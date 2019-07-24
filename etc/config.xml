@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Credorax Credorax config config.
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <credorax>
+                <title>Credorax</title>
+                <debug>0</debug>
+                <cctypes>AE,VI,MC,MI,DN</cctypes>
+                <model>Credorax\Credorax\Model\CredoraxMethod</model>
+            </credorax>
+        </payment>
+    </default>
+</config>

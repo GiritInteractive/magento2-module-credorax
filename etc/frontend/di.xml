@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Credorax frontend di config.
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="CredoraxConfigProvider" type="Credorax\Credorax\Model\ConfigProvider">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Credorax\Credorax\Model\CredoraxMethod::METHOD_CODE</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="credorax_credorax_config_provider" xsi:type="object">CredoraxConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Model\CcGenericConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="credorax" xsi:type="const">Credorax\Credorax\Model\CredoraxMethod::METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

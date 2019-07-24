@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Credorax Credorax adminhtml system config.
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="credorax" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Credorax Payment Solution</label>
+                <group id="account_settings" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
+                    <label>Account settings</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/credorax/active</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Title</label>
+                        <config_path>payment/credorax/title</config_path>
+                    </field>
+                    <field id="mode" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Mode</label>
+                        <source_model>Credorax\Credorax\Model\Adminhtml\Source\Mode</source_model>
+                        <config_path>payment/credorax/mode</config_path>
+                    </field>
+                    <field id="merchant_id" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Merchant ID</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <comment>The merchant account identifier you want to process the (transaction) request with. Find this at</comment>
+                        <config_path>payment/credorax/merchant_id</config_path>
+                    </field>
+                    <field id="merchant_secret_key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Merchant Secret Key</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <comment></comment>
+                        <config_path>payment/credorax/merchant_secret_key</config_path>
+                    </field>
+                    <field id="debug" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Debug</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/credorax/debug</config_path>
+                    </field>
+                </group>
+                <group id="transaction_settings" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                    <label>Transaction settings</label>
+                    <field id="use_vault" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Use Vault</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>When vault is enabled customers will be able so save their credit cards and use them in future orders.</comment>
+                        <config_path>payment/credorax/use_vault</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/credorax/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Allow payment from following countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <config_path>payment/credorax/specificcountry</config_path>
+                    </field>
+                    <field id="billing_descriptor" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Billing Descriptor</label>
+                        <config_path>payment/credorax/billing_descriptor</config_path>
+                    </field>
+                    <field id="secure_3d" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enable 3D secure</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/credorax/secure_3d</config_path>
+                    </field>
+                    <field id="transaction_creation" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                        <label>Enable transaction creation</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/credorax/transaction_creation</config_path>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>
