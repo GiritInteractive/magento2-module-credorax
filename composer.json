@@ -1,0 +1,25 @@
+{
+    "name": "credorax/magento2-module-credorax",
+    "description": "Credorax Payments For Magento 2",
+    "require": {
+        "php": ">=5.5"
+    },
+    "type": "magento2-module",
+    "version": "0.1.0",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "authors": [{
+        "name": "Credorax",
+        "role": "Developer"
+    }],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Credorax\\Credorax\\": ""
+        }
+    }
+}
