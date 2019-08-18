@@ -1,5 +1,5 @@
 /**
- * Safecharge Safecharge js component.
+ * Credorax Credorax js component.
  *
  * @category Credorax
  * @package  Credorax_Credorax

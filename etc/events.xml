@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Credorax Credorax events config.
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_submit_all_after">
+        <observer name="credorax_checkout_submit_all_after" instance="Credorax\Credorax\Observer\Checkout\SubmitAllAfter"/>
+    </event>
+</config>

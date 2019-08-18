@@ -2,8 +2,8 @@
 
 namespace Credorax\Credorax\Model\Adminhtml\Source;
 
-use Magento\Framework\Data\OptionSourceInterface;
 use Credorax\Credorax\Model\CredoraxMethod;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Credorax Credorax mode source model.
@@ -39,8 +39,8 @@ class Mode implements OptionSourceInterface
     public function toArray()
     {
         return [
-            'sandbox' => __('Sandbox'),
-            'live' => __('Live'),
+            CredoraxMethod::MODE_LIVE => __('Live'),
+            CredoraxMethod::MODE_SANDBOX => __('Sandbox'),
         ];
     }
 }

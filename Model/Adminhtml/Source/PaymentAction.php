@@ -2,11 +2,11 @@
 
 namespace Credorax\Credorax\Model\Adminhtml\Source;
 
-use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Payment\Model\MethodInterface;
 
 /**
- * Credorax Credorax mode source model.
+ * Credorax Credorax PaymentAction source model.
  *
  * @category Credorax
  * @package  Credorax_Credorax
@@ -27,7 +27,7 @@ class PaymentAction implements OptionSourceInterface
             ],
             [
                 'value' => MethodInterface::ACTION_AUTHORIZE_CAPTURE,
-                'label' => __('Authorize and Capture'),
+                'label' => __('Authorize & Capture'),
             ]
         ];
     }
