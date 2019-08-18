@@ -16,7 +16,11 @@ abstract class AbstractResponse extends AbstractApi
     /**
      * Response handlers.
      */
-    const PAYMENT_SALE_HANDLER = 'sale';
+    const PAYMENT_SALE_HANDLER = 'payment_sale';
+    const PAYMENT_AUTH_HANDLER = 'payment_auth';
+    const PAYMENT_CAPTURE_HANDLER = 'payment_capture';
+    const PAYMENT_VOID_HANDLER = 'payment_void';
+    const PAYMENT_REFUND_HANDLER = 'payment_refund';
 
     /**
      * Response result const.

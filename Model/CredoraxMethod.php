@@ -382,12 +382,11 @@ class CredoraxMethod extends Cc
     private function processPayment(InfoInterface $payment, $amount)
     {
         $method = AbstractRequest::PAYMENT_AUTH_METHOD;
-        if ($this->credoraxConfig->is3dSecureEnabled()) {
-            $method = AbstractRequest::PAYMENT_DYNAMIC_3D_METHOD;
+        if (0 && $this->credoraxConfig->is3dSecureEnabled()) {
+            //$method = AbstractRequest::PAYMENT_DYNAMIC_3D_METHOD;
         } elseif ($this->credoraxConfig->getPaymentAction() === self::ACTION_AUTHORIZE_CAPTURE) {
             $method = AbstractRequest::PAYMENT_SALE_METHOD;
         }
-        $method = AbstractRequest::PAYMENT_SALE_METHOD;
 
         /** @var RequestInterface $request */
         $request = $this->paymentRequestFactory->create(
@@ -397,9 +396,9 @@ class CredoraxMethod extends Cc
         );
         $response = $request->process();
 
-        if ($method === AbstractRequest::PAYMENT_DYNAMIC_3D_METHOD) {
+        /*if ($method === AbstractRequest::PAYMENT_DYNAMIC_3D_METHOD) {
             $this->finalize3dSecurePayment($response, $payment, $amount);
-        }
+        }*/
 
         return $this;
     }

@@ -25,8 +25,9 @@ class Factory
     private $invokableClasses = [
         AbstractResponse::PAYMENT_SALE_HANDLER => \Credorax\Credorax\Model\Response\Payment\Sale::class,
         AbstractResponse::PAYMENT_AUTH_HANDLER => \Credorax\Credorax\Model\Response\Payment\Auth::class,
-        AbstractResponse::PAYMENT_VOID_HANDLER => \Credorax\Credorax\Model\Response\Payment\Cancel::class,
+        AbstractResponse::PAYMENT_CAPTURE_HANDLER => \Credorax\Credorax\Model\Response\Payment\Capture::class,
         AbstractResponse::PAYMENT_REFUND_HANDLER => \Credorax\Credorax\Model\Response\Payment\Refund::class,
+        AbstractResponse::PAYMENT_VOID_HANDLER => \Credorax\Credorax\Model\Response\Payment\Cancel::class,
     ];
 
     /**

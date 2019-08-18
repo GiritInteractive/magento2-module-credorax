@@ -19,23 +19,11 @@ abstract class AbstractRequest extends AbstractApi
     /**
      * Payment gateway methods.
      */
-    const PAYMENT_SALE_METHOD = 'sale';
-    const PAYMENT_AUTH_METHOD = 'auth';
-
-    const GET_SESSION_TOKEN_METHOD = 'getSessionToken';
-    const PAYMENT_CC_METHOD = 'paymentCC';
-    const PAYMENT_CAPTURE_METHOD = 'captureTransaction';
-    const PAYMENT_CARD_TOKENIZATION_METHOD = 'cardTokenization';
-    const PAYMENT_USER_PAYMENT_OPTION_METHOD = 'addUPOCreditCardByTempToken';
-    const PAYMENT_DYNAMIC_3D_METHOD = 'dynamic3D';
-    const PAYMENT_PAYMENT_3D_METHOD = 'payment3D';
-    const CREATE_USER_METHOD = 'createUser';
-    const GET_USER_DETAILS_METHOD = 'getUserDetails';
-    const PAYMENT_REFUND_METHOD = 'refundTransaction';
-    const PAYMENT_VOID_METHOD = 'voidTransaction';
-    const OPEN_ORDER_METHOD = 'openOrder';
-    const PAYMENT_APM_METHOD = 'paymentAPM';
-    const GET_MERCHANT_PAYMENT_METHODS_METHOD = 'getMerchantPaymentMethods';
+    const PAYMENT_SALE_METHOD = 'payment_sale';
+    const PAYMENT_AUTH_METHOD = 'payment_auth';
+    const PAYMENT_CAPTURE_METHOD = 'payment_capture';
+    const PAYMENT_REFUND_METHOD = 'payment_refund';
+    const PAYMENT_VOID_METHOD = 'payment_cancel';
 
     /**
      * @var Curl

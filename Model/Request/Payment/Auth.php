@@ -76,7 +76,7 @@ class Auth extends AbstractPayment implements RequestInterface
      */
     protected function getRequestMethod()
     {
-        return AbstractRequest::PAYMENT_SALE_METHOD;
+        return AbstractRequest::PAYMENT_AUTH_METHOD;
     }
 
     /**
@@ -86,7 +86,7 @@ class Auth extends AbstractPayment implements RequestInterface
      */
     protected function getResponseHandlerType()
     {
-        return AbstractResponse::PAYMENT_SALE_HANDLER;
+        return AbstractResponse::PAYMENT_AUTH_HANDLER;
     }
 
     /**
