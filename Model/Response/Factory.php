@@ -3,7 +3,8 @@
 namespace Credorax\Credorax\Model\Response;
 
 use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\AbstractResponse;
+use Credorax\Credorax\Model\Response\AbstractGateway as AbstractGatewayResponse;
+use Credorax\Credorax\Model\Response\AbstractPayment as AbstractPaymentResponse;
 use Credorax\Credorax\Model\ResponseInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
@@ -23,11 +24,11 @@ class Factory
      * @var array
      */
     private $invokableClasses = [
-        AbstractResponse::PAYMENT_SALE_HANDLER => \Credorax\Credorax\Model\Response\Payment\Sale::class,
-        AbstractResponse::PAYMENT_AUTH_HANDLER => \Credorax\Credorax\Model\Response\Payment\Auth::class,
-        AbstractResponse::PAYMENT_CAPTURE_HANDLER => \Credorax\Credorax\Model\Response\Payment\Capture::class,
-        AbstractResponse::PAYMENT_REFUND_HANDLER => \Credorax\Credorax\Model\Response\Payment\Refund::class,
-        AbstractResponse::PAYMENT_VOID_HANDLER => \Credorax\Credorax\Model\Response\Payment\Cancel::class,
+        AbstractPaymentResponse::PAYMENT_SALE_HANDLER => \Credorax\Credorax\Model\Response\Payment\Sale::class,
+        AbstractPaymentResponse::PAYMENT_AUTH_HANDLER => \Credorax\Credorax\Model\Response\Payment\Auth::class,
+        AbstractGatewayResponse::GATEWAY_CAPTURE_HANDLER => \Credorax\Credorax\Model\Response\Gateway\Capture::class,
+        AbstractGatewayResponse::GATEWAY_REFUND_HANDLER => \Credorax\Credorax\Model\Response\Gateway\Refund::class,
+        AbstractGatewayResponse::GATEWAY_VOID_HANDLER => \Credorax\Credorax\Model\Response\Gateway\Cancel::class,
     ];
 
     /**

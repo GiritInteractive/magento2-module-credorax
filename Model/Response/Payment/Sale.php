@@ -21,7 +21,8 @@ class Sale extends AbstractPayment implements ResponseInterface
      */
     protected function updateTransaction()
     {
-        parent::updateTransaction();
+        return parent::updateTransaction();
+        /*parent::updateTransaction();
 
         $this->orderPayment->setAdditionalInformation(
             CredoraxMethod::TRANSACTION_ID,
@@ -38,6 +39,21 @@ class Sale extends AbstractPayment implements ResponseInterface
             $this->getOperationCode()
         );
 
-        return $this;
+        return $this;*/
+    }
+
+    /**
+     * @return array
+     */
+    protected function getRequiredResponseDataKeys()
+    {
+        return array_merge_recursive(
+            parent::getRequiredResponseDataKeys(),
+            [
+                'K',
+                'O',
+                'z1',
+            ]
+        );
     }
 }

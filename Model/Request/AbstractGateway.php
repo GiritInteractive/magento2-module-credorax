@@ -12,18 +12,19 @@ use Credorax\Credorax\Model\ResponseInterface;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
- * Credorax Credorax abstract payment request model.
+ * Credorax Credorax abstract gateway request model.
  *
  * @category Credorax
  * @package  Credorax_Credorax
  */
-abstract class AbstractPayment extends AbstractRequest
+abstract class AbstractGateway extends AbstractRequest
 {
     /**
-     * Payment methods.
+     * Gateway methods.
      */
-    const PAYMENT_SALE_METHOD = 'payment_sale';
-    const PAYMENT_AUTH_METHOD = 'payment_auth';
+    const GATEWAY_CAPTURE_METHOD = 'gateway_capture';
+    const GATEWAY_REFUND_METHOD = 'gateway_refund';
+    const GATEWAY_VOID_METHOD = 'gateway_cancel';
 
     /**
      * @var RequestFactory
@@ -41,7 +42,7 @@ abstract class AbstractPayment extends AbstractRequest
     protected $amount;
 
     /**
-     * AbstractGateway constructor.
+     * AbstractPayment constructor.
      *
      * @param Config                $config
      * @param Curl                  $curl
@@ -64,7 +65,6 @@ abstract class AbstractPayment extends AbstractRequest
             $responseFactory
         );
 
-        $this->requestFactory = $requestFactory;
         $this->requestFactory = $requestFactory;
         $this->orderPayment = $orderPayment;
         $this->amount = $amount;
@@ -94,7 +94,7 @@ abstract class AbstractPayment extends AbstractRequest
      */
     protected function getEndpoint()
     {
-        return $this->_credoraxConfig->getCredoraxPaymentUrl();
+        return $this->_credoraxConfig->getCredoraxGatewayUrl();
     }
 
     /**
@@ -114,9 +114,9 @@ abstract class AbstractPayment extends AbstractRequest
         return array_replace_recursive(
             parent::getParams(),
             $this->getOrderData($order),
-            $this->getBillingData($order),
             [
-                'PKey' => $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_PKEY),
+                'g3' => $orderPayment->getAdditionalInformation(CredoraxMethod::TRANSACTION_AUTH_CODE_KEY),
+                'a4' => $this->amountFormat($this->amount, $order->getBaseCurrencyCode()),
             ]
         );
     }

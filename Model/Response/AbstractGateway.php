@@ -13,18 +13,19 @@ use Magento\Sales\Model\Order\Payment\State\CaptureCommand;
 use Magento\Sales\Model\Order\Payment\Transaction as OrderTransaction;
 
 /**
- * Credorax Credorax abstract payment response model.
+ * Credorax Credorax abstract gateway response model.
  *
  * @category Credorax
  * @package  Credorax_Credorax
  */
-abstract class AbstractPayment extends AbstractResponse
+abstract class AbstractGateway extends AbstractResponse
 {
     /**
      * Response handlers.
      */
-    const PAYMENT_SALE_HANDLER = 'payment_sale';
-    const PAYMENT_AUTH_HANDLER = 'payment_auth';
+    const GATEWAY_CAPTURE_HANDLER = 'gateway_capture';
+    const GATEWAY_VOID_HANDLER = 'gateway_void';
+    const GATEWAY_REFUND_HANDLER = 'gateway_refund';
 
     /**
      * @var Order
@@ -159,7 +160,7 @@ abstract class AbstractPayment extends AbstractResponse
     }
 
     /**
-     * @return AbstractPayment
+     * @return AbstractGateway
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function updateTransaction()

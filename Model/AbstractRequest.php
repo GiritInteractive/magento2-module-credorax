@@ -17,15 +17,6 @@ use Magento\Sales\Model\Order;
 abstract class AbstractRequest extends AbstractApi
 {
     /**
-     * Payment gateway methods.
-     */
-    const PAYMENT_SALE_METHOD = 'payment_sale';
-    const PAYMENT_AUTH_METHOD = 'payment_auth';
-    const PAYMENT_CAPTURE_METHOD = 'payment_capture';
-    const PAYMENT_REFUND_METHOD = 'payment_refund';
-    const PAYMENT_VOID_METHOD = 'payment_cancel';
-
-    /**
      * @var Curl
      */
     protected $_curl;
@@ -74,10 +65,7 @@ abstract class AbstractRequest extends AbstractApi
      *
      * @return string
      */
-    protected function getEndpoint()
-    {
-        return $this->_credoraxConfig->getCredoraxGatewayUrl() . $this->getRequestMethod();
-    }
+    abstract protected function getEndpoint();
 
     /**
      * Return method for request call.
@@ -100,9 +88,15 @@ abstract class AbstractRequest extends AbstractApi
      */
     protected function getParams()
     {
-        return [
+        $params =  [
             'M' => $this->_credoraxConfig->getMerchantId()
         ];
+
+        if ($billingDescriptor = $this->_credoraxConfig->getBillingDescriptor()) {
+            $params['i2'] = $billingDescriptor;
+        }
+
+        return $params;
     }
 
     /**
@@ -136,7 +130,7 @@ abstract class AbstractRequest extends AbstractApi
         $params = $this->prepareParams();
         $preparedURL = $this->_curl->buildQuery($endpoint, $params);
 
-        $this->_credoraxConfig->log('AbstractRequest::sendRequest() ', 'debug', [
+        $this->_credoraxConfig->log('AbstractPaymentRequest::sendRequest() ', 'debug', [
             'method' => $this->getRequestMethod(),
             'request' => [
                 'Type' => 'POST',
@@ -169,32 +163,44 @@ abstract class AbstractRequest extends AbstractApi
 
     /**
      * @param Order $order
+     * @param bool $includeBilling
      *
      * @return array
      */
     protected function getOrderData(Order $order)
     {
-        /** @var OrderAddressInterface $billing */
-        $billing = $order->getBillingAddress();
-
-        /** @var OrderPayment $orderPayment */
-        $orderPayment = $order->getPayment();
-
-        $exponents = $this->getExponentsByCurrency($order->getBaseCurrencyCode());
-
         $orderData = [
             'a1' => $order->getIncrementId() . (microtime(true) * 10000),
             'h9' => $order->getIncrementId(),
-            'a4' => number_format((float)$order->getBaseGrandTotal(), $exponents, '', ''),
+            'a4' => $this->amountFormat($order->getBaseGrandTotal(), $order->getBaseCurrencyCode()),
             'a5' => $order->getBaseCurrencyCode(),
             'a6' => date('ymd', strtotime($order->getCreatedAt())),
             'a7' => date('His', strtotime($order->getCreatedAt())),
+        ];
+
+        return $orderData;
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return array
+     */
+    protected function getBillingData(Order $order)
+    {
+        /** @var OrderPayment $orderPayment */
+        $orderPayment = $order->getPayment();
+
+        /** @var OrderAddressInterface $billing */
+        $billing = $order->getBillingAddress();
+
+        $data = [
             'b2' => $this->getCcTypeNumberByCode($orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CC_TYPE)),
             'c1' => $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CC_OWNER),
         ];
 
         if ($billing !== null) {
-            $orderData = array_merge($orderData, [
+            $data = array_merge($data, [
                 'c2' => preg_replace('/[^\d-]/', '', $billing->getTelephone()),
                 'c3' => $billing->getEmail(),
                 'c5' => preg_replace('/[\W_]/', '-', (is_array($billing->getStreet()) ? implode(' ', $billing->getStreet()) : '')),
@@ -204,8 +210,6 @@ abstract class AbstractRequest extends AbstractApi
             ]);
         }
 
-        // TODO: Add billing descriptor if needed
-
-        return $orderData;
+        return $data;
     }
 }

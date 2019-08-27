@@ -2,17 +2,19 @@
 
 namespace Credorax\Credorax\Model;
 
-use Credorax\Credorax\Model\Request\Payment\Factory as PaymentRequestFactory;
-use Credorax\Credorax\Model\Response\Payment\Dynamic3D as Dynamic3DResponse;
+use Credorax\Credorax\Model\Request\AbstractGateway as AbstractGatewayRequest;
+use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
+use Credorax\Credorax\Model\Request\Factory as RequestFactory;
+use Credorax\Credorax\Model\Response\Gateway\Dynamic3D as Dynamic3DResponse;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\GatewayException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\Model\Context;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\Cc;
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
+use Magento\Vault\Api\Data\GatewayTokenFactoryInterface;
 
 /**
  * Credorax payment model.
@@ -57,14 +59,10 @@ class CredoraxMethod extends Cc
     const TRANSACTION_ORDER_ID = 'transaction_order_id';
     const TRANSACTION_AUTH_CODE_KEY = 'authorization_code';
     const TRANSACTION_ID = 'transaction_id';
-    const TRANSACTION_CARD_NUMBER = 'card_number';
-    const TRANSACTION_CARD_TYPE = 'card_type';
-    const TRANSACTION_USER_PAYMENT_OPTION_ID = 'user_payment_option_id';
-    const TRANSACTION_SESSION_TOKEN = 'session_token';
     const TRANSACTION_CARD_CVV = 'card_cvv';
 
     /**
-     * Payment code
+     * Gateway code
      *
      * @var string
      */
@@ -78,66 +76,73 @@ class CredoraxMethod extends Cc
     /**
      * @var string
      */
-    //protected $_infoBlockType = \Credorax\Credorax\Block\Info\Cc::class;
+    protected $_infoBlockType = \Credorax\Credorax\Block\Info\Cc::class;
 
     /**
-     * Payment Method feature.
+     * Info block.
+     *
+     * @var string
+     */
+    //protected $_infoBlockType = \Credorax\Credorax\Block\ConfigurableInfo::class;
+
+    /**
+     * Gateway Method feature.
      *
      * @var bool
      */
     protected $_isGateway = true;
 
     /**
-     * Payment Method feature.
+     * Gateway Method feature.
      *
      * @var bool
      */
     protected $_canAuthorize = true;
 
     /**
-     * Payment Method feature.
+     * Gateway Method feature.
      *
      * @var bool
      */
     protected $_canCapture = true;
 
     /**
-     * Payment Method feature.
+     * Gateway Method feature.
      *
      * @var bool
      */
     protected $_canCapturePartial = true;
 
     /**
-     * Payment Method feature.
+     * Gateway Method feature.
      *
      * @var bool
      */
     protected $_canRefund = true;
 
     /**
-     * Payment Method feature.
+     * Gateway Method feature.
      *
      * @var bool
      */
     protected $_canRefundInvoicePartial = true;
 
     /**
-     * Payment Method feature.
+     * Gateway Method feature.
      *
      * @var bool
      */
     protected $_canVoid = true;
 
     /**
-     * Payment Method feature.
+     * Gateway Method feature.
      *
      * @var bool
      */
     protected $_canUseCheckout = true;
 
     /**
-     * Payment Method feature.
+     * Gateway Method feature.
      *
      * @var bool
      */
@@ -149,12 +154,12 @@ class CredoraxMethod extends Cc
     protected $credoraxConfig;
 
     /**
-     * @var PaymentRequestFactory
+     * @var RequestFactory
      */
-    private $paymentRequestFactory;
+    private $requestFactory;
 
     /**
-     * @var PaymentTokenFactoryInterface
+     * @var GatewayTokenFactoryInterface
      */
     private $paymentTokenFactory;
 
@@ -169,8 +174,7 @@ class CredoraxMethod extends Cc
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Credorax\Credorax\Model\Config $credoraxConfig
-     * @param PaymentRequestFactory $paymentRequestFactory
-     * @param PaymentTokenFactoryInterface $paymentTokenFactory
+     * @param RequestFactory $requestFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -187,7 +191,7 @@ class CredoraxMethod extends Cc
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Credorax\Credorax\Model\Config $credoraxConfig,
-        PaymentRequestFactory $paymentRequestFactory,
+        RequestFactory $requestFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -207,7 +211,7 @@ class CredoraxMethod extends Cc
             $data
         );
         $this->credoraxConfig = $credoraxConfig;
-        $this->paymentRequestFactory = $paymentRequestFactory;
+        $this->requestFactory = $requestFactory;
     }
 
     private function getPKeyData()
@@ -223,7 +227,7 @@ class CredoraxMethod extends Cc
      *
      * @param DataObject $data Data object.
      *
-     * @return Payment
+     * @return Gateway
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function assignData(DataObject $data)
@@ -269,7 +273,7 @@ class CredoraxMethod extends Cc
     /**
      * Validate payment method information object.
      *
-     * @return Payment
+     * @return Gateway
      * @throws LocalizedException
      */
     public function validate()
@@ -345,7 +349,7 @@ class CredoraxMethod extends Cc
      * @param InfoInterface $payment
      * @param float         $amount
      *
-     * @return Payment
+     * @return Gateway
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @api
@@ -354,7 +358,13 @@ class CredoraxMethod extends Cc
     {
         parent::authorize($payment, $amount);
 
-        $this->processPayment($payment, $amount);
+        /** @var RequestInterface $request */
+        $request = $this->requestFactory->create(
+            AbstractPaymentRequest::PAYMENT_AUTH_METHOD,
+            $payment,
+            $amount
+        );
+        $response = $request->process();
 
         return $this;
     }
@@ -365,7 +375,7 @@ class CredoraxMethod extends Cc
      * @param InfoInterface $payment
      * @param float         $amount
      *
-     * @return Payment
+     * @return Gateway
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @api
@@ -374,30 +384,38 @@ class CredoraxMethod extends Cc
     {
         parent::capture($payment, $amount);
 
-        $this->processPayment($payment, $amount);
+        /** @var RequestInterface $request */
+        $request = $this->requestFactory->create(
+            $payment->getAdditionalInformation(self::TRANSACTION_AUTH_CODE_KEY) ?
+                AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD :
+                AbstractPaymentRequest::GATEWAY_SALE_METHOD,
+            $payment,
+            $amount
+        );
+        $response = $request->process();
 
         return $this;
     }
 
-    private function processPayment(InfoInterface $payment, $amount)
+    private function processGateway(InfoInterface $payment, $amount)
     {
-        $method = AbstractRequest::PAYMENT_AUTH_METHOD;
+        /*$method = AbstractGatewayRequest::GATEWAY_AUTH_METHOD;
         if (0 && $this->credoraxConfig->is3dSecureEnabled()) {
-            //$method = AbstractRequest::PAYMENT_DYNAMIC_3D_METHOD;
-        } elseif ($this->credoraxConfig->getPaymentAction() === self::ACTION_AUTHORIZE_CAPTURE) {
-            $method = AbstractRequest::PAYMENT_SALE_METHOD;
+            //$method = AbstractGatewayRequest::GATEWAY_DYNAMIC_3D_METHOD;
+        } elseif ($this->credoraxConfig->getGatewayAction() === self::ACTION_AUTHORIZE_CAPTURE) {
+            $method = AbstractGatewayRequest::GATEWAY_SALE_METHOD;
         }
 
         /** @var RequestInterface $request */
-        $request = $this->paymentRequestFactory->create(
+        /*$request = $this->requestFactory->create(
             $method,
             $payment,
             $amount
         );
         $response = $request->process();
 
-        /*if ($method === AbstractRequest::PAYMENT_DYNAMIC_3D_METHOD) {
-            $this->finalize3dSecurePayment($response, $payment, $amount);
+        /*if ($method === AbstractGatewayRequest::GATEWAY_DYNAMIC_3D_METHOD) {
+            $this->finalize3dSecureGateway($response, $payment, $amount);
         }*/
 
         return $this;
@@ -408,12 +426,12 @@ class CredoraxMethod extends Cc
      * @param InfoInterface     $payment
      * @param float             $amount
      *
-     * @return Payment
+     * @return Gateway
      * @throws \RuntimeException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\PaymentException
+     * @throws \Magento\Framework\Exception\GatewayException
      */
-    private function finalize3dSecurePayment(
+    private function finalize3dSecureGateway(
         Dynamic3DResponse $response,
         InfoInterface $payment,
         $amount
@@ -428,9 +446,9 @@ class CredoraxMethod extends Cc
              * If the merchant’s configured mode of operation is auth-capture,
              * then the merchant should call captureTransaction method afterwards.
              */
-            if ($this->credoraxConfig->getPaymentAction() === self::ACTION_AUTHORIZE_CAPTURE) {
-                $request = $this->paymentRequestFactory->create(
-                    AbstractRequest::PAYMENT_CAPTURE_METHOD,
+            if ($this->credoraxConfig->getGatewayAction() === self::ACTION_AUTHORIZE_CAPTURE) {
+                $request = $this->requestFactory->create(
+                    AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD,
                     $payment,
                     $amount
                     );
@@ -446,8 +464,8 @@ class CredoraxMethod extends Cc
              * in order to complete the 'auth3D’ transaction
              * previously performed in dynamic3D method.
              */
-            $request = $this->paymentRequestFactory->create(
-                AbstractRequest::PAYMENT_PAYMENT_3D_METHOD,
+            $request = $this->requestFactory->create(
+                AbstractGatewayRequest::GATEWAY_GATEWAY_3D_METHOD,
                 $payment,
                 $amount
                 );
@@ -468,8 +486,8 @@ class CredoraxMethod extends Cc
             $payment->setIsTransactionPending(true);
 
             $payment->setAdditionalInformation(
-                self::TRANSACTION_USER_PAYMENT_OPTION_ID,
-                $response->getUserPaymentOptionId()
+                self::TRANSACTION_USER_GATEWAY_OPTION_ID,
+                $response->getUserGatewayOptionId()
                 );
             $payment->setAdditionalInformation(
                 self::TRANSACTION_CARD_CVV,
@@ -479,7 +497,7 @@ class CredoraxMethod extends Cc
             return $this;
         }
 
-        throw new PaymentException(
+        throw new GatewayException(
             __('Unexpected response during 3d secure payment handling.')
             );
     }
@@ -490,7 +508,7 @@ class CredoraxMethod extends Cc
      * @param InfoInterface $payment
      * @param float         $amount
      *
-     * @return Payment
+     * @return Gateway
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @api
@@ -500,8 +518,8 @@ class CredoraxMethod extends Cc
         parent::refund($payment, $amount);
 
         /** @var RequestInterface $request */
-        $request = $this->paymentRequestFactory->create(
-            AbstractRequest::PAYMENT_REFUND_METHOD,
+        $request = $this->requestFactory->create(
+            AbstractGatewayRequest::GATEWAY_REFUND_METHOD,
             $payment,
             $amount
             );
@@ -515,7 +533,7 @@ class CredoraxMethod extends Cc
      *
      * @param InfoInterface $payment
      *
-     * @return Payment
+     * @return Gateway
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @api
@@ -534,7 +552,7 @@ class CredoraxMethod extends Cc
      *
      * @param InfoInterface $payment
      *
-     * @return Payment
+     * @return Gateway
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @api
@@ -544,8 +562,8 @@ class CredoraxMethod extends Cc
         parent::void($payment);
 
         /** @var RequestInterface $request */
-        $request = $this->paymentRequestFactory->create(
-            AbstractRequest::PAYMENT_VOID_METHOD,
+        $request = $this->requestFactory->create(
+            AbstractGatewayRequest::GATEWAY_VOID_METHOD,
             $payment
             );
         $request->process();

@@ -83,4 +83,15 @@ abstract class AbstractApi
                     break;
             }
     }
+
+    /**
+     * @method amountFormat
+     * @param  float|int              $amount
+     * @param  string                 $currency
+     * @return int
+     */
+    protected function amountFormat($amount, $currency)
+    {
+        return number_format((float)$amount, $this->getExponentsByCurrency($currency), '', '');
+    }
 }

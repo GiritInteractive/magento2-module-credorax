@@ -1,30 +1,20 @@
 <?php
 
-namespace Credorax\Credorax\Model\Response\Payment;
+namespace Credorax\Credorax\Model\Response\Gateway;
 
-use Credorax\Credorax\Model\Response\AbstractPayment;
+use Credorax\Credorax\Model\Response\AbstractGateway;
 use Credorax\Credorax\Model\ResponseInterface;
 
 /**
- * Credorax Credorax payment void response model.
+ * Credorax Credorax gateway refund response model.
  *
  * @category Credorax
  * @package  Credorax_Credorax
  */
-class Cancel extends AbstractPayment implements ResponseInterface
+class Refund extends AbstractGateway implements ResponseInterface
 {
     /**
-     * @var int
-     */
-    protected $transactionId;
-
-    /**
-     * @var string
-     */
-    protected $authCode;
-
-    /**
-     * @return Cancel
+     * @return Refund
      */
     protected function processResponseData()
     {
@@ -48,7 +38,14 @@ class Cancel extends AbstractPayment implements ResponseInterface
         }
 
         $body = $this->getBody();
-        if (strtolower($body['transactionStatus']) === 'error') {
+
+        $responseTransactionStatus = strtolower(!empty($body['transactionStatus']) ? $body['transactionStatus'] : '');
+
+        if ($responseTransactionStatus === 'error') {
+            return false;
+        }
+
+        if ($responseTransactionStatus !== 'approved') {
             return false;
         }
 

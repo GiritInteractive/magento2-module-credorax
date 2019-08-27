@@ -1,28 +1,19 @@
 <?php
 
-namespace Credorax\Credorax\Model\Response\Payment;
+namespace Credorax\Credorax\Model\Response\Gateway;
 
 use Credorax\Credorax\Model\CredoraxMethod;
-use Credorax\Credorax\Model\Response\AbstractPayment;
+use Credorax\Credorax\Model\Response\AbstractGateway;
 use Credorax\Credorax\Model\ResponseInterface;
 
 /**
- * Credorax Credorax payment capture response model.
+ * Credorax Credorax gateway capture response model.
  *
  * @category Credorax
  * @package  Credorax_Credorax
  */
-class Capture extends AbstractPayment implements ResponseInterface
+class Capture extends AbstractGateway implements ResponseInterface
 {
-    /**
-     * @var int
-     */
-    protected $transactionId;
-
-    /**
-     * @var string
-     */
-    protected $authCode;
 
     /**
      * @return Capture
@@ -80,7 +71,7 @@ class Capture extends AbstractPayment implements ResponseInterface
     {
         parent::updateTransaction();
 
-        if ($this->_credoraxConfig->getPaymentAction() === CredoraxMethod::ACTION_AUTHORIZE_CAPTURE) {
+        if ($this->_credoraxConfig->getGatewayAction() === CredoraxMethod::ACTION_AUTHORIZE_CAPTURE) {
             $this->orderPayment->setAdditionalInformation(
                 CredoraxMethod::TRANSACTION_AUTH_CODE_KEY,
                 $this->getAuthCode()

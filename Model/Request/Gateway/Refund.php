@@ -1,27 +1,25 @@
 <?php
 
-namespace Credorax\Credorax\Model\Request\Payment;
+namespace Credorax\Credorax\Model\Request\Gateway;
 
 use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\AbstractRequest;
-use Credorax\Credorax\Model\AbstractResponse;
 use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\Request\AbstractPayment;
+use Credorax\Credorax\Model\Request\AbstractGateway as AbstractGatewayRequest;
 use Credorax\Credorax\Model\Request\Factory as RequestFactory;
-use Credorax\Credorax\Model\Request\Payment\Factory as PaymentRequestFactory;
 use Credorax\Credorax\Model\RequestInterface;
+use Credorax\Credorax\Model\Response\AbstractGateway as AbstractGatewayResponse;
 use Credorax\Credorax\Model\Response\Factory as ResponseFactory;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
- * Credorax Credorax refund payment request model.
+ * Credorax Credorax refund gateway request model.
  *
  * @category Credorax
  * @package  Credorax_Credorax
  */
-class Refund extends AbstractPayment implements RequestInterface
+class Refund extends AbstractGatewayRequest implements RequestInterface
 {
     /**
      * Credorax Operation Code
@@ -40,7 +38,6 @@ class Refund extends AbstractPayment implements RequestInterface
      * @param Config                         $config
      * @param Curl                           $curl
      * @param RequestFactory                 $requestFactory
-     * @param Factory                        $paymentRequestFactory
      * @param ResponseFactory                $responseFactory
      * @param OrderPayment                   $orderPayment
      * @param TransactionRepositoryInterface $transactionRepository
@@ -50,7 +47,6 @@ class Refund extends AbstractPayment implements RequestInterface
         Config $credoraxConfig,
         Curl $curl,
         RequestFactory $requestFactory,
-        PaymentRequestFactory $paymentRequestFactory,
         ResponseFactory $responseFactory,
         OrderPayment $orderPayment,
         TransactionRepositoryInterface $transactionRepository,
@@ -60,7 +56,6 @@ class Refund extends AbstractPayment implements RequestInterface
             $credoraxConfig,
             $curl,
             $requestFactory,
-            $paymentRequestFactory,
             $responseFactory,
             $orderPayment,
             $amount
@@ -76,7 +71,7 @@ class Refund extends AbstractPayment implements RequestInterface
      */
     protected function getRequestMethod()
     {
-        return AbstractRequest::PAYMENT_REFUND_METHOD;
+        return AbstractGatewayRequest::GATEWAY_REFUND_METHOD;
     }
 
     /**
@@ -86,7 +81,7 @@ class Refund extends AbstractPayment implements RequestInterface
      */
     protected function getResponseHandlerType()
     {
-        return AbstractResponse::PAYMENT_REFUND_HANDLER;
+        return AbstractGatewayResponse::GATEWAY_REFUND_HANDLER;
     }
 
     /**

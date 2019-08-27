@@ -257,6 +257,16 @@ class Config
     }
 
     /**
+     * Return billing descriptor configuration value.
+     *
+     * @return bool
+     */
+    public function getBillingDescriptor()
+    {
+        return (bool)$this->getConfigValue('billing_descriptor');
+    }
+
+    /**
      * @method getCredoraxGatewayUrl
      * @param string $path
      * @return string

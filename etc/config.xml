@@ -16,7 +16,10 @@
                 <debug>0</debug>
                 <payment_action>authorize</payment_action>
                 <cctypes>AE,VI,MC,MI,DN</cctypes>
+                <!-- Gateway Configuration -->
                 <model>Credorax\Credorax\Model\CredoraxMethod</model>
+                <privateInfoKeys>transaction_id,cc_type</privateInfoKeys>
+                <paymentInfoKeys>transaction_id,cc_type</paymentInfoKeys>
             </credorax>
         </payment>
     </default>

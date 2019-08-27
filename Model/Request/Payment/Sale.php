@@ -3,13 +3,11 @@
 namespace Credorax\Credorax\Model\Request\Payment;
 
 use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\AbstractRequest;
-use Credorax\Credorax\Model\AbstractResponse;
 use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\Request\AbstractPayment;
-use Credorax\Credorax\Model\Request\Factory as PaymentFactory;
-use Credorax\Credorax\Model\Request\Payment\Factory as PaymentRequestFactory;
+use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
+use Credorax\Credorax\Model\Request\Factory as RequestFactory;
 use Credorax\Credorax\Model\RequestInterface;
+use Credorax\Credorax\Model\Response\AbstractPayment as AbstractPaymentResponse;
 use Credorax\Credorax\Model\Response\Factory as ResponseFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
@@ -21,7 +19,7 @@ use Magento\Vault\Api\PaymentTokenManagementInterface;
  * @category Credorax
  * @package  Credorax_Credorax
  */
-class Sale extends AbstractPayment implements RequestInterface
+class Sale extends AbstractPaymentRequest implements RequestInterface
 {
     /**
      * Credorax Operation Code
@@ -39,8 +37,7 @@ class Sale extends AbstractPayment implements RequestInterface
      *
      * @param Config                          $config
      * @param Curl                            $curl
-     * @param PaymentFactory                  $requestFactory
-     * @param Factory                         $paymentRequestFactory
+     * @param RequestFactory                  $requestFactory
      * @param ResponseFactory                 $responseFactory
      * @param OrderPayment|null               $orderPayment
      * @param float|null                      $amount
@@ -49,8 +46,7 @@ class Sale extends AbstractPayment implements RequestInterface
     public function __construct(
         Config $credoraxConfig,
         Curl $curl,
-        PaymentFactory $requestFactory,
-        PaymentRequestFactory $paymentRequestFactory,
+        RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
         $orderPayment,
         $amount,
@@ -60,7 +56,6 @@ class Sale extends AbstractPayment implements RequestInterface
             $credoraxConfig,
             $curl,
             $requestFactory,
-            $paymentRequestFactory,
             $responseFactory,
             $orderPayment,
             $amount
@@ -76,7 +71,7 @@ class Sale extends AbstractPayment implements RequestInterface
      */
     protected function getRequestMethod()
     {
-        return AbstractRequest::PAYMENT_SALE_METHOD;
+        return AbstractPaymentRequest::PAYMENT_SALE_METHOD;
     }
 
     /**
@@ -86,7 +81,7 @@ class Sale extends AbstractPayment implements RequestInterface
      */
     protected function getResponseHandlerType()
     {
-        return AbstractResponse::PAYMENT_SALE_HANDLER;
+        return AbstractPaymentResponse::PAYMENT_SALE_HANDLER;
     }
 
     /**

@@ -1,27 +1,26 @@
 <?php
 
-namespace Credorax\Credorax\Model\Request\Payment;
+namespace Credorax\Credorax\Model\Request\Gateway;
 
-use Credorax\Credorax\Model\AbstractRequest;
-use Credorax\Credorax\Model\AbstractResponse;
-use Credorax\Credorax\Model\Request\AbstractPayment;
+use Credorax\Credorax\Model\Request\AbstractGateway as AbstractGatewayRequest;
 use Credorax\Credorax\Model\RequestInterface;
+use Credorax\Credorax\Model\Response\AbstractGateway as AbstractGatewayResponse;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
- * Credorax Credorax capture payment request model.
+ * Credorax Credorax void gateway request model.
  *
  * @category Credorax
  * @package  Credorax_Credorax
  */
-class Capture extends AbstractPayment implements RequestInterface
+class Cancel extends AbstractGatewayRequest implements RequestInterface
 {
     /**
      * Credorax Operation Code
      * @var integer
      */
-    const CREDORAX_O = 3;
+    const CREDORAX_O = 7;
 
     /**
      * {@inheritdoc}
@@ -30,7 +29,7 @@ class Capture extends AbstractPayment implements RequestInterface
      */
     protected function getRequestMethod()
     {
-        return AbstractRequest::PAYMENT_CAPTURE_METHOD;
+        return AbstractGatewayRequest::GATEWAY_VOID_METHOD;
     }
 
     /**
@@ -40,14 +39,13 @@ class Capture extends AbstractPayment implements RequestInterface
      */
     protected function getResponseHandlerType()
     {
-        return AbstractResponse::PAYMENT_CAPTURE_HANDLER;
+        return AbstractGatewayResponse::GATEWAY_VOID_HANDLER;
     }
 
     /**
      * {@inheritdoc}
      *
      * @return array
-     * @throws \Magento\Framework\Exception\PaymentException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getParams()

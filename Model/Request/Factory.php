@@ -2,9 +2,12 @@
 
 namespace Credorax\Credorax\Model\Request;
 
+use Credorax\Credorax\Model\Request\AbstractGateway as AbstractGatewayRequest;
+use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
 use Credorax\Credorax\Model\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
  * Credorax Credorax request factory model.
@@ -14,12 +17,19 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class Factory
 {
+
     /**
      * Set of requests.
      *
      * @var array
      */
-    private $invokableClasses = [];
+    private $invokableClasses = [
+        AbstractPaymentRequest::PAYMENT_SALE_METHOD => \Credorax\Credorax\Model\Request\Payment\Sale::class,
+        AbstractPaymentRequest::PAYMENT_AUTH_METHOD => \Credorax\Credorax\Model\Request\Payment\Auth::class,
+        AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD => \Credorax\Credorax\Model\Request\Gateway\Capture::class,
+        AbstractGatewayRequest::GATEWAY_REFUND_METHOD => \Credorax\Credorax\Model\Request\Gateway\Refund::class,
+        AbstractGatewayRequest::GATEWAY_VOID_METHOD => \Credorax\Credorax\Model\Request\Gateway\Cancel::class,
+    ];
 
     /**
      * Object manager object.
@@ -41,12 +51,14 @@ class Factory
     /**
      * Create request model.
      *
-     * @param string $method
+     * @param string       $method
+     * @param OrderPayment $orderPayment
+     * @param float        $amount
      *
      * @return RequestInterface
      * @throws LocalizedException
      */
-    public function create($method)
+    public function create($method, OrderPayment $orderPayment = null, $amount = 0.0)
     {
         $className = !empty($this->invokableClasses[$method])
             ? $this->invokableClasses[$method]
@@ -58,7 +70,13 @@ class Factory
             );
         }
 
-        $model = $this->objectManager->create($className);
+        $model = $this->objectManager->create(
+            $className,
+            [
+                'orderPayment' => $orderPayment,
+                'amount' => $amount,
+            ]
+        );
         if (!$model instanceof RequestInterface) {
             throw new LocalizedException(
                 __(
