@@ -81,6 +81,26 @@ abstract class AbstractPayment extends AbstractResponse
     protected $_authCode;
 
     /**
+     * @var int
+     */
+    protected $_ccNumber;
+
+    /**
+     * @var string
+     */
+    protected $_ccExpMonth;
+
+    /**
+     * @var string
+     */
+    protected $_ccExpYear;
+
+    /**
+     * @var string
+     */
+    protected $_ccOwner;
+
+    /**
      * @method __construct
      * @param  Config           $credoraxConfig
      * @param  Curl             $curl
@@ -120,6 +140,10 @@ abstract class AbstractPayment extends AbstractResponse
         $this->_responseCode = isset($body['z2']) ? (int)$body['z2'] : 0;
         $this->_responseDescription = isset($body['z3']) ? $body['z3'] : null;
         $this->_authCode = isset($body['z4']) ? $body['z4'] : null;
+        $this->_ccNumber = isset($body['b1']) ? $body['b1'] : null;
+        $this->_ccExpMonth = isset($body['b3']) ? $body['b3'] : null;
+        $this->_ccExpYear = isset($body['b4']) ? $body['b4'] : null;
+        $this->_ccOwner = isset($body['c1']) ? $body['c1'] : null;
 
         return $this;
     }
@@ -192,6 +216,16 @@ abstract class AbstractPayment extends AbstractResponse
             $this->getAuthCode()
         );
 
+        $this->_orderPayment->getMethodInstance()->getInfoInstance()->addData(
+            [
+                'cc_last_4' => substr($this->getCcNumber(), -4),
+                'cc_number' => $this->getCcNumber(),
+                'cc_exp_month' => $this->getCcExpMonth(),
+                'cc_exp_year' => $this->getCcExpYear(),
+                'cc_owner' => $this->getCcOwner(),
+            ]
+        );
+
         return $this;
     }
 
@@ -241,5 +275,37 @@ abstract class AbstractPayment extends AbstractResponse
     public function getAuthCode()
     {
         return $this->_authCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCcNumber()
+    {
+        return $this->_ccNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCcExpMonth()
+    {
+        return $this->_ccExpMonth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCcExpYear()
+    {
+        return $this->_ccExpYear;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCcOwner()
+    {
+        return $this->_ccOwner;
     }
 }
