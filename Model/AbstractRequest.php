@@ -128,19 +128,26 @@ abstract class AbstractRequest extends AbstractApi
     {
         $endpoint = $this->getEndpoint();
         $params = $this->prepareParams();
-        $preparedURL = $this->_curl->buildQuery($endpoint, $params);
+        //$preparedURL = $this->_curl->buildQuery($endpoint, $params);
+
+        $headers = [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Content-Length' => \strlen(http_build_query($params))
+        ];
+        $this->_curl->setHeaders($headers);
 
         $this->_credoraxConfig->log('AbstractPaymentRequest::sendRequest() ', 'debug', [
             'method' => $this->getRequestMethod(),
             'request' => [
                 'Type' => 'POST',
                 'Endpoint' => $endpoint,
+                'Headers' => $headers,
                 'Params' => $params,
-                'PreparedURL' => $preparedURL,
+                //'PreparedURL' => $preparedURL,
             ],
         ]);
 
-        $this->_curl->post($preparedURL, []);
+        $this->_curl->post($endpoint, $params);
 
         return $this;
     }

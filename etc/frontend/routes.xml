@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Credorax Credorax frontend routes config.
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="credorax" frontName="credorax">
+            <module name="Credorax_Credorax"/>
+        </route>
+    </router>
+</config>

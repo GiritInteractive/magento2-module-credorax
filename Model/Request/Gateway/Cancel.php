@@ -20,7 +20,7 @@ class Cancel extends AbstractGatewayRequest implements RequestInterface
      * Credorax Operation Code
      * @var integer
      */
-    const CREDORAX_O = 7;
+    const CREDORAX_O = 9;
 
     /**
      * {@inheritdoc}
@@ -60,6 +60,7 @@ class Cancel extends AbstractGatewayRequest implements RequestInterface
             parent::getParams(),
             [
                 'O' => self::CREDORAX_O,
+                'a4' => $this->amountFormat($order->getBaseGrandTotal(), $order->getBaseCurrencyCode()),
             ]
         );
     }

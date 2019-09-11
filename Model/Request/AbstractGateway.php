@@ -115,6 +115,7 @@ abstract class AbstractGateway extends AbstractRequest
             parent::getParams(),
             $this->getOrderData($order),
             [
+                'g2' => $orderPayment->getAdditionalInformation(CredoraxMethod::TRANSACTION_RESPONSE_ID),
                 'g3' => $orderPayment->getAdditionalInformation(CredoraxMethod::TRANSACTION_AUTH_CODE_KEY),
                 'a4' => $this->amountFormat($this->amount, $order->getBaseCurrencyCode()),
             ]

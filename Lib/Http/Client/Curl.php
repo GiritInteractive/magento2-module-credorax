@@ -112,15 +112,14 @@ class Curl extends \Magento\Framework\HTTP\Client\Curl
             $contentType = $this->_headers['Content-Type'];
         }
 
-        switch ($contentType) {
-            case 'application/json':
-                $params = json_encode($params);
-                $this->curlOption(CURLOPT_POSTFIELDS, $params);
-                $this->_headers['Content-Length'] = strlen($params);
-                break;
-            default:
-                $this->curlOption(CURLOPT_POSTFIELDS, http_build_query($params));
+        if ($contentType === 'application/json') {
+            $params = json_encode($params);
+        } else {
+            $params = http_build_query($params);
         }
+
+        $this->curlOption(CURLOPT_POSTFIELDS, $params);
+        //$this->_headers['Content-Length'] = strlen($params);
     }
 
     /**

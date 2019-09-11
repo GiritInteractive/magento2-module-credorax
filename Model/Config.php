@@ -4,6 +4,7 @@ namespace Credorax\Credorax\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -52,22 +53,30 @@ class Config
     private $logger;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * @method __construct
      * @param  ScopeConfigInterface  $scopeConfig
      * @param  StoreManagerInterface $storeManager
      * @param  EncryptorInterface    $encryptor
      * @param  LoggerInterface       $logger
+     * @param  UrlInterface          $urlBuilder
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         EncryptorInterface $encryptor,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        UrlInterface $urlBuilder
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->encryptor = $encryptor;
         $this->logger = $logger;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -90,12 +99,12 @@ class Config
     }
 
     /**
-     * Return store manager.
-     * @return StoreManagerInterface
+     * Return URL Builder
+     * @return UrlInterface
      */
-    public function getCheckoutSession()
+    public function getUrlBuilder()
     {
-        return $this->checkoutSession;
+        return $this->urlBuilder;
     }
 
     /**
@@ -175,16 +184,6 @@ class Config
     }
 
     /**
-     * Return bool value depends of that if 3d secure is enabled or not.
-     *
-     * @return bool
-     */
-    public function is3dSecureEnabled()
-    {
-        return (bool)$this->getConfigValue('secure_3d');
-    }
-
-    /**
      * Return payment action configuration value (operation code).
      *
      * @return string
@@ -234,6 +233,22 @@ class Config
     public function getCcTypes()
     {
         return $this->getConfigValue('cctypes');
+    }
+
+    /**
+     * @return bool
+     */
+    public function is3dSecureEnabled()
+    {
+        return (bool)$this->getConfigValue('enable_3d_secure');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUsingSmart3d()
+    {
+        return (bool)$this->getConfigValue('use_smart_3d');
     }
 
     /**
@@ -341,5 +356,29 @@ class Config
             }
         }
         return $this;
+    }
+
+    public function get3dStatusMessage($status)
+    {
+        switch ($status) {
+            case 'A':
+                return __('Attempts Processing Performed; Not Authenticated/Verified, but a proof of attempted authentication/verification is provided');
+                break;
+            case 'Y':
+                return __('Authentication/ Account Verification Successful');
+                break;
+            case 'N':
+                return __('Not Authenticated /Account Not Verified; Transaction denied');
+                break;
+            case 'R':
+                return __('Authentication/ Account Verification Rejected; Issuer is rejecting authentication/verification and requests that authorisation not be attempted.');
+                break;
+            case 'U':
+                return __('Authentication/ Account Verification Could Not Be Performed; Technical or other problem');
+                break;
+            default:
+                return null;
+                break;
+        }
     }
 }

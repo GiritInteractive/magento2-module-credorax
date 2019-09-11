@@ -48,6 +48,10 @@ class AuthorizeCommand
         if ($this->credoraxConfig->isActive() && $payment->getMethod() === CredoraxMethod::METHOD_CODE) {
             $order->setState(Order::STATE_NEW)->setStatus('pending');
             //$order->setState(Order::STATE_PENDING_PAYMENT)->setStatus(Order::STATE_PENDING_PAYMENT);
+
+            if ($payment->getLastTransId()) {
+                $payment->setParentTransactionId($payment->getLastTransId());
+            }
         }
         return $result;
     }

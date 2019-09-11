@@ -3,6 +3,7 @@
 namespace Credorax\Credorax\Model;
 
 use Magento\Checkout\Model\Session\Proxy as CheckoutSession;
+use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
 use Magento\Payment\Model\CcGenericConfigProvider;
@@ -26,13 +27,18 @@ class ConfigProvider extends CcGenericConfigProvider
     private $checkoutSession;
 
     /**
-     * ConfigProvider constructor.
-     *
-     * @param CcConfig                        $ccConfig
-     * @param PaymentHelper                   $paymentHelper
-     * @param Config                          $credoraxConfig
-     * @param CheckoutSession                 $checkoutSession
-     * @param array                           $methodCodes
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
+     * @method __construct
+     * @param  CcConfig        $ccConfig
+     * @param  PaymentHelper   $paymentHelper
+     * @param  Config          $credoraxConfig
+     * @param  CheckoutSession $checkoutSession
+     * @param  UrlInterface    $urlBuilder
+     * @param  array           $methodCodes
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -52,6 +58,7 @@ class ConfigProvider extends CcGenericConfigProvider
         );
         $this->credoraxConfig = $credoraxConfig;
         $this->checkoutSession = $checkoutSession;
+        $this->urlBuilder = $this->credoraxConfig->getUrlBuilder();
     }
     /**
      * Return config array.
@@ -71,11 +78,17 @@ class ConfigProvider extends CcGenericConfigProvider
                     'cvvImageUrl' => $this->getCvvImageUrl(),
                     'merchantId' => $this->credoraxConfig->getMerchantId(),
                     'staticKey' => $this->credoraxConfig->getStaticKey(),
+                    'is3dSecureEnabled' => $this->credoraxConfig->is3dSecureEnabled(),
                     'reservedOrderId' => $this->getReservedOrderId(),
                     'keyCreationUrl' => $this->credoraxConfig->getCredoraxStoreUrl(),
+                    'fingetprintIframeUrl' => $this->urlBuilder->getUrl('credorax/payment_fingerprint/form'),
+                    'challengeRedirectUrl' => $this->urlBuilder->getUrl('credorax/payment_challenge/redirect'),
                 ],
             ],
         ];
+        $this->checkoutSession->unsData(CredoraxMethod::KEY_CREDORAX_3DS_COMPIND);
+        $this->checkoutSession->unsCredoraxPaymentData();
+
         return $config;
     }
 

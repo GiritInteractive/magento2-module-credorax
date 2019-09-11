@@ -43,8 +43,11 @@ define(
                 PKeyData: {},
                 merchantId: '',
                 staticKey: '',
+                is3dSecureEnabled: false,
                 reservedOrderId: '',
-                keyCreationUrl: ''
+                keyCreationUrl: '',
+                fingetprintIframeUrl: '',
+                challengeRedirectUrl: ''
             },
 
             initObservable: function() {
@@ -105,7 +108,8 @@ define(
                         'cc_save': self.creditCardSave(),
                         'cc_type': self.creditCardType(),
                         'cc_owner': (self.creditCardOwner().length >= 5) ? self.creditCardOwner() : null,
-                        'credorax_pkey_data': JSON.stringify(self.PKeyData())
+                        'credorax_pkey_data': JSON.stringify(self.PKeyData()),
+                        'credorax_3ds_compind': window.credorax_3ds_compind || null
                     }
                 };
             },
@@ -133,6 +137,10 @@ define(
                 return window.checkoutConfig.payment[self.getCode()].staticKey;
             },
 
+            is3dSecureEnabled: function() {
+                return window.checkoutConfig.payment[self.getCode()].is3dSecureEnabled;
+            },
+
             getReservedOrderId: function() {
                 return window.checkoutConfig.payment[self.getCode()].reservedOrderId;
             },
@@ -158,12 +166,20 @@ define(
                 }
             },
 
-            is3dSecureEnabled: function() {
+            getIs3dSecureEnabled: function() {
                 return window.checkoutConfig.payment[self.getCode()].is3dSecureEnabled;
             },
 
             getKeyCreationUrl: function() {
                 return window.checkoutConfig.payment[self.getCode()].keyCreationUrl;
+            },
+
+            getFingetprintIframeUrl: function() {
+                return window.checkoutConfig.payment[self.getCode()].fingetprintIframeUrl;
+            },
+
+            getChallengeRedirectUrl: function() {
+                return window.checkoutConfig.payment[self.getCode()].challengeRedirectUrl;
             },
 
             getKeyCreationParams: function() {
@@ -181,6 +197,35 @@ define(
                 }
                 console.log(params);
                 return params;
+            },
+
+            placeOrderProceed: function() {
+                if (self.getIs3dSecureEnabled()) {
+                    self.selectPaymentMethod();
+                    setPaymentMethodAction(self.messageContainer).done(
+                        function() {
+                            $('body').trigger('processStart');
+                            customerData.invalidate(['cart']);
+                            $.mage.redirect(
+                                self.getChallengeRedirectUrl()
+                            );
+                        }
+                    );
+                } else {
+                    self.getPlaceOrderDeferredObject()
+                        .fail(
+                            function() {
+                                self.isPlaceOrderActionAllowed(true);
+                            }
+                        ).done(
+                            function() {
+                                self.afterPlaceOrder();
+                                if (self.redirectAfterPlaceOrder) {
+                                    redirectOnSuccessAction.execute();
+                                }
+                            }
+                        );
+                }
             },
 
             placeOrder: function(data, event) {
@@ -201,25 +246,44 @@ define(
                     }).always(function(res) {
                         console.log(res);
                         self.PKeyData(res);
-                        self.getPlaceOrderDeferredObject()
-                            .fail(
-                                function() {
-                                    self.isPlaceOrderActionAllowed(true);
+
+                        if (self.getIs3dSecureEnabled() && res['3ds_method'] && res['3ds_trxid']) {
+                            window.credorax_fingerprint_done = false;
+                            window.credorax_fingerprint_form_submitted = false;
+
+                            var credoraxFingerprintIframe = $('<iframe>', {
+                                src: self.getFingetprintIframeUrl() + '?3ds_data=' + JSON.stringify({
+                                    "3ds_method": res['3ds_method'],
+                                    "3ds_trxid": res['3ds_trxid']
+                                }),
+                                id: 'credorax_fingerprint_iframe',
+                                frameborder: 0,
+                                scrolling: 'no',
+                                css: {
+                                    //"display": "none"
+                                },
+                            });
+                            credoraxFingerprintIframe.appendTo('body');
+
+                            window.credoraxFingerprintObs = setInterval(function() {
+                                if (window.credorax_fingerprint_form_submitted) {
+                                    clearInterval(window.credoraxFingerprintObs);
+                                    window.credoraxFingerprintObs = setInterval(function() {
+                                        if (window.credorax_fingerprint_done || Date.now() > window.credorax_fingerprint_form_submitted) {
+                                            credoraxFingerprintIframe.remove();
+                                            clearInterval(window.credoraxFingerprintObs);
+                                            self.placeOrderProceed();
+                                        }
+                                    }, 100);
                                 }
-                            ).done(
-                                function() {
-                                    self.afterPlaceOrder();
-                                    if (self.redirectAfterPlaceOrder) {
-                                        redirectOnSuccessAction.execute();
-                                    }
-                                }
-                            );
+                            }, 100);
+                        } else {
+                            self.placeOrderProceed();
+                        }
                     });
-
-                    return true;
+                } else {
+                    return false;
                 }
-
-                return false;
             }
 
         });

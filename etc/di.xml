@@ -11,4 +11,7 @@
     <type name="Magento\Sales\Model\Order\Payment\State\AuthorizeCommand">
         <plugin name="credorax_plugin_sales_model_order_payment_state_authorizecommand" type="Credorax\Credorax\Plugin\Sales\Model\Order\Payment\State\AuthorizeCommand"/>
     </type>
+    <type name="Magento\Framework\App\Request\CsrfValidator">
+        <plugin name="credorax_plugin_csrf_validator_skip" type="Credorax\Credorax\Plugin\Framework\App\Request\CsrfValidator" />
+    </type>
 </config>

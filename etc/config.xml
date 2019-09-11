@@ -15,7 +15,9 @@
                 <mode>live</mode>
                 <debug>0</debug>
                 <payment_action>authorize</payment_action>
-                <cctypes>AE,VI,MC,MI,DN</cctypes>
+                <enable_3d_secure>0</enable_3d_secure>
+                <use_smart_3d>0</use_smart_3d>
+                <cctypes>VI,MC,MI,AE,DN</cctypes>
                 <!-- Gateway Configuration -->
                 <model>Credorax\Credorax\Model\CredoraxMethod</model>
                 <privateInfoKeys>transaction_id,cc_type</privateInfoKeys>

@@ -2,15 +2,27 @@
 
 namespace Credorax\Credorax\Model;
 
+use Credorax\Credorax\Model\Config as CredoraxConfig;
+use Credorax\Credorax\Model\RedirectException as RedirectException;
 use Credorax\Credorax\Model\Request\AbstractGateway as AbstractGatewayRequest;
 use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
 use Credorax\Credorax\Model\Request\Factory as RequestFactory;
 use Credorax\Credorax\Model\Response\Gateway\Dynamic3D as Dynamic3DResponse;
+use Magento\Checkout\Model\Session\Proxy as CheckoutSession;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\GatewayException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Payment\Helper\Data;
+use Magento\Payment\Helper\Data as PaymentDataHelper;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\Cc;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -48,6 +60,12 @@ class CredoraxMethod extends Cc
     const KEY_CC_OWNER = 'cc_owner';
     const KEY_CREDORAX_PKEY = 'credorax_pkey';
     const KEY_CREDORAX_PKEY_DATA = 'credorax_pkey_data';
+    const KEY_CREDORAX_3DS_METHOD = 'credorax_3ds_method';
+    const KEY_CREDORAX_3DS_CAVV = 'credorax_3ds_cavv';
+    const KEY_CREDORAX_3DS_ECI = 'credorax_3ds_eci';
+    const KEY_CREDORAX_3DS_STATUS = 'credorax_3ds_status';
+    const KEY_CREDORAX_3DS_TRXID = 'credorax_3ds_trxid';
+    const KEY_CREDORAX_3DS_COMPIND = 'credorax_3ds_compind';
     const KEY_CC_TOKEN = 'cc_token';
     const KEY_CC_TEMP_TOKEN = 'cc_temp_token';
     const KEY_CREDORAX_LAST_OPERATION_CODE = 'credorax_last_operation_code';
@@ -149,7 +167,12 @@ class CredoraxMethod extends Cc
     protected $_isInitializeNeeded = false;
 
     /**
-     * @var \Credorax\Credorax\Model\Config
+     * @var CheckoutSession
+     */
+    private $checkoutSession;
+
+    /**
+     * @var CredoraxConfig
      */
     protected $credoraxConfig;
 
@@ -164,36 +187,39 @@ class CredoraxMethod extends Cc
     private $paymentTokenFactory;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Logger $logger
-     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Credorax\Credorax\Model\Config $credoraxConfig
-     * @param RequestFactory $requestFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
+     * @method __construct
+     * @param  Context                         $context
+     * @param  Registry                        $registry
+     * @param  ExtensionAttributesFactory      $extensionFactory
+     * @param  AttributeValueFactory           $customAttributeFactory
+     * @param  PaymentDataHelper               $paymentData
+     * @param  ScopeConfigInterface            $scopeConfig
+     * @param  MagentoPaymentModelMethodLogger $logger
+     * @param  ModuleListInterface             $moduleList
+     * @param  TimezoneInterface               $localeDate
+     * @param  CheckoutSession                 $checkoutSession
+     * @param  CredoraxConfig                  $credoraxConfig
+     * @param  RequestFactory                  $requestFactory
+     * @param  AbstractResource|null           $resource
+     * @param  AbstractDb|null                 $resourceCollection
+     * @param array                            $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
+        PaymentDataHelper $paymentData,
+        ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
-        \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Credorax\Credorax\Model\Config $credoraxConfig,
+        ModuleListInterface $moduleList,
+        TimezoneInterface $localeDate,
+        CheckoutSession $checkoutSession,
+        CredoraxConfig $credoraxConfig,
         RequestFactory $requestFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -210,6 +236,8 @@ class CredoraxMethod extends Cc
             $resourceCollection,
             $data
         );
+
+        $this->checkoutSession = $checkoutSession;
         $this->credoraxConfig = $credoraxConfig;
         $this->requestFactory = $requestFactory;
     }
@@ -292,6 +320,10 @@ class CredoraxMethod extends Cc
             );
         }
         $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY, $credoraxPKeyData->PKey);
+
+        $info->setAdditionalInformation(self::KEY_CREDORAX_3DS_METHOD, $this->checkoutSession->getData(self::KEY_CREDORAX_3DS_METHOD));
+        $info->setAdditionalInformation(self::KEY_CREDORAX_3DS_TRXID, $this->checkoutSession->getData(self::KEY_CREDORAX_3DS_TRXID));
+        $info->setAdditionalInformation(self::KEY_CREDORAX_3DS_COMPIND, $this->checkoutSession->getData(self::KEY_CREDORAX_3DS_COMPIND) ?: null);
 
         $tokenHash = $info->getAdditionalInformation(self::KEY_CC_TOKEN);
         if ($tokenHash === null) {
@@ -384,25 +416,35 @@ class CredoraxMethod extends Cc
     {
         parent::capture($payment, $amount);
 
+        if ($this->checkoutSession->getCredoraxPaymentData() !== null) {
+            $this->checkoutSession->unsCredoraxPaymentData();
+            return $this;
+        }
+
         /** @var RequestInterface $request */
         $request = $this->requestFactory->create(
             $payment->getAdditionalInformation(self::TRANSACTION_AUTH_CODE_KEY) ?
-                AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD :
-                AbstractPaymentRequest::GATEWAY_SALE_METHOD,
+                AbstractGatewayRequest::PAYMENT_CAPTURE_METHOD :
+                AbstractPaymentRequest::PAYMENT_SALE_METHOD,
             $payment,
             $amount
         );
         $response = $request->process();
 
+        if ($response->is3dsChallengeRequired()) {
+            $this->checkoutSession->setCredoraxPaymentData($response->getDataObject());
+            throw new RedirectException($response->get3dsAcsurl());
+        }
+
         return $this;
     }
 
-    private function processGateway(InfoInterface $payment, $amount)
+    private function processPayment(InfoInterface $payment, $amount)
     {
         /*$method = AbstractGatewayRequest::GATEWAY_AUTH_METHOD;
         if (0 && $this->credoraxConfig->is3dSecureEnabled()) {
             //$method = AbstractGatewayRequest::GATEWAY_DYNAMIC_3D_METHOD;
-        } elseif ($this->credoraxConfig->getGatewayAction() === self::ACTION_AUTHORIZE_CAPTURE) {
+        } elseif ($this->credoraxConfig->getPaymentAction() === self::ACTION_AUTHORIZE_CAPTURE) {
             $method = AbstractGatewayRequest::GATEWAY_SALE_METHOD;
         }
 
@@ -446,7 +488,7 @@ class CredoraxMethod extends Cc
              * If the merchant’s configured mode of operation is auth-capture,
              * then the merchant should call captureTransaction method afterwards.
              */
-            if ($this->credoraxConfig->getGatewayAction() === self::ACTION_AUTHORIZE_CAPTURE) {
+            if ($this->credoraxConfig->getPaymentAction() === self::ACTION_AUTHORIZE_CAPTURE) {
                 $request = $this->requestFactory->create(
                     AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD,
                     $payment,

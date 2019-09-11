@@ -98,10 +98,41 @@ abstract class AbstractPayment extends AbstractRequest
     }
 
     /**
+     * Return 3d secure related request params.
+     *
+     * @return array
+     */
+    protected function get3dSecureParams(OrderPayment $orderPayment)
+    {
+        $params = [
+            '3ds_initiate' => '02'
+        ];
+        if ($this->_credoraxConfig->is3dSecureEnabled()) {
+            if ($this->_credoraxConfig->isUsingSmart3d()) {
+                $params['3ds_initiate'] = '01';
+            } else {
+                $params['3ds_initiate'] = '03';
+            }
+            $params['3ds_browseracceptheader'] = '3dsBrowseracceptheader';
+            $params['3ds_browsercolordepth'] = '32';
+            $params['3ds_browserscreenheight'] = '123';
+            $params['3ds_browserscreenwidth'] = '1';
+            $params['3ds_browserjavaenabled'] = 'false';
+            $params['3ds_browsertz'] = '1';
+            $params['3ds_challengewindowsize'] = '03';
+            $params['3ds_compind'] = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_COMPIND) ?: 'N';
+            $params['3ds_transtype'] = '01';
+            $params['3ds_purchasedate'] = date('YmdHis', strtotime($orderPayment->getOrder()->getCreatedAt()));
+            $params['3ds_redirect_url'] = $this->_credoraxConfig->getUrlBuilder()->getUrl('credorax/payment_challenge/callback', ['quote' => $orderPayment->getOrder()->getQuoteId()]);
+            $params['d6'] = 'English';
+        }
+        return $params;
+    }
+
+    /**
      * Return request params.
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getParams()
     {
@@ -115,6 +146,7 @@ abstract class AbstractPayment extends AbstractRequest
             parent::getParams(),
             $this->getOrderData($order),
             $this->getBillingData($order),
+            $this->get3dSecureParams($orderPayment),
             [
                 'PKey' => $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_PKEY),
             ]

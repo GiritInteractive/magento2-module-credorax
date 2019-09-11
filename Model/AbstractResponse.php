@@ -3,6 +3,7 @@
 namespace Credorax\Credorax\Model;
 
 use Credorax\Credorax\Lib\Http\Client\Curl;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
 /**
@@ -57,7 +58,7 @@ abstract class AbstractResponse extends AbstractApi
 
     /**
      * @return AbstractResponse
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws PaymentException
      */
     public function process()
     {
@@ -85,7 +86,7 @@ abstract class AbstractResponse extends AbstractApi
     protected function getErrorMessage()
     {
         $errorReason = $this->getErrorReason();
-        if ($errorReason !== false) {
+        if ($errorReason !== false && $this->_credoraxConfig->isDebugEnabled()) {
             return __('Request to payment gateway failed. Details: "%1".', $errorReason);
         }
 
@@ -157,7 +158,11 @@ abstract class AbstractResponse extends AbstractApi
     protected function getBody()
     {
         if ($this->_body === null) {
-            $this->_body = json_decode($this->_curl->getBody(), 1);
+            $body = $this->_curl->getBody();
+            $this->_body = json_decode($body, 1);
+            if ($body && !$this->_body) {
+                parse_str($body, $this->_body);
+            }
         }
 
         return $this->_body;
@@ -188,7 +193,7 @@ abstract class AbstractResponse extends AbstractApi
         if (!empty($diff)) {
             throw new PaymentException(
                 __(
-                    'Required response data fields are missing: %1.',
+                    'Credorax required response data fields are missing: %1.',
                     implode(', ', $diff)
                 )
             );
@@ -203,5 +208,10 @@ abstract class AbstractResponse extends AbstractApi
     protected function getRequiredResponseDataKeys()
     {
         return [];
+    }
+
+    public function getDataObject()
+    {
+        return new DataObject($this->getBody());
     }
 }

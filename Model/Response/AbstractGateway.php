@@ -117,7 +117,7 @@ abstract class AbstractGateway extends AbstractResponse
         $this->_transactionId = $body['z13'];
         $this->_cipher = $body['K'];
         $this->_operationCode = (int)$body['O'];
-        $this->_responseId = isset($body['z1']) ? (int)$body['z1'] : null;
+        $this->_responseId = isset($body['z1']) ? $body['z1'] : null;
         $this->_responseCode = isset($body['z2']) ? (int)$body['z2'] : 0;
         $this->_responseDescription = isset($body['z3']) ? $body['z3'] : null;
         $this->_authCode = isset($body['z4']) ? $body['z4'] : null;
@@ -174,24 +174,23 @@ abstract class AbstractGateway extends AbstractResponse
         );
 
         $this->_orderPayment->setAdditionalInformation(
-            CredoraxMethod::TRANSACTION_ID,
-            $this->getTransactionId()
-        );
-
-        $this->_orderPayment->setAdditionalInformation(
-            CredoraxMethod::TRANSACTION_RESPONSE_ID,
-            $this->getResponseId()
-        );
-
-        $this->_orderPayment->setAdditionalInformation(
             CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE,
             $this->getOperationCode()
         );
 
-        $this->_orderPayment->setAdditionalInformation(
-            CredoraxMethod::TRANSACTION_AUTH_CODE_KEY,
-            $this->getAuthCode()
-        );
+        if (($transactionId = $this->getTransactionId())) {
+            $this->_orderPayment->setAdditionalInformation(
+                CredoraxMethod::TRANSACTION_ID,
+                $transactionId
+            );
+        }
+
+        if (!$this->_orderPayment->getAdditionalInformation(CredoraxMethod::TRANSACTION_RESPONSE_ID) && ($responseId = $this->getResponseId())) {
+            $this->_orderPayment->setAdditionalInformation(
+                CredoraxMethod::TRANSACTION_RESPONSE_ID,
+                $responseId
+            );
+        }
 
         return $this;
     }
