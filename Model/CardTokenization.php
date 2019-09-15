@@ -89,6 +89,7 @@ class CardTokenization
         if ($paymentToken && $paymentToken->getId()) {
             $paymentToken->setData(CredoraxMethod::KEY_CC_NUMBER, $this->orderPayment->getCcNumber());
             $paymentToken->setData(CredoraxMethod::KEY_CC_OWNER, $this->orderPayment->getCcOwner());
+            $paymentToken->setGatewayToken($token);
             $this->paymentTokenRepository->save($paymentToken);
             return $paymentToken;
         }
@@ -109,6 +110,7 @@ class CardTokenization
         if ($paymentToken && $paymentToken->getId()) {
             $paymentToken->setData(CredoraxMethod::KEY_CC_NUMBER, $this->orderPayment->getCcNumber());
             $paymentToken->setData(CredoraxMethod::KEY_CC_OWNER, $this->orderPayment->getCcOwner());
+            $paymentToken->setGatewayToken($token);
             $this->paymentTokenRepository->save($paymentToken);
             return $paymentToken;
         }
@@ -136,14 +138,9 @@ class CardTokenization
      */
     private function getExpirationDate()
     {
-        $expDate = new \DateTime(
-            $this->orderPayment->getCcExpYear()
-            . '-'
-            . $this->orderPayment->getCcExpMonth()
-            . '-'
-            . '01'
-            . ' '
-            . '00:00:00',
+        $expDate = \DateTime::createFromFormat(
+            'y-m-d H:i:s',
+            $this->orderPayment->getCcExpYear() . '-' . $this->orderPayment->getCcExpMonth() . '-01 00:00:00',
             new \DateTimeZone('UTC')
         );
         $expDate->add(new \DateInterval('P1M'));
