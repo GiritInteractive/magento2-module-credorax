@@ -22,8 +22,12 @@ abstract class AbstractPayment extends AbstractRequest
     /**
      * Payment methods.
      */
-    const PAYMENT_SALE_METHOD = 'payment_sale';
     const PAYMENT_AUTH_METHOD = 'payment_auth';
+    const PAYMENT_AUTH_TOKENIZATION_METHOD = 'payment_auth_tokenization';
+    const PAYMENT_AUTH_USE_TOKEN_METHOD = 'payment_auth_use_token';
+    const PAYMENT_SALE_METHOD = 'payment_sale';
+    const PAYMENT_SALE_TOKENIZATION_METHOD = 'payment_sale_tokenization';
+    const PAYMENT_SALE_USE_TOKEN_METHOD = 'payment_sale_use_token';
 
     /**
      * @var RequestFactory
@@ -146,10 +150,7 @@ abstract class AbstractPayment extends AbstractRequest
             parent::getParams(),
             $this->getOrderData($order),
             $this->getBillingData($order),
-            $this->get3dSecureParams($orderPayment),
-            [
-                'PKey' => $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_PKEY),
-            ]
+            $this->get3dSecureParams($orderPayment)
         );
     }
 }

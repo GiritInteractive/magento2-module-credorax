@@ -2,7 +2,8 @@
     "name": "credorax/magento2-module-credorax",
     "description": "Credorax Payments For Magento 2",
     "require": {
-        "php": ">=5.5"
+        "php": ">=5.5",
+        "magento/module-vault": "100.1.*"
     },
     "type": "magento2-module",
     "version": "0.1.0",

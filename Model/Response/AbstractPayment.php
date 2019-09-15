@@ -8,8 +8,6 @@ use Credorax\Credorax\Model\Config;
 use Credorax\Credorax\Model\CredoraxMethod;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
-use Magento\Sales\Model\Order\Payment\State\AuthorizeCommand;
-use Magento\Sales\Model\Order\Payment\State\CaptureCommand;
 use Magento\Sales\Model\Order\Payment\Transaction as OrderTransaction;
 
 /**
@@ -23,8 +21,12 @@ abstract class AbstractPayment extends AbstractResponse
     /**
      * Response handlers.
      */
-    const PAYMENT_SALE_HANDLER = 'payment_sale';
     const PAYMENT_AUTH_HANDLER = 'payment_auth';
+    const PAYMENT_AUTH_TOKENIZATION_HANDLER = 'payment_auth_tokenization';
+    const PAYMENT_AUTH_USE_TOKEN_HANDLER = 'payment_auth_use_token';
+    const PAYMENT_SALE_HANDLER = 'payment_sale';
+    const PAYMENT_SALE_TOKENIZATION_HANDLER = 'payment_sale_tokenization';
+    const PAYMENT_SALE_USE_TOKEN_HANDLER = 'payment_sale_use_token';
 
     /**
      * @var Order
@@ -35,15 +37,6 @@ abstract class AbstractPayment extends AbstractResponse
      * @var OrderPayment
      */
     protected $_orderPayment;
-
-    /**
-     * @var AuthorizeCommand
-     */
-    protected $_authorizeCommand;
-    /**
-     * @var CaptureCommand
-     */
-    protected $_captureCommand;
 
     /**
      * @var string
@@ -74,11 +67,6 @@ abstract class AbstractPayment extends AbstractResponse
      * @var string
      */
     protected $_responseDescription;
-
-    /**
-     * @var string
-     */
-    protected $_authCode;
 
     /**
      * @var int
@@ -127,28 +115,21 @@ abstract class AbstractPayment extends AbstractResponse
 
     /**
      * @method __construct
-     * @param  Config           $credoraxConfig
-     * @param  Curl             $curl
-     * @param  OrderPayment     $orderPayment
-     * @param  AuthorizeCommand $authorizeCommand
-     * @param  CaptureCommand   $captureCommand
+     * @param  Config                          $credoraxConfig
+     * @param  Curl                            $curl
+     * @param  OrderPayment                    $orderPayment
      */
     public function __construct(
         Config $credoraxConfig,
         Curl $curl,
-        OrderPayment $orderPayment,
-        AuthorizeCommand $authorizeCommand,
-        CaptureCommand $captureCommand
+        OrderPayment $orderPayment
     ) {
         parent::__construct(
             $credoraxConfig,
             $curl
         );
-
         $this->_order = $orderPayment->getOrder();
         $this->_orderPayment = $orderPayment;
-        $this->_authorizeCommand = $authorizeCommand;
-        $this->_captureCommand = $captureCommand;
     }
 
     /**
@@ -164,7 +145,8 @@ abstract class AbstractPayment extends AbstractResponse
         $this->_responseId = isset($body['z1']) ? $body['z1'] : null;
         $this->_responseCode = isset($body['z2']) ? (int)$body['z2'] : 0;
         $this->_responseDescription = isset($body['z3']) ? $body['z3'] : null;
-        $this->_authCode = isset($body['z4']) ? $body['z4'] : null;
+
+        //CC info:
         $this->_ccNumber = isset($body['b1']) ? $body['b1'] : null;
         $this->_ccExpMonth = isset($body['b3']) ? $body['b3'] : null;
         $this->_ccExpYear = isset($body['b4']) ? $body['b4'] : null;
@@ -268,13 +250,6 @@ abstract class AbstractPayment extends AbstractResponse
             );
         }
 
-        if ($this->_authCode) {
-            $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::TRANSACTION_AUTH_CODE_KEY,
-                $this->_authCode
-            );
-        }
-
         if ($this->_3dsCavv) {
             $this->_orderPayment->setAdditionalInformation(
                 CredoraxMethod::KEY_CREDORAX_3DS_CAVV,
@@ -305,11 +280,11 @@ abstract class AbstractPayment extends AbstractResponse
 
         $this->_orderPayment->getMethodInstance()->getInfoInstance()->addData(
             [
-                'cc_last_4' => substr($this->getCcNumber(), -4),
-                'cc_number' => $this->getCcNumber(),
-                'cc_exp_month' => $this->getCcExpMonth(),
-                'cc_exp_year' => $this->getCcExpYear(),
-                'cc_owner' => $this->getCcOwner(),
+                CredoraxMethod::KEY_CC_LAST_4 => substr($this->getCcNumber(), -4),
+                CredoraxMethod::KEY_CC_NUMBER => $this->getCcNumber(),
+                CredoraxMethod::KEY_CC_EXP_MONTH => $this->getCcExpMonth(),
+                CredoraxMethod::KEY_CC_EXP_YEAR => $this->getCcExpYear(),
+                CredoraxMethod::KEY_CC_OWNER => $this->getCcOwner(),
             ]
         );
 
@@ -354,14 +329,6 @@ abstract class AbstractPayment extends AbstractResponse
     public function getResponseDescription()
     {
         return $this->_responseDescription;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthCode()
-    {
-        return $this->_authCode;
     }
 
     /**

@@ -256,7 +256,7 @@ class Config
      *
      * @return bool
      */
-    public function getUseVault()
+    public function isUsingVault()
     {
         return (bool)$this->getConfigValue('use_vault');
     }

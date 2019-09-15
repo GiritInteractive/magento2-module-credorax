@@ -6,7 +6,6 @@ use Credorax\Credorax\Model\CredoraxMethod;
 
 class Cc extends \Magento\Payment\Block\Info\Cc
 {
-
     /**
      * Prepare credit card related payment info
      *

@@ -24,8 +24,12 @@ class Factory
      * @var array
      */
     private $invokableClasses = [
-        AbstractPaymentRequest::PAYMENT_SALE_METHOD => \Credorax\Credorax\Model\Request\Payment\Sale::class,
         AbstractPaymentRequest::PAYMENT_AUTH_METHOD => \Credorax\Credorax\Model\Request\Payment\Auth::class,
+        AbstractPaymentRequest::PAYMENT_AUTH_TOKENIZATION_METHOD => \Credorax\Credorax\Model\Request\Payment\AuthTokenization::class,
+        AbstractPaymentRequest::PAYMENT_AUTH_USE_TOKEN_METHOD => \Credorax\Credorax\Model\Request\Payment\AuthUseToken::class,
+        AbstractPaymentRequest::PAYMENT_SALE_METHOD => \Credorax\Credorax\Model\Request\Payment\Sale::class,
+        AbstractPaymentRequest::PAYMENT_SALE_TOKENIZATION_METHOD => \Credorax\Credorax\Model\Request\Payment\SaleTokenization::class,
+        AbstractPaymentRequest::PAYMENT_SALE_USE_TOKEN_METHOD => \Credorax\Credorax\Model\Request\Payment\SaleUseToken::class,
         AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD => \Credorax\Credorax\Model\Request\Gateway\Capture::class,
         AbstractGatewayRequest::GATEWAY_REFUND_METHOD => \Credorax\Credorax\Model\Request\Gateway\Refund::class,
         AbstractGatewayRequest::GATEWAY_VOID_METHOD => \Credorax\Credorax\Model\Request\Gateway\Cancel::class,

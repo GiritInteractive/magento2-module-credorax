@@ -108,6 +108,7 @@ define(
                         'cc_save': self.creditCardSave(),
                         'cc_type': self.creditCardType(),
                         'cc_owner': (self.creditCardOwner().length >= 5) ? self.creditCardOwner() : null,
+                        'cc_token': self.creditCardToken(),
                         'credorax_pkey_data': JSON.stringify(self.PKeyData()),
                         'credorax_3ds_compind': window.credorax_3ds_compind || null
                     }
@@ -187,35 +188,48 @@ define(
                     "M": self.getMerchantId(),
                     "RequestID": self.getReservedOrderId(),
                     "Statickey": self.getStaticKey(),
-                    "b1": self.creditCardNumber(),
-                    "b3": self.creditCardExpMonth(),
-                    "b4": self.creditCardExpYear(),
                     "b5": self.creditCardVerificationNumber()
                 };
-                if (self.creditCardOwner().length >= 5) {
-                    params["c1"] = self.creditCardOwner();
+                if (self.creditCardToken()) {
+                    params["g1"] = self.creditCardToken();
+                } else {
+                    params["b1"] = self.creditCardNumber();
+                    params["b3"] = self.creditCardExpMonth();
+                    params["b4"] = self.creditCardExpYear();
+                    if (self.creditCardOwner().length >= 5) {
+                        params["c1"] = self.creditCardOwner();
+                    }
                 }
+
                 console.log(params);
                 return params;
             },
 
             placeOrderProceed: function() {
+                self.isPlaceOrderActionAllowed(false);
+                $('body').trigger('processStart');
                 if (self.getIs3dSecureEnabled()) {
                     self.selectPaymentMethod();
-                    setPaymentMethodAction(self.messageContainer).done(
-                        function() {
-                            $('body').trigger('processStart');
-                            customerData.invalidate(['cart']);
-                            $.mage.redirect(
-                                self.getChallengeRedirectUrl()
-                            );
-                        }
-                    );
+                    setPaymentMethodAction(self.messageContainer)
+                        .fail(
+                            function() {
+                                self.isPlaceOrderActionAllowed(true);
+                                $('body').trigger('processStop');
+                            }
+                        ).done(
+                            function() {
+                                customerData.invalidate(['cart']);
+                                $.mage.redirect(
+                                    self.getChallengeRedirectUrl()
+                                );
+                            }
+                        );
                 } else {
                     self.getPlaceOrderDeferredObject()
                         .fail(
                             function() {
                                 self.isPlaceOrderActionAllowed(true);
+                                $('body').trigger('processStop');
                             }
                         ).done(
                             function() {
@@ -241,8 +255,7 @@ define(
                         url: self.getKeyCreationUrl(),
                         data: self.getKeyCreationParams(),
                         method: 'post',
-                        cache: false,
-                        showLoader: true
+                        cache: false
                     }).always(function(res) {
                         console.log(res);
                         self.PKeyData(res);

@@ -22,7 +22,13 @@
                 <model>Credorax\Credorax\Model\CredoraxMethod</model>
                 <privateInfoKeys>transaction_id,cc_type</privateInfoKeys>
                 <paymentInfoKeys>transaction_id,cc_type</paymentInfoKeys>
+                <can_authorize_vault>1</can_authorize_vault>
             </credorax>
+
+            <credorax_cc_vault>
+                <model>CredoraxCreditCardVaultFacade</model>
+                <title>Stored Cards (Credorax)</title>
+            </credorax_cc_vault>
         </payment>
     </default>
 </config>

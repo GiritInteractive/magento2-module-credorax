@@ -2,6 +2,7 @@
 
 namespace Credorax\Credorax\Controller\Payment\Challenge;
 
+use Credorax\Credorax\Model\CardTokenization as CardTokenizationModel;
 use Credorax\Credorax\Model\Config as CredoraxConfig;
 use Credorax\Credorax\Model\CredoraxMethod;
 use Credorax\Credorax\Model\Payment;
@@ -65,16 +66,21 @@ class Callback extends Action
     private $onepageCheckout;
 
     /**
-     * Object constructor.
-     *
-     * @param Context                 $context
-     * @param OrderFactory            $orderFactory
-     * @param CredoraxConfig          $credoraxConfig
-     * @param DataObjectFactory       $dataObjectFactory
-     * @param CartManagementInterface $cartManagement
-     * @param CartRepositoryInterface $quoteRepository
-     * @param CheckoutSession         $checkoutSession
-     * @param Onepage                 $onepageCheckout
+     * @var CardTokenizationModel
+     */
+    private $cardTokenizationModel;
+
+    /**
+     * @method __construct
+     * @param  Context                 $context
+     * @param  OrderFactory            $orderFactory
+     * @param  CredoraxConfig          $credoraxConfig
+     * @param  DataObjectFactory       $dataObjectFactory
+     * @param  CartManagementInterface $cartManagement
+     * @param  CartRepositoryInterface $quoteRepository
+     * @param  CheckoutSession         $checkoutSession
+     * @param  Onepage                 $onepageCheckout
+     * @param  CardTokenizationModel   $cardTokenizationModel
      */
     public function __construct(
         Context $context,
@@ -84,7 +90,8 @@ class Callback extends Action
         CartManagementInterface $cartManagement,
         CartRepositoryInterface $quoteRepository,
         CheckoutSession $checkoutSession,
-        Onepage $onepageCheckout
+        Onepage $onepageCheckout,
+        CardTokenizationModel $cardTokenizationModel
     ) {
         parent::__construct($context);
         $this->orderFactory = $orderFactory;
@@ -94,6 +101,7 @@ class Callback extends Action
         $this->quoteRepository = $quoteRepository;
         $this->checkoutSession = $checkoutSession;
         $this->onepageCheckout = $onepageCheckout;
+        $this->cardTokenizationModel = $cardTokenizationModel;
     }
     /**
      * @return ResultInterface
@@ -116,7 +124,7 @@ class Callback extends Action
             $resData = $this->dataObjectFactory->create()->setData(array_merge($paymentParams, $params));
 
             if (!(in_array($resData->getData('3ds_status'), ['Y','A']))) {
-                if ($this->_credoraxConfig->isDebugEnabled()) {
+                if ($this->credoraxConfig->isDebugEnabled()) {
                     throw new PaymentException(__('Your payment failed. Details: %1', $this->credoraxConfig->get3dStatusMessage($resData->getData('3ds_status'))));
                 } else {
                     throw new PaymentException(__('Your payment failed.'));
@@ -203,13 +211,6 @@ class Callback extends Action
             );
         }
 
-        if ($authCode = $resData->getData('z4')) {
-            $orderPayment->setAdditionalInformation(
-                CredoraxMethod::TRANSACTION_AUTH_CODE_KEY,
-                $authCode
-            );
-        }
-
         if ($_3dsCavv = $resData->getData('3ds_cavv')) {
             $orderPayment->setAdditionalInformation(
                 CredoraxMethod::KEY_CREDORAX_3DS_CAVV,
@@ -247,6 +248,23 @@ class Callback extends Action
                 'cc_owner' => $resData->getData('c1'),
             ]
         );
+
+        if ($authCode = $resData->getData('z4') && in_array($resData->getData('O'), [2,28])) {
+            $orderPayment->setAdditionalInformation(
+                CredoraxMethod::TRANSACTION_AUTH_CODE_KEY,
+                $authCode
+            );
+        }
+
+        if (
+            ($token = $resData->getData('g1')) &&
+            $this->credoraxConfig->isUsingVault() &&
+            $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CC_SAVE)
+        ) {
+            $this->cardTokenizationModel
+                ->setOrderPayment($orderPayment)
+                ->processCardPaymentToken($token);
+        }
 
         return $this;
     }

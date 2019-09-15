@@ -2,7 +2,6 @@
 
 namespace Credorax\Credorax\Model\Response\Payment;
 
-use Credorax\Credorax\Model\CredoraxMethod;
 use Credorax\Credorax\Model\Response\AbstractPayment;
 use Credorax\Credorax\Model\ResponseInterface;
 
@@ -14,34 +13,6 @@ use Credorax\Credorax\Model\ResponseInterface;
  */
 class Sale extends AbstractPayment implements ResponseInterface
 {
-    /**
-     * @return Sale
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Exception
-     */
-    protected function updateTransaction()
-    {
-        return parent::updateTransaction();
-        /*parent::updateTransaction();
-
-        $this->orderPayment->setAdditionalInformation(
-            CredoraxMethod::TRANSACTION_ID,
-            $this->getTransactionId()
-        );
-
-        $this->orderPayment->setAdditionalInformation(
-            CredoraxMethod::TRANSACTION_RESPONSE_ID,
-            $this->getResponseId()
-        );
-
-        $this->orderPayment->setAdditionalInformation(
-            CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE,
-            $this->getOperationCode()
-        );
-
-        return $this;*/
-    }
-
     /**
      * @return array
      */

@@ -15,34 +15,48 @@ use Credorax\Credorax\Model\ResponseInterface;
 class Auth extends AbstractPayment implements ResponseInterface
 {
     /**
+     * @var string
+     */
+    protected $_authCode;
+
+    /**
+     * @return Dynamic3D
+     */
+    protected function processResponseData()
+    {
+        parent::processResponseData();
+
+        $body = $this->getBody();
+        $this->_authCode = isset($body['z4']) ? $body['z4'] : null;
+
+        return $this;
+    }
+
+    /**
      * @return Auth
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
      */
     protected function updateTransaction()
     {
-        return parent::updateTransaction();
+        parent::updateTransaction();
 
-        //return $this;
+        if ($this->_authCode) {
+            $this->_orderPayment->setAdditionalInformation(
+                CredoraxMethod::TRANSACTION_AUTH_CODE_KEY,
+                $this->_authCode
+            );
+        }
 
-        /*parent::updateTransaction();
+        return $this;
+    }
 
-        $this->orderPayment->setAdditionalInformation(
-            CredoraxMethod::TRANSACTION_ID,
-            $this->getTransactionId()
-        );
-
-        $this->orderPayment->setAdditionalInformation(
-            CredoraxMethod::TRANSACTION_RESPONSE_ID,
-            $this->getResponseId()
-        );
-
-        $this->orderPayment->setAdditionalInformation(
-            CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE,
-            $this->getOperationCode()
-        );
-
-        return $this;*/
+    /**
+     * @return string
+     */
+    public function getAuthCode()
+    {
+        return $this->_authCode;
     }
 
     /**
