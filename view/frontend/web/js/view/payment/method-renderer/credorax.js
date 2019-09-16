@@ -51,8 +51,6 @@ define(
             },
 
             initObservable: function() {
-                console.log(quote);
-
                 self = this;
 
                 self._super()
@@ -201,7 +199,6 @@ define(
                     }
                 }
 
-                console.log(params);
                 return params;
             },
 
@@ -257,7 +254,6 @@ define(
                         method: 'post',
                         cache: false
                     }).always(function(res) {
-                        console.log(res);
                         self.PKeyData(res);
 
                         if (self.getIs3dSecureEnabled() && res['3ds_method'] && res['3ds_trxid']) {
