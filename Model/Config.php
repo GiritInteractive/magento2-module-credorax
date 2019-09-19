@@ -5,6 +5,7 @@ namespace Credorax\Credorax\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -191,6 +192,22 @@ class Config
     public function getPaymentAction()
     {
         return $this->getConfigValue('payment_action');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthirizeAction()
+    {
+        return $this->getPaymentAction() === MethodInterface::ACTION_AUTHORIZE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthirizeAndCaptureAction()
+    {
+        return $this->getPaymentAction() === MethodInterface::ACTION_AUTHORIZE_CAPTURE;
     }
 
     /**

@@ -69,6 +69,11 @@ abstract class AbstractPayment extends AbstractResponse
     protected $_responseDescription;
 
     /**
+     * @var string
+     */
+    protected $_riskScore;
+
+    /**
      * @var int
      */
     protected $_ccNumber;
@@ -114,6 +119,11 @@ abstract class AbstractPayment extends AbstractResponse
     protected $_3dsTrxid;
 
     /**
+     * @var string
+     */
+    protected $_3dsVersion;
+
+    /**
      * @method __construct
      * @param  Config                          $credoraxConfig
      * @param  Curl                            $curl
@@ -145,6 +155,7 @@ abstract class AbstractPayment extends AbstractResponse
         $this->_responseId = isset($body['z1']) ? $body['z1'] : null;
         $this->_responseCode = isset($body['z2']) ? (int)$body['z2'] : 0;
         $this->_responseDescription = isset($body['z3']) ? $body['z3'] : null;
+        $this->_riskScore = isset($body['z21']) ? $body['z21'] : null;
 
         //CC info:
         $this->_ccNumber = isset($body['b1']) ? $body['b1'] : null;
@@ -158,6 +169,7 @@ abstract class AbstractPayment extends AbstractResponse
         $this->_3dsEci = isset($body['3ds_eci']) ? $body['3ds_eci'] : null;
         $this->_3dsStatus = isset($body['3ds_status']) ? $body['3ds_status'] : null;
         $this->_3dsTrxid = isset($body['3ds_trxid']) ? $body['3ds_trxid'] : null;
+        $this->_3dsVersion = isset($body['3ds_version']) ? $body['3ds_version'] : null;
 
         return $this;
     }
@@ -238,15 +250,22 @@ abstract class AbstractPayment extends AbstractResponse
 
         if ($this->_transactionId) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::TRANSACTION_ID,
+                CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID,
                 $this->_transactionId
             );
         }
 
         if ($this->_responseId) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::TRANSACTION_RESPONSE_ID,
+                CredoraxMethod::KEY_CREDORAX_RESPONSE_ID,
                 $this->_responseId
+            );
+        }
+
+        if ($this->_riskScore) {
+            $this->_orderPayment->setAdditionalInformation(
+                CredoraxMethod::KEY_CREDORAX_RISK_SCORE,
+                $this->_riskScore
             );
         }
 
@@ -275,6 +294,13 @@ abstract class AbstractPayment extends AbstractResponse
             $this->_orderPayment->setAdditionalInformation(
                 CredoraxMethod::KEY_CREDORAX_3DS_TRXID,
                 $this->_3dsTrxid
+            );
+        }
+
+        if ($this->_3dsVersion) {
+            $this->_orderPayment->setAdditionalInformation(
+                CredoraxMethod::KEY_CREDORAX_3DS_VERSION,
+                $this->_3dsVersion
             );
         }
 
@@ -401,6 +427,14 @@ abstract class AbstractPayment extends AbstractResponse
     public function get3dsTrxid()
     {
         return $this->_3dsTrxid;
+    }
+
+    /**
+     * @return string
+     */
+    public function get3dsVersion()
+    {
+        return $this->_3dsVersion;
     }
 
     /**

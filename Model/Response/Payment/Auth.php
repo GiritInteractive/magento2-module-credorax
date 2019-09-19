@@ -43,7 +43,7 @@ class Auth extends AbstractPayment implements ResponseInterface
 
         if ($this->_authCode) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::TRANSACTION_AUTH_CODE_KEY,
+                CredoraxMethod::KEY_CREDORAX_AUTH_CODE,
                 $this->_authCode
             );
         }

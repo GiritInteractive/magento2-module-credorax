@@ -79,7 +79,7 @@ class SubmitAllAfter implements ObserverInterface
             }
 
             $operationCode = (int)$orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE);
-            $transactionId = $orderPayment->getAdditionalInformation(CredoraxMethod::TRANSACTION_ID);
+            $transactionId = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID);
 
             if ($operationCode === 1 && $transactionId) {
                 $message = $this->captureCommand->execute(

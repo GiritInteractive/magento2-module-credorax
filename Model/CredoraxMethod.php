@@ -61,21 +61,20 @@ class CredoraxMethod extends Cc
     const KEY_CC_TOKEN = 'cc_token';
     const KEY_CC_TEMP_TOKEN = 'cc_temp_token';
 
-    const KEY_CREDORAX_PKEY = 'credorax_pkey';
-    const KEY_CREDORAX_PKEY_DATA = 'credorax_pkey_data';
-    const KEY_CREDORAX_3DS_METHOD = 'credorax_3ds_method';
     const KEY_CREDORAX_3DS_CAVV = 'credorax_3ds_cavv';
+    const KEY_CREDORAX_3DS_COMPIND = 'credorax_3ds_compind';
     const KEY_CREDORAX_3DS_ECI = 'credorax_3ds_eci';
+    const KEY_CREDORAX_3DS_METHOD = 'credorax_3ds_method';
     const KEY_CREDORAX_3DS_STATUS = 'credorax_3ds_status';
     const KEY_CREDORAX_3DS_TRXID = 'credorax_3ds_trxid';
-    const KEY_CREDORAX_3DS_COMPIND = 'credorax_3ds_compind';
+    const KEY_CREDORAX_3DS_VERSION = 'credorax_3ds_version';
+    const KEY_CREDORAX_AUTH_CODE = 'credorax_auth_code';
     const KEY_CREDORAX_LAST_OPERATION_CODE = 'credorax_last_operation_code';
-
-    const TRANSACTION_RESPONSE_ID = 'transaction_response_id';
-    const TRANSACTION_ORDER_ID = 'transaction_order_id';
-    const TRANSACTION_AUTH_CODE_KEY = 'authorization_code';
-    const TRANSACTION_ID = 'transaction_id';
-    const TRANSACTION_CARD_CVV = 'card_cvv';
+    const KEY_CREDORAX_PKEY = 'credorax_pkey';
+    const KEY_CREDORAX_PKEY_DATA = 'credorax_pkey_data';
+    const KEY_CREDORAX_RESPONSE_ID = 'credorax_response_id';
+    const KEY_CREDORAX_RISK_SCORE = 'credorax_risk_score';
+    const KEY_CREDORAX_TRANSACTION_ID = 'credorax_transaction_id';
 
     /**
      * Gateway code
@@ -87,19 +86,7 @@ class CredoraxMethod extends Cc
     /**
      * @var string
      */
-    //protected $_formBlockType = \Magento\Payment\Block\Form\Cc::class;
-
-    /**
-     * @var string
-     */
     protected $_infoBlockType = \Credorax\Credorax\Block\Info\Cc::class;
-
-    /**
-     * Info block.
-     *
-     * @var string
-     */
-    //protected $_infoBlockType = \Credorax\Credorax\Block\ConfigurableInfo::class;
 
     /**
      * Gateway Method feature.
@@ -149,6 +136,13 @@ class CredoraxMethod extends Cc
      * @var bool
      */
     protected $_canVoid = true;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canUseInternal = false;
 
     /**
      * Gateway Method feature.
@@ -302,6 +296,12 @@ class CredoraxMethod extends Cc
         $info->setAdditionalInformation(self::KEY_CC_OWNER, $ccOwner);
         $info->setAdditionalInformation(self::KEY_CC_TOKEN, $ccToken);
         $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY_DATA, $credoraxPKeyData);
+        $info->addData(
+            [
+                self::KEY_CC_TYPE => $ccType,
+                self::KEY_CC_OWNER => $ccOwner,
+            ]
+        );
 
         //Token
         $tokenHash = $info->getAdditionalInformation(self::KEY_CC_TOKEN);
@@ -317,12 +317,16 @@ class CredoraxMethod extends Cc
             return $this;
         }
         $tokenDetails = new DataObject((array) json_decode($token->getTokenDetails()));
-        $info->setAdditionalInformation(self::KEY_CC_TYPE, $tokenDetails->getData(self::KEY_CC_TYPE));
-        $info->setAdditionalInformation(self::KEY_CC_LAST_4, $tokenDetails->getData(self::KEY_CC_LAST_4));
-        $info->setAdditionalInformation(self::KEY_CC_NUMBER, $tokenDetails->getData(self::KEY_CC_NUMBER));
-        $info->setAdditionalInformation(self::KEY_CC_EXP_MONTH, $tokenDetails->getData(self::KEY_CC_EXP_MONTH));
-        $info->setAdditionalInformation(self::KEY_CC_EXP_YEAR, $tokenDetails->getData(self::KEY_CC_EXP_YEAR));
-        $info->setAdditionalInformation(self::KEY_CC_OWNER, $tokenDetails->getData(self::KEY_CC_OWNER));
+        $info->addData(
+            [
+                self::KEY_CC_TYPE => $tokenDetails->getData(self::KEY_CC_TYPE),
+                self::KEY_CC_LAST_4 => $tokenDetails->getData(self::KEY_CC_LAST_4),
+                self::KEY_CC_NUMBER => $tokenDetails->getData(self::KEY_CC_NUMBER),
+                self::KEY_CC_EXP_MONTH => $tokenDetails->getData(self::KEY_CC_EXP_MONTH),
+                self::KEY_CC_EXP_YEAR => $tokenDetails->getData(self::KEY_CC_EXP_YEAR),
+                self::KEY_CC_OWNER => $tokenDetails->getData(self::KEY_CC_OWNER),
+            ]
+        );
 
         return $this;
     }
@@ -387,8 +391,8 @@ class CredoraxMethod extends Cc
                 AbstractPaymentRequest::PAYMENT_AUTH_METHOD;
         }
 
-        if ($this->credoraxConfig->getPaymentAction() === self::ACTION_AUTHORIZE_CAPTURE) {
-            if ($payment->getAdditionalInformation(self::TRANSACTION_AUTH_CODE_KEY)) {
+        if ($this->credoraxConfig->isAuthirizeAndCaptureAction()) {
+            if ($payment->getAdditionalInformation(self::KEY_CREDORAX_AUTH_CODE)) {
                 $method = AbstractGatewayRequest::PAYMENT_CAPTURE_METHOD;
             } elseif ($token) {
                 $method = AbstractPaymentRequest::PAYMENT_SALE_USE_TOKEN_METHOD;

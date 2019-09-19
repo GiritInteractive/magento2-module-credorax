@@ -199,15 +199,22 @@ class Callback extends Action
 
         if ($transactionId = $resData->getData('z13')) {
             $orderPayment->setAdditionalInformation(
-                CredoraxMethod::TRANSACTION_ID,
+                CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID,
                 $transactionId
             );
         }
 
         if ($responseId = $resData->getData('z1')) {
             $orderPayment->setAdditionalInformation(
-                CredoraxMethod::TRANSACTION_RESPONSE_ID,
+                CredoraxMethod::KEY_CREDORAX_RESPONSE_ID,
                 $responseId
+            );
+        }
+
+        if ($riskScore = $resData->getData('z21')) {
+            $orderPayment->setAdditionalInformation(
+                CredoraxMethod::KEY_CREDORAX_RISK_SCORE,
+                $riskScore
             );
         }
 
@@ -239,19 +246,26 @@ class Callback extends Action
             );
         }
 
+        if ($_3dsVersion = $resData->getData('3ds_version')) {
+            $orderPayment->setAdditionalInformation(
+                CredoraxMethod::KEY_CREDORAX_3DS_VERSION,
+                $_3dsVersion
+            );
+        }
+
         $orderPayment->getMethodInstance()->getInfoInstance()->addData(
             [
-                'cc_last_4' => substr($resData->getData('b1'), -4),
-                'cc_number' => $resData->getData('b1'),
-                'cc_exp_month' => $resData->getData('b3'),
-                'cc_exp_year' => $resData->getData('b4'),
-                'cc_owner' => $resData->getData('c1'),
+                CredoraxMethod::KEY_CC_LAST_4 => substr($resData->getData('b1'), -4),
+                CredoraxMethod::KEY_CC_NUMBER => $resData->getData('b1'),
+                CredoraxMethod::KEY_CC_EXP_MONTH => $resData->getData('b3'),
+                CredoraxMethod::KEY_CC_EXP_YEAR => $resData->getData('b4'),
+                CredoraxMethod::KEY_CC_OWNER => $resData->getData('c1'),
             ]
         );
 
         if ($authCode = $resData->getData('z4') && in_array($resData->getData('O'), [2,28])) {
             $orderPayment->setAdditionalInformation(
-                CredoraxMethod::TRANSACTION_AUTH_CODE_KEY,
+                CredoraxMethod::KEY_CREDORAX_AUTH_CODE,
                 $authCode
             );
         }
