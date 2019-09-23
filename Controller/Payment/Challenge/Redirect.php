@@ -6,6 +6,7 @@ use Credorax\Credorax\Model\Config as CredoraxConfig;
 use Credorax\Credorax\Model\QuoteManagement;
 use Credorax\Credorax\Model\RedirectException as RedirectException;
 use Magento\Checkout\Model\Session\Proxy as CheckoutSession;
+use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
@@ -30,6 +31,11 @@ class Redirect extends Action
     private $checkoutSession;
 
     /**
+     * @var Onepage
+     */
+    private $onepageCheckout;
+
+    /**
      * @var CredoraxConfig
      */
     private $credoraxConfig;
@@ -39,17 +45,20 @@ class Redirect extends Action
      * @param  Context         $context
      * @param  QuoteManagement $quoteManagement
      * @param  CheckoutSession $checkoutSession
+     * @param  Onepage         $onepageCheckout
      * @param  CredoraxConfig  $credoraxConfig
      */
     public function __construct(
         Context $context,
         QuoteManagement $quoteManagement,
         CheckoutSession $checkoutSession,
+        Onepage $onepageCheckout,
         CredoraxConfig $credoraxConfig
     ) {
         parent::__construct($context);
         $this->quoteManagement = $quoteManagement;
         $this->checkoutSession = $checkoutSession;
+        $this->onepageCheckout = $onepageCheckout;
         $this->credoraxConfig = $credoraxConfig;
     }
     /**
@@ -59,10 +68,15 @@ class Redirect extends Action
      */
     public function execute()
     {
+        $this->credoraxConfig->log('Challenge\Redirect::execute() ', 'debug', [
+            'params' => $this->getRequest()->getParams(),
+        ]);
+
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         try {
             $quote = $this->checkoutSession->getQuote();
+            $this->onepageCheckout->getCheckoutMethod();
             $orderId = $this->quoteManagement->placeOrder($quote->getId());
         } catch (RedirectException $e) {
             $this->quoteManagement->rollbackAddressesAlias();
