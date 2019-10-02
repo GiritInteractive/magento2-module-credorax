@@ -41,7 +41,7 @@
             <!--/ko-->
         </div>
 
-        <form class="form" data-bind="attr: {'id': getCode() + '-form'}">
+        <form class="form" data-bind="attr: {'id': getCode() + '-form'}" data-mage-init='{"validation": {}}'>
             <fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
 
                 <!-- ko if: (isShowLegend())-->

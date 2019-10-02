@@ -8,6 +8,7 @@ use Magento\Framework\Phrase;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**
  * Plugin for product Details Block
@@ -49,9 +50,17 @@ class AuthorizeCommand
             $order->setState(Order::STATE_NEW)->setStatus('pending');
             //$order->setState(Order::STATE_PENDING_PAYMENT)->setStatus(Order::STATE_PENDING_PAYMENT);
 
-            if ($payment->getLastTransId()) {
-                $payment->setParentTransactionId($payment->getLastTransId());
-            }
+            //$operationCode = (int)$payment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE);
+            //$transactionId = $payment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID);
+
+            /*if (in_array($operationCode, [2, 12, 28]) && $transactionId) {
+                if ($payment->getLastTransId()) {
+                    $payment->setParentTransactionId($payment->getLastTransId());
+                }
+                $payment->setTransactionId($transactionId);
+                $payment->setIsTransactionClosed(0);
+                $payment->addTransaction(Transaction::TYPE_AUTH);
+            }*/
         }
         return $result;
     }

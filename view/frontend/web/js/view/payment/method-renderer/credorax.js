@@ -15,7 +15,9 @@ define(
         'jquery.redirect',
         'ko',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/action/create-billing-address'
+        'Magento_Checkout/js/action/create-billing-address',
+        'Magento_Ui/js/model/messages',
+        'mage/translate'
     ],
     function(
         $,
@@ -27,7 +29,9 @@ define(
         jqueryRedirect,
         ko,
         quote,
-        billingAddress
+        billingAddress,
+        Messages,
+        $t
     ) {
         'use strict';
 
@@ -66,6 +70,8 @@ define(
                 if (savedCards.length > 0) {
                     self.creditCardToken(savedCards[0]['value']);
                 }
+
+                this.messageContainer = new Messages();
 
                 return self;
             },
@@ -181,6 +187,12 @@ define(
                 return window.checkoutConfig.payment[self.getCode()].challengeRedirectUrl;
             },
 
+            pad: function(num, size) {
+                var s = num + "";
+                while (s.length < size) s = "0" + s;
+                return s;
+            },
+
             getKeyCreationParams: function() {
                 var params = {
                     "M": self.getMerchantId(),
@@ -192,14 +204,38 @@ define(
                     params["g1"] = self.creditCardToken();
                 } else {
                     params["b1"] = self.creditCardNumber();
-                    params["b3"] = self.creditCardExpMonth();
-                    params["b4"] = self.creditCardExpYear();
+                    params["b3"] = self.creditCardExpMonth() ? self.pad(self.creditCardExpMonth(), 2) : null;
+                    params["b4"] = self.creditCardExpYear() ? self.creditCardExpYear().toString().substr(-2) : null;
                     if (self.creditCardOwner().length >= 5) {
                         params["c1"] = self.creditCardOwner();
                     }
                 }
 
                 return params;
+            },
+
+            /**
+             * @return {Boolean}
+             */
+            isValidCcExp: function() {
+                var isValid = false,
+                    month = self.creditCardExpMonth(),
+                    year = self.creditCardExpYear(),
+                    currentTime, currentMonth, currentYear;
+                if (month && year) {
+                    currentTime = new Date();
+                    currentMonth = currentTime.getMonth() + 1;
+                    currentYear = currentTime.getFullYear();
+                    isValid = !year || year > currentYear || year == currentYear && month >= currentMonth;
+                }
+                return isValid;
+            },
+
+            /**
+             * @return {Boolean}
+             */
+            validate: function() {
+                return true;
             },
 
             placeOrderProceed: function() {
@@ -255,6 +291,16 @@ define(
                         cache: false
                     }).always(function(res) {
                         self.PKeyData(res);
+                        res['z2'] = parseInt(res['z2']);
+                        if (!res['PKey'] || res['z2']) {
+                            console.error(res);
+                            self.messageContainer.addErrorMessage({
+                                message: $t(res['z3'] || 'Credorax transaction failed, please make sure that the payment details are correct.')
+                            });
+                            self.isPlaceOrderActionAllowed(true);
+                            $('body').trigger('processStop');
+                            return false;
+                        }
 
                         if (self.getIs3dSecureEnabled() && res['3ds_method'] && res['3ds_trxid']) {
                             window.credorax_fingerprint_done = false;

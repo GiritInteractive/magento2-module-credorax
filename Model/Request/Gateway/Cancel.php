@@ -20,7 +20,7 @@ class Cancel extends AbstractGatewayRequest implements RequestInterface
      * Credorax Operation Code
      * @var integer
      */
-    const CREDORAX_O = 9;
+    const CREDORAX_O = 4;
 
     /**
      * {@inheritdoc}

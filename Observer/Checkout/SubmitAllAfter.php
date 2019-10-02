@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Sales\Model\Order\Payment\State\AuthorizeCommand;
 use Magento\Sales\Model\Order\Payment\State\CaptureCommand;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Service\InvoiceService;
 
 class SubmitAllAfter implements ObserverInterface
@@ -81,7 +82,18 @@ class SubmitAllAfter implements ObserverInterface
             $operationCode = (int)$orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE);
             $transactionId = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID);
 
-            if ($operationCode === 1 && $transactionId) {
+            if (in_array($operationCode, [2, 12, 28]) && $transactionId) {
+                if ($orderPayment->getLastTransId()) {
+                    $orderPayment->setParentTransactionId($orderPayment->getLastTransId());
+                }
+                $orderPayment->setTransactionId($transactionId);
+                $orderPayment->setIsTransactionClosed(0);
+                $orderPayment->addTransaction(Transaction::TYPE_AUTH);
+                $orderPayment->save();
+                $order->save();
+            }
+
+            if (in_array($operationCode, [1, 11, 23]) && $transactionId) {
                 $message = $this->captureCommand->execute(
                     $orderPayment,
                     $order->getBaseGrandTotal(),

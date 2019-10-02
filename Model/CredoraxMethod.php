@@ -347,9 +347,10 @@ class CredoraxMethod extends Cc
                 __('No response from Credorax gateway, please contact us or try again later.')
             );
         }
-        if (!property_exists($credoraxPKeyData, 'PKey') || !$credoraxPKeyData->PKey) {
+        if (!property_exists($credoraxPKeyData, 'PKey') || !$credoraxPKeyData->PKey || (property_exists($credoraxPKeyData, 'z2') && $credoraxPKeyData->z2)) {
+            $errMessage = (property_exists($credoraxPKeyData, 'z3' && $credoraxPKeyData->z3)) ? $credoraxPKeyData->z3 : 'Credorax transaction failed, please make sure that the payment details are correct.';
             throw new LocalizedException(
-                __('Credorax transaction failed, please make sure that the payment details are correct.')
+                __($errMessage)
             );
         }
         $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY, $credoraxPKeyData->PKey);
@@ -540,7 +541,7 @@ class CredoraxMethod extends Cc
         $request = $this->requestFactory->create(
             AbstractGatewayRequest::GATEWAY_VOID_METHOD,
             $payment
-            );
+        );
         $request->process();
 
         return $this;

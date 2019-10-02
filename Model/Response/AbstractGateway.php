@@ -8,8 +8,6 @@ use Credorax\Credorax\Model\Config;
 use Credorax\Credorax\Model\CredoraxMethod;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
-use Magento\Sales\Model\Order\Payment\State\AuthorizeCommand;
-use Magento\Sales\Model\Order\Payment\State\CaptureCommand;
 use Magento\Sales\Model\Order\Payment\Transaction as OrderTransaction;
 
 /**
@@ -36,15 +34,6 @@ abstract class AbstractGateway extends AbstractResponse
      * @var OrderPayment
      */
     protected $_orderPayment;
-
-    /**
-     * @var AuthorizeCommand
-     */
-    protected $_authorizeCommand;
-    /**
-     * @var CaptureCommand
-     */
-    protected $_captureCommand;
 
     /**
      * @var string
@@ -86,15 +75,11 @@ abstract class AbstractGateway extends AbstractResponse
      * @param  Config           $credoraxConfig
      * @param  Curl             $curl
      * @param  OrderPayment     $orderPayment
-     * @param  AuthorizeCommand $authorizeCommand
-     * @param  CaptureCommand   $captureCommand
      */
     public function __construct(
         Config $credoraxConfig,
         Curl $curl,
-        OrderPayment $orderPayment,
-        AuthorizeCommand $authorizeCommand,
-        CaptureCommand $captureCommand
+        OrderPayment $orderPayment
     ) {
         parent::__construct(
             $credoraxConfig,
@@ -103,8 +88,6 @@ abstract class AbstractGateway extends AbstractResponse
 
         $this->_order = $orderPayment->getOrder();
         $this->_orderPayment = $orderPayment;
-        $this->_authorizeCommand = $authorizeCommand;
-        $this->_captureCommand = $captureCommand;
     }
 
     /**
