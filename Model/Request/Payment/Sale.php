@@ -1,4 +1,12 @@
 <?php
+/**
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ */
 
 namespace Credorax\Credorax\Model\Request\Payment;
 
@@ -9,9 +17,6 @@ use Credorax\Credorax\Model\Response\AbstractPayment as AbstractPaymentResponse;
 
 /**
  * Credorax Sale payment request model.
- *
- * @category Credorax
- * @package  Credorax_Credorax
  */
 class Sale extends AbstractPaymentRequest implements RequestInterface
 {

@@ -2,18 +2,20 @@
     "name": "credorax/magento2-module-credorax",
     "description": "Credorax Payments For Magento 2",
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.6",
         "magento/module-vault": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "authors": [{
-        "name": "Credorax",
-        "role": "Developer"
+        "name": "Pniel Cohen (Girit Interactive)",
+        "email": "pini@girit.biz",
+        "role": "Developer",
+        "homepage": "https://www.girit-tech.com/"
     }],
     "autoload": {
         "files": [

@@ -1,8 +1,13 @@
 /**
- * Credorax Credorax js component.
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
  *
  * @category Credorax
  * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ *
+ *
+ * Credorax Credorax js component.
  */
 define(
     [
@@ -17,7 +22,9 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/action/create-billing-address',
         'Magento_Ui/js/model/messages',
-        'mage/translate'
+        'mage/translate',
+        'Magento_Payment/js/model/credit-card-validation/validator',
+        'mage/validation'
     ],
     function(
         $,
@@ -31,7 +38,9 @@ define(
         quote,
         billingAddress,
         Messages,
-        $t
+        $t,
+        vlidator,
+        validation
     ) {
         'use strict';
 
@@ -279,8 +288,9 @@ define(
                 if (event) {
                     event.preventDefault();
                 }
-
-                if (self.validate() && additionalValidators.validate()) {
+                $('#credorax-form').validation();
+                if (self.validate() && additionalValidators.validate() && $('#credorax-form').validation('isValid')) {
+                    $('body').trigger('processStart');
                     self.isPlaceOrderActionAllowed(false);
 
                     //= Key Creation (PKey)

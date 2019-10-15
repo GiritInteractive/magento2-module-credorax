@@ -1,9 +1,14 @@
 <!--
 /**
- * Credorax Credorax payment template.
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
  *
  * @category Credorax
  * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ *
+ *
+ * Credorax Credorax payment template.
  */
 -->
 
@@ -136,7 +141,7 @@
                         <div class="fields group group-2">
                             <div class="field no-label month">
                                 <div class="control">
-                                    <select data-name="payment[cc_exp_month]" class="select select-month" data-bind="attr: {id: getCode() + '_expiration', 'data-container': getCode() + '-cc-month', 'data-validate': JSON.stringify({required:true, 'validate-cc-exp':'#' + getCode() + '_expiration_yr'})},
+                                    <select name="payment[cc_exp_month]" class="select select-month" data-bind="attr: {id: getCode() + '_expiration', 'data-container': getCode() + '-cc-month', 'data-validate': JSON.stringify({required:true, 'validate-cc-exp':'#' + getCode() + '_expiration_yr'})},
                                         enable: isActive($parents),
                                         options: getCcMonthsValues(),
                                         optionsValue: 'value',
@@ -148,7 +153,7 @@
                             </div>
                             <div class="field no-label year">
                                 <div class="control">
-                                    <select data-name="payment[cc_exp_year]" class="select select-year" data-bind="attr: {id: getCode() + '_expiration_yr', 'data-container': getCode() + '-cc-year', 'data-validate': JSON.stringify({required:true})},
+                                    <select name="payment[cc_exp_year]" class="select select-year" data-bind="attr: {id: getCode() + '_expiration_yr', 'data-container': getCode() + '-cc-year', 'data-validate': JSON.stringify({required:true})},
                                        enable: isActive($parents),
                                        options: getCcYearsValues(),
                                        optionsValue: 'value',
@@ -163,14 +168,14 @@
                 </div>
 
                 <!-- ko if: (hasNameOnCard())-->
-                <div class="field number required" data-bind="visible: isCcFormShown">
+                <div class="field" data-bind="visible: isCcFormShown">
                     <label data-bind="attr: {for: getCode() + '_cc_owner'}" class="label">
                         <span>
                             <!-- ko i18n: 'Name On Card'-->
                             <!-- /ko --></span>
                     </label>
                     <div class="control">
-                        <input type="text" data-name="payment[cc_owner]" class="input-text" value="" data-bind="
+                        <input type="text" name="payment[cc_owner]" class="input-text" value="" data-bind="
                                 attr: {
                                     autocomplete: on,
                                     id: getCode() + '_cc_owner',
@@ -178,7 +183,7 @@
                                     'data-container': getCode() + '-cc-owner',
                                     'data-validate': JSON.stringify(
                                         {
-                                            'required':true
+                                            'required':false
                                         }
                                     )
                                 },
@@ -198,7 +203,7 @@
                             <!-- /ko --></span>
                     </label>
                     <div class="control _with-tooltip">
-                        <input type="number" autocomplete="off" class="input-text cvv" data-name="payment[cc_cid]" value="" data-bind="attr: {id: getCode() + '_cc_cid',
+                        <input type="number" autocomplete="off" class="input-text cvv" name="payment[cc_cid]" value="" data-bind="attr: {id: getCode() + '_cc_cid',
                                     title: $t('Card Verification Number'),
                                     'data-container': getCode() + '-cc-cvv',
                                     'data-validate': JSON.stringify({'required-number':true, 'validate-card-cvv':'#' + getCode() + '_cc_type'})},

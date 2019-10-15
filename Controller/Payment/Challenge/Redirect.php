@@ -1,4 +1,12 @@
 <?php
+/**
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ */
 
 namespace Credorax\Credorax\Controller\Payment\Challenge;
 
@@ -14,9 +22,6 @@ use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Credorax Credorax challenge redirect controller.
- *
- * @category Credorax
- * @package  Credorax_Credorax
  */
 class Redirect extends Action
 {

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ */
 
 namespace Credorax\Credorax\Controller\Payment\Fingerprint;
 
@@ -6,9 +14,6 @@ use Magento\Framework\App\Action\Action;
 
 /**
  * Credorax Credorax payment device fingerprint (iframe) form controller.
- *
- * @category Credorax
- * @package  Credorax_Credorax
  */
 class Form extends Action
 {

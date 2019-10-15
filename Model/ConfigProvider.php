@@ -1,4 +1,12 @@
 <?php
+/**
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ */
 
 namespace Credorax\Credorax\Model;
 
@@ -13,9 +21,6 @@ use Magento\Vault\Model\CreditCardTokenFactory;
 
 /**
  * Credorax config provider model.
- *
- * @category Credorax
- * @package  Credorax_Credorax
  */
 class ConfigProvider extends CcGenericConfigProvider
 {

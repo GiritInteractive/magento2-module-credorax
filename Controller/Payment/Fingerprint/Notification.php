@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ */
 namespace Credorax\Credorax\Controller\Payment\Fingerprint;
 
 use Credorax\Credorax\Model\Config as CredoraxConfig;
@@ -11,9 +18,6 @@ use Magento\Framework\Serialize\Serializer\Base64Json;
 
 /**
  * Credorax Credorax payment device fingerprint notification controller.
- *
- * @category Credorax
- * @package  Credorax_Credorax
  */
 class Notification extends Action
 {

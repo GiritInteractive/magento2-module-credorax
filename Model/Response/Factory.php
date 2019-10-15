@@ -1,4 +1,12 @@
 <?php
+/**
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ */
 
 namespace Credorax\Credorax\Model\Response;
 
@@ -12,9 +20,6 @@ use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
  * Credorax Credorax response factory model.
- *
- * @category Credorax
- * @package  Credorax_Credorax
  */
 class Factory
 {
