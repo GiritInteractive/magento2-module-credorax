@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Credorax Payments For Magento 2
+ * https://www.credorax.com/
+ *
+ * @category Credorax
+ * @package  Credorax_Credorax
+ * @author   Girit-Interactive (https://www.girit-tech.com/)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="credorax" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Credorax Payment Solution</label>
+                <group id="account_settings" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
+                    <label>Account settings</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/credorax/active</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Title</label>
+                        <config_path>payment/credorax/title</config_path>
+                    </field>
+                    <field id="mode" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Mode</label>
+                        <source_model>Credorax\Credorax\Model\Adminhtml\Source\Mode</source_model>
+                        <config_path>payment/credorax/mode</config_path>
+                    </field>
+                    <field id="merchant_id" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Merchant ID</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <comment>The merchant account identifier you want to process the (transaction) request with. Find this at</comment>
+                        <config_path>payment/credorax/merchant_id</config_path>
+                        <depends>
+                            <field id="mode">live</field>
+                        </depends>
+                    </field>
+                    <field id="signature_key" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Signature Key</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <comment></comment>
+                        <config_path>payment/credorax/signature_key</config_path>
+                        <depends>
+                            <field id="mode">live</field>
+                        </depends>
+                    </field>
+                    <field id="static_key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Static Key</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <comment></comment>
+                        <config_path>payment/credorax/static_key</config_path>
+                        <depends>
+                            <field id="mode">live</field>
+                        </depends>
+                    </field>
+                    <field id="sandbox_merchant_id" translate="label" type="obscure" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Sandbox Merchant ID</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <comment>The merchant account identifier you want to process the (transaction) request with. Find this at</comment>
+                        <config_path>payment/credorax/sandbox_merchant_id</config_path>
+                        <depends>
+                            <field id="mode">sandbox</field>
+                        </depends>
+                    </field>
+                    <field id="sandbox_signature_key" translate="label" type="obscure" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Sandbox Signature Key</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <comment></comment>
+                        <config_path>payment/credorax/sandbox_signature_key</config_path>
+                        <depends>
+                            <field id="mode">sandbox</field>
+                        </depends>
+                    </field>
+                    <field id="sandbox_static_key" translate="label" type="obscure" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Sandbox Static Key</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <comment></comment>
+                        <config_path>payment/credorax/sandbox_static_key</config_path>
+                        <depends>
+                            <field id="mode">sandbox</field>
+                        </depends>
+                    </field>
+                    <field id="debug" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Debug</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/credorax/debug</config_path>
+                    </field>
+                </group>
+                <group id="transaction_settings" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                    <label>Transaction Settings</label>
+                    <field id="payment_action" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Payment Action</label>
+                        <source_model>Credorax\Credorax\Model\Adminhtml\Source\PaymentAction</source_model>
+                        <config_path>payment/credorax/payment_action</config_path>
+                    </field>
+                    <field id="billing_descriptor" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Billing Descriptor</label>
+                        <config_path>payment/credorax/billing_descriptor</config_path>
+                    </field>
+                    <field id="enable_3d_secure" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enable 3D secure</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/credorax/enable_3d_secure</config_path>
+                    </field>
+                    <field id="use_smart_3d" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Are you using Smart 3D secure service?</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/credorax/use_smart_3d</config_path>
+                        <depends>
+                            <field id="enable_3d_secure">1</field>
+                        </depends>
+                    </field>
+                    <field id="use_vault" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Use Vault</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>When vault is enabled customers will be able so save their credit cards and use them in future orders.</comment>
+                        <config_path>payment/credorax/use_vault</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    </field>
+                    <field id="cctypes" translate="label" type="multiselect" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Credit Card Types</label>
+                        <source_model>Credorax\Credorax\Model\Adminhtml\Source\Cctype</source_model>
+                    </field>
+                    <field id="min_order_total" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Minimum Order Total</label>
+                    </field>
+                    <field id="max_order_total" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Maximum Order Total</label>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>
