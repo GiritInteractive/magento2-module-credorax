@@ -168,7 +168,7 @@
                 </div>
 
                 <!-- ko if: (hasNameOnCard())-->
-                <div class="field" data-bind="visible: isCcFormShown">
+                <div class="field cc_owner required" data-bind="visible: isCcFormShown">
                     <label data-bind="attr: {for: getCode() + '_cc_owner'}" class="label">
                         <span>
                             <!-- ko i18n: 'Name On Card'-->
@@ -183,7 +183,8 @@
                                     'data-container': getCode() + '-cc-owner',
                                     'data-validate': JSON.stringify(
                                         {
-                                            'required':false
+                                            'required':true,
+                                            'minLength': 5
                                         }
                                     )
                                 },
