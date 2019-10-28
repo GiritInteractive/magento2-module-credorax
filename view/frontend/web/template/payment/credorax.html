@@ -175,7 +175,7 @@
                             <!-- /ko --></span>
                     </label>
                     <div class="control">
-                        <input type="text" name="payment[cc_owner]" class="input-text" value="" data-bind="
+                        <input type="text" name="payment[cc_owner]" class="input-text" value="" minLength="5" data-bind="
                                 attr: {
                                     autocomplete: on,
                                     id: getCode() + '_cc_owner',
@@ -183,8 +183,8 @@
                                     'data-container': getCode() + '-cc-owner',
                                     'data-validate': JSON.stringify(
                                         {
-                                            'required':true,
-                                            'minLength': 5
+                                            'required': true,
+                                            'validate-length': true
                                         }
                                     )
                                 },
