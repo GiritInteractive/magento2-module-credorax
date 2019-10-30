@@ -17,7 +17,6 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Sales\Model\Order\Payment\State\AuthorizeCommand;
 use Magento\Sales\Model\Order\Payment\State\CaptureCommand;
@@ -83,53 +82,53 @@ class SubmitAllAfter implements ObserverInterface
             /** @var OrderPayment $payment */
             $orderPayment = $order->getPayment();
 
-            if (!$order->canInvoice() || $orderPayment->getMethod() !== CredoraxMethod::METHOD_CODE) {
+            if ($orderPayment->getMethod() !== CredoraxMethod::METHOD_CODE) {
                 return $this;
             }
 
             $operationCode = (int)$orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE);
-            $transactionId = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID);
+            $transactionId = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID) ?: $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_TRXID);
 
-            if (in_array($operationCode, [2, 12, 28]) && $transactionId) {
-                if ($orderPayment->getLastTransId()) {
-                    $orderPayment->setParentTransactionId($orderPayment->getLastTransId());
-                }
-                $orderPayment->setTransactionId($transactionId);
-                $orderPayment->setIsTransactionClosed(0);
-                $orderPayment->addTransaction(Transaction::TYPE_AUTH);
-                $orderPayment->save();
-                $order->save();
+            switch ($operationCode) {
+                case 2:
+                case 12:
+                case 28:
+                    $transactionType = Transaction::TYPE_AUTH;
+                    break;
+
+                case 1:
+                case 11:
+                case 23:
+                    $transactionType = Transaction::TYPE_CAPTURE;
+                    break;
+
+                default:
+                    $transactionType = false;
+                    break;
             }
 
-            if (in_array($operationCode, [1, 11, 23]) && $transactionId) {
-                $message = $this->captureCommand->execute(
-                    $orderPayment,
-                    $order->getBaseGrandTotal(),
-                    $order
-                );
-
+            if ($transactionId && $transactionType) {
                 if ($orderPayment->getLastTransId()) {
                     $orderPayment->setParentTransactionId($orderPayment->getLastTransId());
                 }
-
-                $orderPayment
-                    ->setTransactionId($transactionId)
-                    ->setIsTransactionPending(false)
-                    ->setIsTransactionClosed(1);
-
-                $invoice = $this->invoiceService->prepareInvoice($order);
-                if (!$invoice) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__("We can't save the invoice right now."));
+                if ($transactionType === Transaction::TYPE_CAPTURE) {
+                    $message = $this->captureCommand->execute(
+                        $orderPayment,
+                        $order->getBaseGrandTotal(),
+                        $order
+                    );
+                    $orderPayment
+                        ->setIsTransactionPending(false)
+                        ->setIsTransactionClosed(1);
+                } else {
+                    $orderPayment->setIsTransactionClosed(0);
                 }
-                $invoice->setRequestedCaptureCase(Invoice::CAPTURE_OFFLINE);
-                $invoice->register();
-                //$invoice->getOrder()->setCustomerNoteNotify(false);
-                $invoice->getOrder()->setIsInProcess(true);
-                $order->addStatusHistoryComment($message, false);
-                $transaction = $this->transactionFactory->create()
-                    ->addObject($invoice)
-                    ->addObject($invoice->getOrder())
-                    ->save();
+
+                $orderPayment->setTransactionId($transactionId);
+                $orderPayment->addTransactionCommentsToOrder(
+                    $orderPayment->addTransaction($transactionType),
+                    $orderPayment->prependMessage($message)
+                );
 
                 $orderPayment->save();
                 $order->save();
