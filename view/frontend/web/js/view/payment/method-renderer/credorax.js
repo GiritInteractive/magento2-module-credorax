@@ -76,9 +76,10 @@ define(
                     ]);
 
                 var savedCards = self.getCardTokens();
-                if (savedCards.length > 0) {
+                if (savedCards.length > 0 && self.useVault()) {
                     self.creditCardToken(savedCards[0]['value']);
                 }
+                self.creditCardSave(self.useVault() ? 1 : 0);
 
                 this.messageContainer = new Messages();
 
@@ -118,10 +119,10 @@ define(
                 return {
                     'method': self.item.method,
                     'additional_data': {
-                        'cc_save': self.creditCardSave(),
+                        'cc_save': self.useVault() ? self.creditCardSave() : 0,
                         'cc_type': self.creditCardType(),
                         'cc_owner': (self.creditCardOwner().length >= 5) ? self.creditCardOwner() : null,
-                        'cc_token': self.creditCardToken(),
+                        'cc_token': self.useVault() ? self.creditCardToken() : null,
                         'credorax_pkey_data': JSON.stringify(self.PKeyData()),
                         'credorax_3ds_compind': window.credorax_3ds_compind || null
                     }
@@ -129,10 +130,7 @@ define(
             },
 
             useVault: function() {
-                var useVault = window.checkoutConfig.payment[self.getCode()].useVault;
-                self.creditCardSave(useVault ? 1 : 0);
-
-                return useVault;
+                return window.checkoutConfig.payment[self.getCode()].useVault;
             },
 
             canSaveCard: function() {

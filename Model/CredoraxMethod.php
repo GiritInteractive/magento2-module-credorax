@@ -275,7 +275,7 @@ class CredoraxMethod extends Cc
             ? $additionalData[self::KEY_CREDORAX_PKEY_DATA]
             : null;
 
-        $ccSave = !empty($additionalData[self::KEY_CC_SAVE])
+        $ccSave = (!empty($additionalData[self::KEY_CC_SAVE]) && $this->credoraxConfig->isUsingVault())
             ? (bool)$additionalData[self::KEY_CC_SAVE]
             : false;
 
@@ -287,7 +287,7 @@ class CredoraxMethod extends Cc
             ? $additionalData[self::KEY_CC_OWNER]
             : null;
 
-        $ccToken = !empty($additionalData[self::KEY_CC_TOKEN])
+        $ccToken = (!empty($additionalData[self::KEY_CC_TOKEN]) && $this->credoraxConfig->isUsingVault())
             ? $additionalData[self::KEY_CC_TOKEN]
             : null;
 

@@ -135,7 +135,7 @@ class ConfigProvider extends CcGenericConfigProvider
     private function getSavedCards()
     {
         $customerId = $this->customerSession->getCustomerId();
-        if (!$customerId) {
+        if (!$customerId || !$this->credoraxConfig->isUsingVault()) {
             return [];
         }
 
