@@ -121,6 +121,11 @@ class SubmitAllAfter implements ObserverInterface
                         ->setIsTransactionPending(false)
                         ->setIsTransactionClosed(1);
                 } else {
+                    $message = $this->authorizeCommand->execute(
+                        $orderPayment,
+                        $order->getBaseGrandTotal(),
+                        $order
+                    );
                     $orderPayment->setIsTransactionClosed(0);
                 }
 
