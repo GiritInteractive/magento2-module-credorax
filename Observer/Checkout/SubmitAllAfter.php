@@ -89,25 +89,15 @@ class SubmitAllAfter implements ObserverInterface
             $operationCode = (int)$orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE);
             $transactionId = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID) ?: $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_TRXID);
 
-            switch ($operationCode) {
-                case 2:
-                case 12:
-                case 28:
+            if ($transactionId) {
+                if (in_array($operationCode, [2,12,28])) {
                     $transactionType = Transaction::TYPE_AUTH;
-                    break;
-
-                case 1:
-                case 11:
-                case 23:
+                } elseif (in_array($operationCode, [1,11,23])) {
                     $transactionType = Transaction::TYPE_CAPTURE;
-                    break;
+                } else {
+                    $transactionType = $this->credoraxConfig->isAuthirizeAndCaptureAction() ? Transaction::TYPE_CAPTURE : Transaction::TYPE_AUTH;
+                }
 
-                default:
-                    $transactionType = false;
-                    break;
-            }
-
-            if ($transactionId && $transactionType) {
                 if ($orderPayment->getLastTransId()) {
                     $orderPayment->setParentTransactionId($orderPayment->getLastTransId());
                 }
