@@ -387,25 +387,25 @@ class CredoraxMethod extends Cc
      */
     private function getRequestMethod(InfoInterface $payment, $amount)
     {
-        $token = $payment->getAdditionalInformation(self::KEY_CC_TOKEN);
-
-        if ($token) {
-            $method = AbstractPaymentRequest::PAYMENT_AUTH_USE_TOKEN_METHOD;
+        if ($payment->getAdditionalInformation(self::KEY_CREDORAX_AUTH_CODE)) {
+            $method = AbstractGatewayRequest::PAYMENT_CAPTURE_METHOD;
         } else {
-            $method = $this->credoraxConfig->isUsingVault() ?
-                AbstractPaymentRequest::PAYMENT_AUTH_TOKENIZATION_METHOD :
-                AbstractPaymentRequest::PAYMENT_AUTH_METHOD;
-        }
-
-        if ($this->credoraxConfig->isAuthirizeAndCaptureAction()) {
-            if ($payment->getAdditionalInformation(self::KEY_CREDORAX_AUTH_CODE)) {
-                $method = AbstractGatewayRequest::PAYMENT_CAPTURE_METHOD;
-            } elseif ($token) {
-                $method = AbstractPaymentRequest::PAYMENT_SALE_USE_TOKEN_METHOD;
+            $token = $payment->getAdditionalInformation(self::KEY_CC_TOKEN);
+            if ($token) {
+                $method = AbstractPaymentRequest::PAYMENT_AUTH_USE_TOKEN_METHOD;
             } else {
                 $method = $this->credoraxConfig->isUsingVault() ?
-                    AbstractPaymentRequest::PAYMENT_SALE_TOKENIZATION_METHOD :
-                    AbstractPaymentRequest::PAYMENT_SALE_METHOD;
+                    AbstractPaymentRequest::PAYMENT_AUTH_TOKENIZATION_METHOD :
+                    AbstractPaymentRequest::PAYMENT_AUTH_METHOD;
+            }
+            if ($this->credoraxConfig->isAuthirizeAndCaptureAction()) {
+                if ($token) {
+                    $method = AbstractPaymentRequest::PAYMENT_SALE_USE_TOKEN_METHOD;
+                } else {
+                    $method = $this->credoraxConfig->isUsingVault() ?
+                        AbstractPaymentRequest::PAYMENT_SALE_TOKENIZATION_METHOD :
+                        AbstractPaymentRequest::PAYMENT_SALE_METHOD;
+                }
             }
         }
 
