@@ -388,7 +388,7 @@ class CredoraxMethod extends Cc
     private function getRequestMethod(InfoInterface $payment, $amount)
     {
         if ($payment->getAdditionalInformation(self::KEY_CREDORAX_AUTH_CODE)) {
-            $method = AbstractGatewayRequest::PAYMENT_CAPTURE_METHOD;
+            $method = AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD;
         } else {
             $token = $payment->getAdditionalInformation(self::KEY_CC_TOKEN);
             if ($token) {
