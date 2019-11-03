@@ -247,7 +247,6 @@ define(
 
             placeOrderProceed: function() {
                 self.isPlaceOrderActionAllowed(false);
-                $('body').trigger('processStart');
                 if (self.getIs3dSecureEnabled()) {
                     self.selectPaymentMethod();
                     setPaymentMethodAction(self.messageContainer)
