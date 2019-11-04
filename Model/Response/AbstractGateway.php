@@ -174,6 +174,13 @@ abstract class AbstractGateway extends AbstractResponse
             $this->getOperationCode()
         );
 
+        if ($this->_responseId) {
+            $this->_orderPayment->setAdditionalInformation(
+                CredoraxMethod::KEY_CREDORAX_RESPONSE_ID,
+                $this->_responseId
+            );
+        }
+
         if (($transactionId = $this->getTransactionId())) {
             $this->_orderPayment->setAdditionalInformation(
                 CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID,
