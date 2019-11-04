@@ -435,7 +435,7 @@ class CredoraxMethod extends Cc
         );
         $response = $request->process();
 
-        if ($response->is3dsChallengeRequired()) {
+        if ($response->getResponseType() === AbstractResponse::RESPONSE_TYPE_PAYMENT && $response->is3dsChallengeRequired()) {
             $this->checkoutSession->setCredoraxPaymentData($response->getDataObject());
             throw new RedirectException($response->get3dsAcsurl());
         }

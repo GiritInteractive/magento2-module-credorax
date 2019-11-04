@@ -180,6 +180,14 @@ abstract class AbstractPayment extends AbstractResponse
     }
 
     /**
+     * @return string
+     */
+    public function getResponseType()
+    {
+        return AbstractResponse::RESPONSE_TYPE_PAYMENT;
+    }
+
+    /**
      * @return AbstractResponse
      * @throws \Magento\Framework\Exception\LocalizedException
      */

@@ -25,6 +25,9 @@ abstract class AbstractResponse extends AbstractApi
     const STATUS_SUCCESS = 1;
     const STATUS_FAILED = 2;
 
+    const RESPONSE_TYPE_GATEWAY = 'response_type_gateway';
+    const RESPONSE_TYPE_PAYMENT = 'response_type_payment';
+
     /**
      * @var Curl
      */
@@ -219,4 +222,9 @@ abstract class AbstractResponse extends AbstractApi
     {
         return new DataObject($this->getBody());
     }
+
+    /**
+     * @return string
+     */
+    abstract public function getResponseType();
 }

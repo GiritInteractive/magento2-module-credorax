@@ -96,6 +96,14 @@ abstract class AbstractGateway extends AbstractResponse
     }
 
     /**
+     * @return string
+     */
+    public function getResponseType()
+    {
+        return AbstractResponse::RESPONSE_TYPE_GATEWAY;
+    }
+
+    /**
      * @return Dynamic3D
      */
     protected function processResponseData()
