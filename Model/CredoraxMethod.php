@@ -353,7 +353,7 @@ class CredoraxMethod extends Cc
             );
         }
         if (!property_exists($credoraxPKeyData, 'PKey') || !$credoraxPKeyData->PKey || (property_exists($credoraxPKeyData, 'z2') && $credoraxPKeyData->z2)) {
-            $errMessage = (property_exists($credoraxPKeyData, 'z3' && $credoraxPKeyData->z3)) ? $credoraxPKeyData->z3 : 'Credorax transaction failed, please make sure that the payment details are correct.';
+            $errMessage = (property_exists($credoraxPKeyData, 'z3') && $credoraxPKeyData->z3) ? $credoraxPKeyData->z3 : 'Credorax transaction failed, please make sure that the payment details are correct.';
             throw new LocalizedException(
                 __($errMessage)
             );

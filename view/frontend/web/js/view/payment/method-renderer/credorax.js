@@ -322,7 +322,7 @@ define(
                                 frameborder: 0,
                                 scrolling: 'no',
                                 css: {
-                                    //"display": "none"
+                                    "display": "none"
                                 },
                             });
                             credoraxFingerprintIframe.appendTo('body');

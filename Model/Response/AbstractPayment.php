@@ -232,10 +232,10 @@ abstract class AbstractPayment extends AbstractResponse
 
         $body = $this->getBody();
 
-        if ($this->_credoraxConfig->is3dSecureEnabled() && !(isset($body['3ds_status']) && (in_array($body['3ds_status'], ['Y','A']) || ($body['3ds_status'] === 'C' && isset($body['3ds_acsurl']) && $body['3ds_acsurl'])))) {
+        if ($this->_credoraxConfig->is3dSecureEnabled() && !(isset($body['3ds_status']) && (in_array($body['3ds_status'], ['Y','A']) || (isset($body['3ds_acsurl']) && $body['3ds_acsurl'])))) {
             return false;
         }
-        if (isset($body['z2']) && $body['z2'] && (!isset($body['3ds_status']) || $body['3ds_status'] !== 'C')) {
+        if (isset($body['z2']) && $body['z2'] && (!isset($body['3ds_status']) || !(isset($body['3ds_acsurl']) && $body['3ds_acsurl']))) {
             return false;
         }
 
@@ -455,7 +455,7 @@ abstract class AbstractPayment extends AbstractResponse
      */
     public function is3dsChallengeRequired()
     {
-        return $this->_credoraxConfig->is3dSecureEnabled() && $this->get3dsStatus() === 'C';
+        return $this->_credoraxConfig->is3dSecureEnabled() && $this->get3dsAcsurl();
     }
 
     public function get3dStatusMessage()
