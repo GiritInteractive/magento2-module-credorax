@@ -133,7 +133,7 @@ abstract class AbstractPayment extends AbstractRequest
             $params['3ds_transtype'] = '01';
             $params['3ds_purchasedate'] = date('YmdHis', strtotime($orderPayment->getOrder()->getCreatedAt()));
             $params['3ds_redirect_url'] = $this->_credoraxConfig->getUrlBuilder()->getUrl('credorax/payment_challenge/callback', ['quote' => $orderPayment->getOrder()->getQuoteId()]);
-            $params['d6'] = 'English';
+            $params['d6'] = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_BROWSER_LANG) ?: 'en-US';
         }
         return $params;
     }

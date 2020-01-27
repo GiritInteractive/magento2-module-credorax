@@ -74,6 +74,7 @@ class CredoraxMethod extends Cc
     const KEY_CREDORAX_3DS_TRXID = 'credorax_3ds_trxid';
     const KEY_CREDORAX_3DS_VERSION = 'credorax_3ds_version';
     const KEY_CREDORAX_AUTH_CODE = 'credorax_auth_code';
+    const KEY_CREDORAX_BROWSER_LANG = 'credorax_browser_lang';
     const KEY_CREDORAX_LAST_OPERATION_CODE = 'credorax_last_operation_code';
     const KEY_CREDORAX_PKEY = 'credorax_pkey';
     const KEY_CREDORAX_PKEY_DATA = 'credorax_pkey_data';
@@ -275,10 +276,6 @@ class CredoraxMethod extends Cc
             ? $additionalData[self::KEY_CREDORAX_PKEY_DATA]
             : null;
 
-        $ccSave = (!empty($additionalData[self::KEY_CC_SAVE]) && $this->credoraxConfig->isUsingVault())
-            ? (bool)$additionalData[self::KEY_CC_SAVE]
-            : false;
-
         $ccType = !empty($additionalData[self::KEY_CC_TYPE])
             ? $additionalData[self::KEY_CC_TYPE]
             : null;
@@ -291,15 +288,20 @@ class CredoraxMethod extends Cc
             ? $additionalData[self::KEY_CC_TOKEN]
             : null;
 
-        if ($ccToken !== null) {
-            $ccSave = false;
-        }
+        $ccSave = ($ccToken === null && !empty($additionalData[self::KEY_CC_SAVE]) && $this->credoraxConfig->isUsingVault())
+            ? (bool)$additionalData[self::KEY_CC_SAVE]
+            : false;
+
+        $browserLang = !empty($additionalData[self::KEY_CREDORAX_BROWSER_LANG])
+            ? trim($additionalData[self::KEY_CREDORAX_BROWSER_LANG])
+            : 'en-US';
 
         $info = $this->getInfoInstance();
-        $info->setAdditionalInformation(self::KEY_CC_SAVE, $ccSave);
         $info->setAdditionalInformation(self::KEY_CC_TYPE, $ccType);
         $info->setAdditionalInformation(self::KEY_CC_OWNER, $ccOwner);
         $info->setAdditionalInformation(self::KEY_CC_TOKEN, $ccToken);
+        $info->setAdditionalInformation(self::KEY_CC_SAVE, $ccSave);
+        $info->setAdditionalInformation(self::KEY_CREDORAX_BROWSER_LANG, $browserLang);
         $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY_DATA, $credoraxPKeyData);
         $info->addData(
             [
@@ -391,10 +393,11 @@ class CredoraxMethod extends Cc
             $method = AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD;
         } else {
             $token = $payment->getAdditionalInformation(self::KEY_CC_TOKEN);
+            $ccSave = $payment->getAdditionalInformation(self::KEY_CC_SAVE);
             if ($token) {
                 $method = AbstractPaymentRequest::PAYMENT_AUTH_USE_TOKEN_METHOD;
             } else {
-                $method = $this->credoraxConfig->isUsingVault() ?
+                $method = $this->credoraxConfig->isUsingVault() && $ccSave ?
                     AbstractPaymentRequest::PAYMENT_AUTH_TOKENIZATION_METHOD :
                     AbstractPaymentRequest::PAYMENT_AUTH_METHOD;
             }
@@ -402,7 +405,7 @@ class CredoraxMethod extends Cc
                 if ($token) {
                     $method = AbstractPaymentRequest::PAYMENT_SALE_USE_TOKEN_METHOD;
                 } else {
-                    $method = $this->credoraxConfig->isUsingVault() ?
+                    $method = $this->credoraxConfig->isUsingVault() && $ccSave ?
                         AbstractPaymentRequest::PAYMENT_SALE_TOKENIZATION_METHOD :
                         AbstractPaymentRequest::PAYMENT_SALE_METHOD;
                 }
