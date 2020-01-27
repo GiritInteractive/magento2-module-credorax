@@ -136,6 +136,14 @@ class Callback extends Action
                 }
             }
 
+            if (in_array($resData->getData('O'), [2,28]) && !$resData->getData('z4')) {
+                if ($this->credoraxConfig->isDebugEnabled()) {
+                    throw new PaymentException(__('Your payment failed. Details: Missing z4 param on challenge response.'));
+                } else {
+                    throw new PaymentException(__('Your payment failed.'));
+                }
+            }
+
             try {
                 $this->onepageCheckout->getCheckoutMethod();
                 $orderId = $this->cartManagement->placeOrder($this->getQuoteId());
@@ -268,7 +276,7 @@ class Callback extends Action
             ]
         );
 
-        if ($authCode = $resData->getData('z4') && in_array($resData->getData('O'), [2,28])) {
+        if (($authCode = $resData->getData('z4')) && in_array($resData->getData('O'), [2,28])) {
             $orderPayment->setAdditionalInformation(
                 CredoraxMethod::KEY_CREDORAX_AUTH_CODE,
                 $authCode
