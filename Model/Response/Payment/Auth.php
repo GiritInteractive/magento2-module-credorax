@@ -69,14 +69,18 @@ class Auth extends AbstractPayment implements ResponseInterface
      */
     protected function getRequiredResponseDataKeys()
     {
-        return array_merge_recursive(
+        $params = array_merge_recursive(
             parent::getRequiredResponseDataKeys(),
             [
                 'K',
                 'O',
                 'z1',
-                'z4',
             ]
         );
+        $body = $this->getBody();
+        if (!(isset($body['3ds_acsurl']) && $body['3ds_acsurl'])) {
+            $params[] = 'z4';
+        }
+        return $params;
     }
 }
