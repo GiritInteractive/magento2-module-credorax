@@ -24,6 +24,15 @@ class Capture extends AbstractGateway implements ResponseInterface
      */
     protected function updateTransaction()
     {
-        return parent::updateTransaction();
+        parent::updateTransaction();
+
+        if ($this->_responseId) {
+            $this->_orderPayment->setAdditionalInformation(
+                CredoraxMethod::KEY_CREDORAX_RESPONSE_ID,
+                $this->_responseId
+            );
+        }
+
+        return $this;
     }
 }

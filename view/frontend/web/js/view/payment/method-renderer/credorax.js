@@ -124,7 +124,8 @@ define(
                         'cc_owner': (self.creditCardOwner().length >= 5) ? self.creditCardOwner() : null,
                         'cc_token': self.useVault() ? self.creditCardToken() : null,
                         'credorax_pkey_data': JSON.stringify(self.PKeyData()),
-                        'credorax_3ds_compind': window.credorax_3ds_compind || null
+                        'credorax_3ds_compind': window.credorax_3ds_compind || null,
+                        'credorax_browser_lang': navigator.language || navigator.userLanguage || 'en-US'
                     }
                 };
             },
@@ -322,7 +323,7 @@ define(
                                 frameborder: 0,
                                 scrolling: 'no',
                                 css: {
-                                    //"display": "none"
+                                    "display": "none"
                                 },
                             });
                             credoraxFingerprintIframe.appendTo('body');
