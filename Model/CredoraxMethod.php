@@ -60,8 +60,8 @@ class CredoraxMethod extends Cc
     const KEY_CC_TYPE = 'cc_type';
     const KEY_CC_LAST_4 = 'cc_last_4';
     const KEY_CC_NUMBER = 'cc_number';
-    const KEY_CC_EXP_YEAR = 'cc_exp_month';
-    const KEY_CC_EXP_MONTH = 'cc_exp_year';
+    const KEY_CC_EXP_MONTH = 'cc_exp_month';
+    const KEY_CC_EXP_YEAR = 'cc_exp_year';
     const KEY_CC_OWNER = 'cc_owner';
     const KEY_CC_TOKEN = 'cc_token';
     const KEY_CC_TEMP_TOKEN = 'cc_temp_token';
