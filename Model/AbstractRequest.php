@@ -182,7 +182,7 @@ abstract class AbstractRequest extends AbstractApi
     protected function getOrderData(Order $order)
     {
         $orderData = [
-            'a1' => $order->getIncrementId() . (microtime(true) * 10000),
+            'a1' => $order->getIncrementId() . round(microtime(true) * 10000),
             'h9' => $order->getIncrementId(),
             'a4' => $this->amountFormat($order->getBaseGrandTotal(), $order->getBaseCurrencyCode()),
             'a5' => $order->getBaseCurrencyCode(),
