@@ -213,7 +213,7 @@ abstract class AbstractRequest extends AbstractApi
 
         if ($billing !== null) {
             $data = array_merge($data, [
-                'c2' => preg_replace('/[^\d-]/', '', $billing->getTelephone()),
+                'c2' => (int) substr(preg_replace('/[^\d]/', '', $billing->getTelephone()), 0, 15),
                 'c3' => $billing->getEmail(),
                 'c5' => preg_replace('/[\W_]/', '-', (is_array($billing->getStreet()) ? implode(' ', $billing->getStreet()) : '')),
                 'c7' => preg_replace('/[^\p{L}]/', '-', $billing->getCity()),

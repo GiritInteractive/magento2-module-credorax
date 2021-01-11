@@ -122,8 +122,8 @@ abstract class AbstractPayment extends AbstractRequest
             } else {
                 $params['3ds_initiate'] = '01';
             }
-            if (($billing = $orderPayment->getOrder()->getBillingAddress()) !== null && $billing->getTelephone()) {
-                $params['3ds_homephonecountry'] = $billing->getCountryId();
+            if (($billing = $orderPayment->getOrder()->getBillingAddress()) !== null && (int) $billing->getTelephone() && $billing->getCountryId()) {
+                $params['3ds_homephonecountry'] = $this->countryCodeToPhoneCode($billing->getCountryId());
             }
             $params['3ds_browseracceptheader'] = '3dsBrowseracceptheader';
             $params['3ds_browsercolordepth'] = '32';
