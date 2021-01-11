@@ -351,11 +351,15 @@ abstract class AbstractApi
         ];
     }
 
+    /**
+     * @param  string    $countryCode
+     * @return int|null
+     */
     public function countryCodeToPhoneCode($countryCode)
     {
         $codes = $this->getCountryPhoneCodes();
         if (isset($codes[$countryCode]) && $codes[$countryCode]) {
-            return $codes[$countryCode];
+            return (int) $codes[$countryCode];
         }
     }
 }
