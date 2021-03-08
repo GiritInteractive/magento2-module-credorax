@@ -362,4 +362,14 @@ abstract class AbstractApi
             return (int) $codes[$countryCode];
         }
     }
+
+    /**
+     * @method fixUTF8
+     * @param  string  $str
+     * @return string
+     */
+    protected function fixUTF8($str)
+    {
+        return Encoding::fixUTF8($str);
+    }
 }
