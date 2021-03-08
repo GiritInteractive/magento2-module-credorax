@@ -114,6 +114,10 @@ abstract class AbstractRequest extends AbstractApi
             return !is_null($value) && $value !== '';
         });
 
+        foreach ($params as &$val) {
+            $val = $this->fixUTF8($val);
+        }
+
         //= Add the K param (SignatureKey|SHA256 Cipher)
         ksort($params);
         $cipherParams = preg_replace("/[\<|\>|\"|\'|\\|\(|\)]/", " ", $params);
@@ -208,17 +212,17 @@ abstract class AbstractRequest extends AbstractApi
 
         $data = [
             'b2' => $this->getCcTypeNumberByCode($orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CC_TYPE)),
-            'c1' => $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CC_OWNER),
+            'c1' => $this->fixUTF8($orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CC_OWNER)),
         ];
 
         if ($billing !== null) {
             $data = array_merge($data, [
                 'c2' => (int) substr(preg_replace('/[^\d]/', '', $billing->getTelephone()), 0, 15),
-                'c3' => $billing->getEmail(),
-                'c5' => preg_replace('/[\W_]/', '-', (is_array($billing->getStreet()) ? implode(' ', $billing->getStreet()) : '')),
-                'c7' => preg_replace('/[^\p{L}]/', '-', $billing->getCity()),
+                'c3' => $this->fixUTF8($billing->getEmail()),
+                'c5' => preg_replace('/[\W_]/', '-', $this->fixUTF8(is_array($billing->getStreet()) ? implode(' ', $billing->getStreet()) : '')),
+                'c7' => preg_replace('/[^\p{L}]/', '-', $this->fixUTF8($billing->getCity())),
                 'c9' => $billing->getCountryId(),
-                'c10' => preg_replace('/[\W_]/', '', $billing->getPostcode()),
+                'c10' => preg_replace('/[\W_]/', '', $this->fixUTF8($billing->getPostcode())),
             ]);
         }
 
