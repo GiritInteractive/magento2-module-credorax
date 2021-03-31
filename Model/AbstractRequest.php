@@ -219,8 +219,8 @@ abstract class AbstractRequest extends AbstractApi
             $data = array_merge($data, [
                 'c2' => (int) substr(preg_replace('/[^\d]/', '', $billing->getTelephone()), 0, 15),
                 'c3' => $this->fixUTF8($billing->getEmail()),
-                'c5' => preg_replace('/[^\d\p{L}_]/', '-', $this->fixUTF8(is_array($billing->getStreet()) ? implode(' ', $billing->getStreet()) : '')),
-                'c7' => preg_replace('/[^\p{L}]/', '-', $this->fixUTF8($billing->getCity())),
+                'c5' => preg_replace('/[^\d\p{L}\p{C}_]/', '-', $this->fixUTF8(is_array($billing->getStreet()) ? implode(' ', $billing->getStreet()) : '')),
+                'c7' => preg_replace('/[^\p{L}\p{C}]/', '-', $this->fixUTF8($billing->getCity())),
                 'c9' => $billing->getCountryId(),
                 'c10' => preg_replace('/[\W_]/', '', $this->fixUTF8($billing->getPostcode())),
             ]);
