@@ -97,6 +97,13 @@ abstract class AbstractRequest extends AbstractApi
             'M' => $this->_credoraxConfig->getMerchantId()
         ];
 
+        if (
+            ($subMerchantId = (int)$this->_credoraxConfig->getSubMerchantId()) &&
+            strlen((string)$subMerchantId) <= 15
+        ) {
+            $params['h3'] = $subMerchantId;
+        }
+
         if (($billingDescriptor = $this->_credoraxConfig->getBillingDescriptor())) {
             $params['i2'] = $billingDescriptor;
         }

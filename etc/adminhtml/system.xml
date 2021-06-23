@@ -30,11 +30,18 @@
                         <source_model>Credorax\Credorax\Model\Adminhtml\Source\Mode</source_model>
                         <config_path>payment/credorax/mode</config_path>
                     </field>
-                    <field id="merchant_id" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <field id="merchant_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Merchant ID</label>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <comment>The merchant account identifier you want to process the (transaction) request with. You can find this information in Insights, the Credorax customer portal, under 'Connectivity Details'.</comment>
                         <config_path>payment/credorax/merchant_id</config_path>
+                        <depends>
+                            <field id="mode">live</field>
+                        </depends>
+                    </field>
+                    <field id="sub_merchant_id" translate="label" type="text" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Sub-merchant ID</label>
+                        <comment>The Merchant ID of a sub-merchant belonging to a Payment Facilitator.</comment>
+                        <config_path>payment/credorax/sub_merchant_id</config_path>
                         <depends>
                             <field id="mode">live</field>
                         </depends>
@@ -49,7 +56,16 @@
                     </field>
                     <field id="sandbox_merchant_id" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Sandbox Merchant ID</label>
+                        <comment>The merchant account identifier you want to process the (transaction) request with. You can find this information in Insights, the Credorax customer portal, under 'Connectivity Details'.</comment>
                         <config_path>payment/credorax/sandbox_merchant_id</config_path>
+                        <depends>
+                            <field id="mode">sandbox</field>
+                        </depends>
+                    </field>
+                    <field id="sandbox_sub_merchant_id" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Sandbox Sub-merchant ID</label>
+                        <comment>The Merchant ID of a sub-merchant belonging to a Payment Facilitator.</comment>
+                        <config_path>payment/credorax/sandbox_sub_merchant_id</config_path>
                         <depends>
                             <field id="mode">sandbox</field>
                         </depends>
