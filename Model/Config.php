@@ -170,6 +170,16 @@ class Config
     }
 
     /**
+     * Return sub merchant id.
+     *
+     * @return string
+     */
+    public function getSubMerchantId()
+    {
+        return $this->getConfigValue(($this->isSandboxMode()) ? 'sandbox_sub_merchant_id' : 'sub_merchant_id');
+    }
+
+    /**
      * Return signature key.
      *
      * @return string
