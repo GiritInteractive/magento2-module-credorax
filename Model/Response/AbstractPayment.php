@@ -64,7 +64,7 @@ abstract class AbstractPayment extends AbstractResponse
     protected $_responseId;
 
     /**
-     * @var int
+     * @var string|int
      */
     protected $_responseCode;
 
@@ -163,7 +163,7 @@ abstract class AbstractPayment extends AbstractResponse
         $this->_cipher = $body['K'];
         $this->_operationCode = (int)$body['O'];
         $this->_responseId = isset($body['z1']) ? $body['z1'] : null;
-        $this->_responseCode = isset($body['z2']) ? (int)$body['z2'] : 0;
+        $this->_responseCode = isset($body['z2']) ? $body['z2'] : 0;
         $this->_responseDescription = isset($body['z3']) ? $body['z3'] : null;
         $this->_riskScore = isset($body['z21']) ? $body['z21'] : null;
 
@@ -248,10 +248,10 @@ abstract class AbstractPayment extends AbstractResponse
 
         $body = $this->getBody();
 
-        if ($this->is3dSecureResponse() && !(isset($body['3ds_status']) && (in_array($body['3ds_status'], ['Y','A']) || (isset($body['3ds_acsurl']) && $body['3ds_acsurl'])))) {
+        if ($this->is3dSecureResponse() && !(isset($body['3ds_status']) && (in_array($body['3ds_status'], ['Y','A']) || !empty($body['3ds_acsurl'])))) {
             return false;
         }
-        if (isset($body['z2']) && $body['z2'] && (!isset($body['3ds_status']) || !(isset($body['3ds_acsurl']) && $body['3ds_acsurl']))) {
+        if (isset($body['z2']) && (int)$body['z2'] && ($body['z2'] !== '06' || (!empty($body['3ds_method']) || !empty($body['3ds_acsurl'])))) {
             return false;
         }
 
@@ -371,7 +371,7 @@ abstract class AbstractPayment extends AbstractResponse
     }
 
     /**
-     * @return int
+     * @return string|int
      */
     public function getResponseCode()
     {
