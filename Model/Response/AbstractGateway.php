@@ -61,7 +61,7 @@ abstract class AbstractGateway extends AbstractResponse
     protected $_responseId;
 
     /**
-     * @var int
+     * @var string|int
      */
     protected $_responseCode;
 
@@ -114,7 +114,7 @@ abstract class AbstractGateway extends AbstractResponse
         $this->_cipher = $body['K'];
         $this->_operationCode = (int)$body['O'];
         $this->_responseId = isset($body['z1']) ? $body['z1'] : null;
-        $this->_responseCode = isset($body['z2']) ? (int)$body['z2'] : 0;
+        $this->_responseCode = isset($body['z2']) ? $body['z2'] : 0;
         $this->_responseDescription = isset($body['z3']) ? $body['z3'] : null;
         $this->_authCode = isset($body['z4']) ? $body['z4'] : null;
 
@@ -148,7 +148,7 @@ abstract class AbstractGateway extends AbstractResponse
         }
 
         $body = $this->getBody();
-        if (isset($body['z2']) && $body['z2']) {
+        if (isset($body['z2']) && (int)$body['z2']) {
             return false;
         }
 
@@ -216,7 +216,7 @@ abstract class AbstractGateway extends AbstractResponse
     }
 
     /**
-     * @return int
+     * @return string|int
      */
     public function getResponseCode()
     {
