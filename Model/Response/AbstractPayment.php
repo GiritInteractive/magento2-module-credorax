@@ -251,7 +251,7 @@ abstract class AbstractPayment extends AbstractResponse
         if ($this->is3dSecureResponse() && !(isset($body['3ds_status']) && (in_array($body['3ds_status'], ['Y','A']) || !empty($body['3ds_acsurl'])))) {
             return false;
         }
-        if (isset($body['z2']) && (int)$body['z2'] && ($body['z2'] !== '06' || (!empty($body['3ds_method']) || !empty($body['3ds_acsurl'])))) {
+        if (isset($body['z2']) && (int)$body['z2'] && ($body['z2'] !== '06' || (empty($body['3ds_method']) && empty($body['3ds_acsurl'])))) {
             return false;
         }
 
