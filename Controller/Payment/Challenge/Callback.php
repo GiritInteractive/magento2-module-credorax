@@ -135,6 +135,9 @@ class Callback extends Action
                     throw new PaymentException(__('Your payment failed.'));
                 }
             }
+            if ((int)$resData->getData('z2')) {
+                throw new PaymentException(__('Your payment failed. Details: %1', $resData->getData('z3') ?: __('Unknown')));
+            }
 
             if (in_array($resData->getData('O'), [2,28]) && !$resData->getData('z4')) {
                 if ($this->credoraxConfig->isDebugEnabled()) {
