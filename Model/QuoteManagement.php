@@ -116,7 +116,15 @@ class QuoteManagement extends \Magento\Quote\Model\QuoteManagement implements \M
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
         $order = $this->orderFactory->create();
-        $this->quoteValidator->validateBeforeSubmit($quote);
+
+        if (property_exists($this, 'quoteValidator')) {
+            //Backwards compatibility for Magento versions older than 2.2.10
+            $this->quoteValidator->validateBeforeSubmit($quote);
+        } else {
+            //For Magento version 2.2.10 and above
+            $this->submitQuoteValidator->validateQuote($quote);
+        }
+
         if (!$quote->getCustomerIsGuest()) {
             if ($quote->getCustomerId()) {
                 $this->_prepareCustomerQuote($quote);
