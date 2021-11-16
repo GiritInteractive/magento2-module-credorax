@@ -11,7 +11,6 @@
 namespace Credorax\Credorax\Controller\Payment\Challenge;
 
 use Credorax\Credorax\Model\Config as CredoraxConfig;
-use Credorax\Credorax\Model\QuoteManagement;
 use Credorax\Credorax\Model\RedirectException as RedirectException;
 use Magento\Checkout\Model\Session\Proxy as CheckoutSession;
 use Magento\Checkout\Model\Type\Onepage;
@@ -19,6 +18,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Quote\Model\QuoteManagement;
 
 /**
  * Credorax Credorax challenge redirect controller.
@@ -83,11 +83,10 @@ class Redirect extends Action
             $quote = $this->checkoutSession->getQuote();
             $this->onepageCheckout->getCheckoutMethod();
             $orderId = $this->quoteManagement->placeOrder($quote->getId());
-        } catch (RedirectException $e) {
-            $this->quoteManagement->rollbackAddressesAlias();
-            return $resultRedirect->setUrl($e->getRedirectUrl());
         } catch (\Exception $e) {
-            $this->quoteManagement->rollbackAddressesAlias();
+            if (is_a($e, RedirectException::class)) {
+                return $resultRedirect->setUrl($e->getRedirectUrl());
+            }
             $this->credoraxConfig->log('Challenge\Redirect::execute() - Exception: ' . $e->getMessage(), 'error', [
                 'trace' => $e->getTraceAsString(),
             ]);
