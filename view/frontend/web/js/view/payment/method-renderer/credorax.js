@@ -142,6 +142,10 @@ define(
                 return window.checkoutConfig.payment[self.getCode()].hasNameOnCard;
             },
 
+            hasVerification: function() {
+                return window.checkoutConfig.payment[self.getCode()].hasVerification;
+            },
+
             getMerchantId: function() {
                 return window.checkoutConfig.payment[self.getCode()].merchantId;
             },
