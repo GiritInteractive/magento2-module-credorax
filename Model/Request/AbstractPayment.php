@@ -18,6 +18,7 @@ use Credorax\Credorax\Model\Request\Factory as RequestFactory;
 use Credorax\Credorax\Model\Response\Factory as ResponseFactory;
 use Credorax\Credorax\Model\ResponseInterface;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Credorax Credorax abstract payment request model.
@@ -50,14 +51,20 @@ abstract class AbstractPayment extends AbstractRequest
     protected $amount;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $timezoneInterface;
+
+    /**
      * AbstractGateway constructor.
      *
-     * @param Config                $config
-     * @param Curl                  $curl
-     * @param RequestFactory        $requestFactory
-     * @param ResponseFactory       $responseFactory
-     * @param OrderPayment|null     $orderPayment
-     * @param float|null            $amount
+     * @param Config                 $config
+     * @param Curl                   $curl
+     * @param RequestFactory         $requestFactory
+     * @param ResponseFactory        $responseFactory
+     * @param OrderPayment|null      $orderPayment
+     * @param float|null             $amount
+     * @param TimezoneInterface|null $timezoneInterface
      */
     public function __construct(
         Config $credoraxConfig,
@@ -65,7 +72,8 @@ abstract class AbstractPayment extends AbstractRequest
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
         OrderPayment $orderPayment,
-        $amount = 0.0
+        $amount = 0.0,
+        TimezoneInterface $timezoneInterface
     ) {
         parent::__construct(
             $credoraxConfig,
@@ -77,6 +85,7 @@ abstract class AbstractPayment extends AbstractRequest
         $this->requestFactory = $requestFactory;
         $this->orderPayment = $orderPayment;
         $this->amount = $amount;
+        $this->timezoneInterface = $timezoneInterface;
     }
 
     /**
@@ -134,7 +143,7 @@ abstract class AbstractPayment extends AbstractRequest
             $params['3ds_challengewindowsize'] = '03';
             $params['3ds_compind'] = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_COMPIND) ?: 'N';
             $params['3ds_transtype'] = '01';
-            $params['3ds_purchasedate'] = date('YmdHis', strtotime($orderPayment->getOrder()->getCreatedAt()));
+            $params['3ds_purchasedate'] = date('YmdHis', strtotime($this->timezoneInterface->date()->format('Y-m-d H:i:s')));
             $params['3ds_redirect_url'] = $this->_credoraxConfig->getUrlBuilder()->getUrl('credorax/payment_challenge/callback', ['quote' => $orderPayment->getOrder()->getQuoteId()]);
             $params['d6'] = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_BROWSER_LANG) ?: 'en-US';
         }

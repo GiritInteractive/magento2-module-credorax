@@ -19,6 +19,7 @@ use Credorax\Credorax\Model\RequestInterface;
 use Credorax\Credorax\Model\Response\AbstractPayment as AbstractPaymentResponse;
 use Credorax\Credorax\Model\Response\Factory as ResponseFactory;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 
 /**
@@ -45,7 +46,9 @@ class AuthUseToken extends Auth implements RequestInterface
      * @param  ResponseFactory                 $responseFactory
      * @param  OrderPayment                    $orderPayment
      * @param  float                           $amount
+     * @param  TimezoneInterface               $timezoneInterface
      * @param  PaymentTokenManagementInterface $paymentTokenFactory
+
      */
     public function __construct(
         Config $credoraxConfig,
@@ -54,6 +57,7 @@ class AuthUseToken extends Auth implements RequestInterface
         ResponseFactory $responseFactory,
         OrderPayment $orderPayment,
         $amount = 0.0,
+        TimezoneInterface $timezoneInterface,
         PaymentTokenManagementInterface $paymentTokenManagement
     ) {
         parent::__construct(
@@ -62,7 +66,8 @@ class AuthUseToken extends Auth implements RequestInterface
             $requestFactory,
             $responseFactory,
             $orderPayment,
-            $amount
+            $amount,
+            $timezoneInterface
         );
         $this->paymentTokenManagement = $paymentTokenManagement;
     }
