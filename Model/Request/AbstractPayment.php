@@ -72,8 +72,8 @@ abstract class AbstractPayment extends AbstractRequest
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
         OrderPayment $orderPayment,
+        TimezoneInterface $timezoneInterface,
         $amount = 0.0,
-        TimezoneInterface $timezoneInterface
     ) {
         parent::__construct(
             $credoraxConfig,
@@ -84,8 +84,8 @@ abstract class AbstractPayment extends AbstractRequest
         $this->requestFactory = $requestFactory;
         $this->requestFactory = $requestFactory;
         $this->orderPayment = $orderPayment;
-        $this->amount = $amount;
         $this->timezoneInterface = $timezoneInterface;
+        $this->amount = $amount;
     }
 
     /**

@@ -55,9 +55,9 @@ class SaleUseToken extends Sale implements RequestInterface
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
         OrderPayment $orderPayment,
-        $amount = 0.0,
         TimezoneInterface $timezoneInterface,
-        PaymentTokenManagementInterface $paymentTokenManagement
+        PaymentTokenManagementInterface $paymentTokenManagement,
+        $amount = 0.0,
     ) {
         parent::__construct(
             $credoraxConfig,
@@ -65,8 +65,8 @@ class SaleUseToken extends Sale implements RequestInterface
             $requestFactory,
             $responseFactory,
             $orderPayment,
-            $amount,
-            $timezoneInterface
+            $timezoneInterface,
+            $amount
         );
         $this->paymentTokenManagement = $paymentTokenManagement;
     }
