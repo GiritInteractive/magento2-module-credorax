@@ -1,19 +1,19 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Controller\Payment\Fingerprint;
+namespace Shift4\Shift4\Controller\Payment\Fingerprint;
 
 use Magento\Framework\App\Action\Action;
 
 /**
- * Credorax Credorax payment device fingerprint (iframe) form controller.
+ * Shift4 Shift4 payment device fingerprint (iframe) form controller.
  */
 class Form extends Action
 {
@@ -21,8 +21,8 @@ class Form extends Action
     {
         $this->getResponse()->setBody(
             $this->_view->getLayout()
-                ->createBlock(\Credorax\Credorax\Block\Payment\Fingerprint::class)
-                ->setTemplate('Credorax_Credorax::payment/fingerprint.phtml')
+                ->createBlock(\Shift4\Shift4\Block\Payment\Fingerprint::class)
+                ->setTemplate('Shift4_Shift4::payment/fingerprint.phtml')
                 ->toHtml()
         );
     }

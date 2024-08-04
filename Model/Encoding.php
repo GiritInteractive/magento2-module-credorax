@@ -37,7 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * @license  Revised BSD
   */
 
-namespace Credorax\Credorax\Model;
+namespace Shift4\Shift4\Model;
 
 class Encoding
 {
@@ -150,7 +150,7 @@ class Encoding
     public static function toUTF8($text)
     {
         /**
-         * Function WC_Credorax_Model_Encoding::toUTF8
+         * Function WC_Shift4_Model_Encoding::toUTF8
          *
          * This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
          *

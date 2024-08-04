@@ -1,22 +1,22 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  *
  *
- * @var Credorax\Credorax\Block\Payment\Fingerprint $block
+ * @var Shift4\Shift4\Block\Payment\Fingerprint $block
  */
 ?>
-<form id="credorax_fingerprint_form" action="<?php /* @noEscape */ echo $block->getThreeDSMethodUrl(); ?>" method="POST">
+<form id="shift4_fingerprint_form" action="<?php /* @noEscape */ echo $block->getThreeDSMethodUrl(); ?>" method="POST">
     <input type="text" name="threeDSMethodData" value="<?php /* @noEscape */ echo $block->getThreeDSMethodData(); ?>">
 </form>
 <script>
     window.onload = function(){
-        parent.credorax_fingerprint_form_submitted = Date.now() + 10000;
-        document.getElementById('credorax_fingerprint_form').submit();
+        parent.shift4_fingerprint_form_submitted = Date.now() + 10000;
+        document.getElementById('shift4_fingerprint_form').submit();
     }
 </script>

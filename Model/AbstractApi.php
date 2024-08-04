@@ -1,24 +1,24 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model;
+namespace Shift4\Shift4\Model;
 
 /**
- * Credorax Credorax abstract api model.
+ * Shift4 Shift4 abstract api model.
  */
 abstract class AbstractApi
 {
     /**
      * @var Config
      */
-    protected $_credoraxConfig;
+    protected $_shift4Config;
 
     /**
      * Object initialization.
@@ -26,12 +26,12 @@ abstract class AbstractApi
      * @param Config           $config
      */
     public function __construct(
-        Config $credoraxConfig
+        Config $shift4Config
     ) {
-        $this->_credoraxConfig = $credoraxConfig;
+        $this->_shift4Config = $shift4Config;
     }
 
-    //= Credorax Helpers
+    //= Shift4 Helpers
 
     /**
      * @method getExponentsByCurrency

@@ -1,14 +1,14 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Plugin\Framework\App\Request;
+namespace Shift4\Shift4\Plugin\Framework\App\Request;
 
 class CsrfValidator
 {
@@ -24,7 +24,7 @@ class CsrfValidator
         $request,
         $action
     ) {
-        if ($request->getFullActionName() === 'credorax_payment_fingerprint_notification') {
+        if ($request->getFullActionName() === 'shift4_payment_fingerprint_notification') {
             return;
         }
         return $proceed($request, $action);

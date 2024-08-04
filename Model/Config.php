@@ -1,14 +1,14 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model;
+namespace Shift4\Shift4\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -19,20 +19,20 @@ use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Credorax Credorax config model.
+ * Shift4 Shift4 config model.
  */
 class Config
 {
-    const MODULE_NAME = 'Credorax_Credorax';
+    const MODULE_NAME = 'Shift4_Shift4';
 
     //= Integration (sandbox) URLs:
-    const CREDORAX_GATEWAY_INTEGATION_URL = 'https://intconsole.credorax.com/intenv/service/gateway';
-    const CREDORAX_STORE_INTEGATION_URL = 'https://ppskey-int.credorax.com/keypayment/rest/v2/store';
-    const CREDORAX_PAYMENT_INTEGATION_URL = 'https://pps-int.credorax.com/keypayment/rest/v2/payment';
+    const CREDORAX_GATEWAY_INTEGATION_URL = 'https://intconsole.shift4.com/intenv/service/gateway';
+    const CREDORAX_STORE_INTEGATION_URL = 'https://ppskey-int.shift4.com/keypayment/rest/v2/store';
+    const CREDORAX_PAYMENT_INTEGATION_URL = 'https://pps-int.shift4.com/keypayment/rest/v2/payment';
     //= Production (live) URLs:
-    const CREDORAX_GATEWAY_PRODUCTION_URL = 'https://xts.gate.credorax.net/crax_gate/service/gateway';
-    const CREDORAX_STORE_PRODUCTION_URL = 'https://ppskey.credorax.net/keypayment/rest/v2/store';
-    const CREDORAX_PAYMENT_PRODUCTION_URL = 'https://PPS.credorax.net/keypayment/rest/v2/payment';
+    const CREDORAX_GATEWAY_PRODUCTION_URL = 'https://xts.gate.shift4.net/crax_gate/service/gateway';
+    const CREDORAX_STORE_PRODUCTION_URL = 'https://ppskey.shift4.net/keypayment/rest/v2/store';
+    const CREDORAX_PAYMENT_PRODUCTION_URL = 'https://PPS.shift4.net/keypayment/rest/v2/payment';
 
     /**
      * Scope config object.
@@ -92,7 +92,7 @@ class Config
      */
     private function getConfigPath()
     {
-        return sprintf('payment/%s/', CredoraxMethod::METHOD_CODE);
+        return sprintf('payment/%s/', Shift4Method::METHOD_CODE);
     }
 
     /**
@@ -243,7 +243,7 @@ class Config
      */
     public function isSandboxMode()
     {
-        return ($this->getConfigValue('mode') === CredoraxMethod::MODE_LIVE) ? false : true;
+        return ($this->getConfigValue('mode') === Shift4Method::MODE_LIVE) ? false : true;
     }
 
     /**
@@ -314,31 +314,31 @@ class Config
     }
 
     /**
-     * @method getCredoraxGatewayUrl
+     * @method getShift4GatewayUrl
      * @param string $path
      * @return string
      */
-    public function getCredoraxGatewayUrl($path = "")
+    public function getShift4GatewayUrl($path = "")
     {
         return ($this->isSandboxMode() ? self::CREDORAX_GATEWAY_INTEGATION_URL : self::CREDORAX_GATEWAY_PRODUCTION_URL) . (($path) ? '/' . $path : '');
     }
 
     /**
-     * @method getCredoraxStoreUrl
+     * @method getShift4StoreUrl
      * @param string $path
      * @return string
      */
-    public function getCredoraxStoreUrl($path = "")
+    public function getShift4StoreUrl($path = "")
     {
         return ($this->isSandboxMode() ? self::CREDORAX_STORE_INTEGATION_URL : self::CREDORAX_STORE_PRODUCTION_URL) . (($path) ? '/' . $path : '');
     }
 
     /**
-     * @method getCredoraxPaymentUrl
+     * @method getShift4PaymentUrl
      * @param string $path
      * @return string
      */
-    public function getCredoraxPaymentUrl($path = "")
+    public function getShift4PaymentUrl($path = "")
     {
         return ($this->isSandboxMode() ? self::CREDORAX_PAYMENT_INTEGATION_URL : self::CREDORAX_PAYMENT_PRODUCTION_URL) . (($path) ? '/' . $path : '');
     }
@@ -368,7 +368,7 @@ class Config
      * @param  string  $prefix
      * @return $this
      */
-    public function log($message, $type = "debug", $data = [], $prefix = '[Credorax] ')
+    public function log($message, $type = "debug", $data = [], $prefix = '[Shift4] ')
     {
         if ($type !== 'debug' || $this->isDebugEnabled()) {
             if (!isset($data['store_id'])) {

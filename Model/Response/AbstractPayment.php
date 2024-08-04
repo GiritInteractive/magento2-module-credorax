@@ -1,25 +1,25 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Response;
+namespace Shift4\Shift4\Model\Response;
 
-use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\AbstractResponse;
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\CredoraxMethod;
+use Shift4\Shift4\Lib\Http\Client\Curl;
+use Shift4\Shift4\Model\AbstractResponse;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Shift4Method;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Sales\Model\Order\Payment\Transaction as OrderTransaction;
 
 /**
- * Credorax Credorax abstract payment response model.
+ * Shift4 Shift4 abstract payment response model.
  */
 abstract class AbstractPayment extends AbstractResponse
 {
@@ -135,17 +135,17 @@ abstract class AbstractPayment extends AbstractResponse
 
     /**
      * @method __construct
-     * @param  Config                          $credoraxConfig
+     * @param  Config                          $shift4Config
      * @param  Curl                            $curl
      * @param  OrderPayment                    $orderPayment
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         Curl $curl,
         OrderPayment $orderPayment
     ) {
         parent::__construct(
-            $credoraxConfig,
+            $shift4Config,
             $curl
         );
         $this->_order = $orderPayment->getOrder();
@@ -159,7 +159,7 @@ abstract class AbstractPayment extends AbstractResponse
     {
         $body = $this->getBody();
 
-        $this->_transactionId = ($this->_credoraxConfig->is3dSecureEnabled() && isset($body['3ds_status'])) ? null : $body['z13'];
+        $this->_transactionId = ($this->_shift4Config->is3dSecureEnabled() && isset($body['3ds_status'])) ? null : $body['z13'];
         $this->_cipher = $body['K'];
         $this->_operationCode = (int)$body['O'];
         $this->_responseId = isset($body['z1']) ? $body['z1'] : null;
@@ -192,7 +192,7 @@ abstract class AbstractPayment extends AbstractResponse
     public function is3dSecureResponse()
     {
         $body = $this->getBody();
-        return (!$this->_credoraxConfig->is3dSecureEnabled() || ($this->_credoraxConfig->isUsingSmart3d() && isset($body['smart_3ds_result']) && $body['smart_3ds_result'] === '02')) ? false : true;
+        return (!$this->_shift4Config->is3dSecureEnabled() || ($this->_shift4Config->isUsingSmart3d() && isset($body['smart_3ds_result']) && $body['smart_3ds_result'] === '02')) ? false : true;
     }
 
     /**
@@ -273,73 +273,73 @@ abstract class AbstractPayment extends AbstractResponse
         );
 
         $this->_orderPayment->setAdditionalInformation(
-            CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE,
+            Shift4Method::KEY_CREDORAX_LAST_OPERATION_CODE,
             $this->_operationCode
         );
 
         if ($this->_transactionId) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID,
+                Shift4Method::KEY_CREDORAX_TRANSACTION_ID,
                 $this->_transactionId
             );
         }
 
         if ($this->_responseId) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_RESPONSE_ID,
+                Shift4Method::KEY_CREDORAX_RESPONSE_ID,
                 $this->_responseId
             );
         }
 
         if ($this->_riskScore) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_RISK_SCORE,
+                Shift4Method::KEY_CREDORAX_RISK_SCORE,
                 $this->_riskScore
             );
         }
 
         if ($this->_3dsCavv) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_3DS_CAVV,
+                Shift4Method::KEY_CREDORAX_3DS_CAVV,
                 $this->_3dsCavv
             );
         }
 
         if ($this->_3dsEci) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_3DS_ECI,
+                Shift4Method::KEY_CREDORAX_3DS_ECI,
                 $this->_3dsEci
             );
         }
 
         if ($this->_3dsStatus) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_3DS_STATUS,
+                Shift4Method::KEY_CREDORAX_3DS_STATUS,
                 $this->_3dsStatus
             );
         }
 
         if ($this->_3dsTrxid) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_3DS_TRXID,
+                Shift4Method::KEY_CREDORAX_3DS_TRXID,
                 $this->_3dsTrxid
             );
         }
 
         if ($this->_3dsVersion) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_3DS_VERSION,
+                Shift4Method::KEY_CREDORAX_3DS_VERSION,
                 $this->_3dsVersion
             );
         }
 
         $this->_orderPayment->getMethodInstance()->getInfoInstance()->addData(
             [
-                CredoraxMethod::KEY_CC_LAST_4 => substr($this->getCcNumber(), -4),
-                CredoraxMethod::KEY_CC_NUMBER => $this->getCcNumber(),
-                CredoraxMethod::KEY_CC_EXP_MONTH => $this->getCcExpMonth(),
-                CredoraxMethod::KEY_CC_EXP_YEAR => $this->getCcExpYear(),
-                CredoraxMethod::KEY_CC_OWNER => $this->getCcOwner(),
+                Shift4Method::KEY_CC_LAST_4 => substr($this->getCcNumber(), -4),
+                Shift4Method::KEY_CC_NUMBER => $this->getCcNumber(),
+                Shift4Method::KEY_CC_EXP_MONTH => $this->getCcExpMonth(),
+                Shift4Method::KEY_CC_EXP_YEAR => $this->getCcExpYear(),
+                Shift4Method::KEY_CC_OWNER => $this->getCcOwner(),
             ]
         );
 
@@ -471,11 +471,11 @@ abstract class AbstractPayment extends AbstractResponse
      */
     public function is3dsChallengeRequired()
     {
-        return $this->_credoraxConfig->is3dSecureEnabled() && $this->get3dsAcsurl();
+        return $this->_shift4Config->is3dSecureEnabled() && $this->get3dsAcsurl();
     }
 
     public function get3dStatusMessage()
     {
-        return $this->_credoraxConfig->get3dStatusMessage($this->_3dsStatus);
+        return $this->_shift4Config->get3dStatusMessage($this->_3dsStatus);
     }
 }

@@ -1,20 +1,20 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Adminhtml\Source;
+namespace Shift4\Shift4\Model\Adminhtml\Source;
 
-use Credorax\Credorax\Model\CredoraxMethod;
+use Shift4\Shift4\Model\Shift4Method;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Credorax Credorax mode source model.
+ * Shift4 Shift4 mode source model.
  */
 class Mode implements OptionSourceInterface
 {
@@ -44,8 +44,8 @@ class Mode implements OptionSourceInterface
     public function toArray()
     {
         return [
-            CredoraxMethod::MODE_LIVE => __('Live'),
-            CredoraxMethod::MODE_SANDBOX => __('Sandbox'),
+            Shift4Method::MODE_LIVE => __('Live'),
+            Shift4Method::MODE_SANDBOX => __('Sandbox'),
         ];
     }
 }

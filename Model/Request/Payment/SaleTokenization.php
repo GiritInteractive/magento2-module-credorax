@@ -1,26 +1,26 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Request\Payment;
+namespace Shift4\Shift4\Model\Request\Payment;
 
-use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
-use Credorax\Credorax\Model\RequestInterface;
-use Credorax\Credorax\Model\Response\AbstractPayment as AbstractPaymentResponse;
+use Shift4\Shift4\Model\Request\AbstractPayment as AbstractPaymentRequest;
+use Shift4\Shift4\Model\RequestInterface;
+use Shift4\Shift4\Model\Response\AbstractPayment as AbstractPaymentResponse;
 
 /**
- * Credorax SaleTokenization payment request model.
+ * Shift4 SaleTokenization payment request model.
  */
 class SaleTokenization extends Sale implements RequestInterface
 {
     /**
-     * Credorax Operation Code
+     * Shift4 Operation Code
      * @var integer
      */
     const CREDORAX_O = 23;

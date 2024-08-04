@@ -1,20 +1,20 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model;
+namespace Shift4\Shift4\Model;
 
-use Credorax\Credorax\Model\Config as CredoraxConfig;
-use Credorax\Credorax\Model\RedirectException as RedirectException;
-use Credorax\Credorax\Model\Request\AbstractGateway as AbstractGatewayRequest;
-use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
-use Credorax\Credorax\Model\Request\Factory as RequestFactory;
+use Shift4\Shift4\Model\Config as Shift4Config;
+use Shift4\Shift4\Model\RedirectException as RedirectException;
+use Shift4\Shift4\Model\Request\AbstractGateway as AbstractGatewayRequest;
+use Shift4\Shift4\Model\Request\AbstractPayment as AbstractPaymentRequest;
+use Shift4\Shift4\Model\Request\Factory as RequestFactory;
 use Magento\Checkout\Model\Session\Proxy as CheckoutSession;
 use Magento\Customer\Model\Session\Proxy as CustomerSession;
 use Magento\Framework\Api\AttributeValueFactory;
@@ -36,14 +36,14 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 
 /**
- * Credorax payment model.
+ * Shift4 payment model.
  */
-class CredoraxMethod extends Cc
+class Shift4Method extends Cc
 {
     /**
      * Method code const.
      */
-    const METHOD_CODE = 'credorax';
+    const METHOD_CODE = 'shift4';
 
     /**
      * Modes.
@@ -54,7 +54,7 @@ class CredoraxMethod extends Cc
     /**
      * Method vault code const.
      */
-    const CC_VAULT_CODE = 'credorax_vault';
+    const CC_VAULT_CODE = 'shift4_vault';
 
     const KEY_CC_SAVE = 'cc_save';
     const KEY_CC_TYPE = 'cc_type';
@@ -66,21 +66,21 @@ class CredoraxMethod extends Cc
     const KEY_CC_TOKEN = 'cc_token';
     const KEY_CC_TEMP_TOKEN = 'cc_temp_token';
 
-    const KEY_CREDORAX_3DS_CAVV = 'credorax_3ds_cavv';
-    const KEY_CREDORAX_3DS_COMPIND = 'credorax_3ds_compind';
-    const KEY_CREDORAX_3DS_ECI = 'credorax_3ds_eci';
-    const KEY_CREDORAX_3DS_METHOD = 'credorax_3ds_method';
-    const KEY_CREDORAX_3DS_STATUS = 'credorax_3ds_status';
-    const KEY_CREDORAX_3DS_TRXID = 'credorax_3ds_trxid';
-    const KEY_CREDORAX_3DS_VERSION = 'credorax_3ds_version';
-    const KEY_CREDORAX_AUTH_CODE = 'credorax_auth_code';
-    const KEY_CREDORAX_BROWSER_LANG = 'credorax_browser_lang';
-    const KEY_CREDORAX_LAST_OPERATION_CODE = 'credorax_last_operation_code';
-    const KEY_CREDORAX_PKEY = 'credorax_pkey';
-    const KEY_CREDORAX_PKEY_DATA = 'credorax_pkey_data';
-    const KEY_CREDORAX_RESPONSE_ID = 'credorax_response_id';
-    const KEY_CREDORAX_RISK_SCORE = 'credorax_risk_score';
-    const KEY_CREDORAX_TRANSACTION_ID = 'credorax_transaction_id';
+    const KEY_CREDORAX_3DS_CAVV = 'shift4_3ds_cavv';
+    const KEY_CREDORAX_3DS_COMPIND = 'shift4_3ds_compind';
+    const KEY_CREDORAX_3DS_ECI = 'shift4_3ds_eci';
+    const KEY_CREDORAX_3DS_METHOD = 'shift4_3ds_method';
+    const KEY_CREDORAX_3DS_STATUS = 'shift4_3ds_status';
+    const KEY_CREDORAX_3DS_TRXID = 'shift4_3ds_trxid';
+    const KEY_CREDORAX_3DS_VERSION = 'shift4_3ds_version';
+    const KEY_CREDORAX_AUTH_CODE = 'shift4_auth_code';
+    const KEY_CREDORAX_BROWSER_LANG = 'shift4_browser_lang';
+    const KEY_CREDORAX_LAST_OPERATION_CODE = 'shift4_last_operation_code';
+    const KEY_CREDORAX_PKEY = 'shift4_pkey';
+    const KEY_CREDORAX_PKEY_DATA = 'shift4_pkey_data';
+    const KEY_CREDORAX_RESPONSE_ID = 'shift4_response_id';
+    const KEY_CREDORAX_RISK_SCORE = 'shift4_risk_score';
+    const KEY_CREDORAX_TRANSACTION_ID = 'shift4_transaction_id';
 
     /**
      * Gateway code
@@ -92,7 +92,7 @@ class CredoraxMethod extends Cc
     /**
      * @var string
      */
-    protected $_infoBlockType = \Credorax\Credorax\Block\Info\Cc::class;
+    protected $_infoBlockType = \Shift4\Shift4\Block\Info\Cc::class;
 
     /**
      * Gateway Method feature.
@@ -175,9 +175,9 @@ class CredoraxMethod extends Cc
     private $customerSession;
 
     /**
-     * @var CredoraxConfig
+     * @var Shift4Config
      */
-    protected $credoraxConfig;
+    protected $shift4Config;
 
     /**
      * @var RequestFactory
@@ -201,7 +201,7 @@ class CredoraxMethod extends Cc
      * @param  ModuleListInterface             $moduleList
      * @param  TimezoneInterface               $localeDate
      * @param  CheckoutSession                 $checkoutSession
-     * @param  CredoraxConfig                  $credoraxConfig
+     * @param  Shift4Config                  $shift4Config
      * @param  RequestFactory                  $requestFactory
      * @param  PaymentTokenManagementInterface $paymentTokenManagement
      * @param  AbstractResource|null           $resource
@@ -221,7 +221,7 @@ class CredoraxMethod extends Cc
         TimezoneInterface $localeDate,
         CheckoutSession $checkoutSession,
         CustomerSession $customerSession,
-        CredoraxConfig $credoraxConfig,
+        Shift4Config $shift4Config,
         RequestFactory $requestFactory,
         PaymentTokenManagementInterface $paymentTokenManagement,
         AbstractResource $resource = null,
@@ -245,7 +245,7 @@ class CredoraxMethod extends Cc
 
         $this->checkoutSession = $checkoutSession;
         $this->customerSession = $customerSession;
-        $this->credoraxConfig = $credoraxConfig;
+        $this->shift4Config = $shift4Config;
         $this->requestFactory = $requestFactory;
         $this->paymentTokenManagement = $paymentTokenManagement;
     }
@@ -272,7 +272,7 @@ class CredoraxMethod extends Cc
 
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
-        $credoraxPKeyData = !empty($additionalData[self::KEY_CREDORAX_PKEY_DATA])
+        $shift4PKeyData = !empty($additionalData[self::KEY_CREDORAX_PKEY_DATA])
             ? $additionalData[self::KEY_CREDORAX_PKEY_DATA]
             : null;
 
@@ -284,11 +284,11 @@ class CredoraxMethod extends Cc
             ? $additionalData[self::KEY_CC_OWNER]
             : null;
 
-        $ccToken = (!empty($additionalData[self::KEY_CC_TOKEN]) && $this->credoraxConfig->isUsingVault())
+        $ccToken = (!empty($additionalData[self::KEY_CC_TOKEN]) && $this->shift4Config->isUsingVault())
             ? $additionalData[self::KEY_CC_TOKEN]
             : null;
 
-        $ccSave = ($ccToken === null && !empty($additionalData[self::KEY_CC_SAVE]) && $this->credoraxConfig->isUsingVault())
+        $ccSave = ($ccToken === null && !empty($additionalData[self::KEY_CC_SAVE]) && $this->shift4Config->isUsingVault())
             ? (bool)$additionalData[self::KEY_CC_SAVE]
             : false;
 
@@ -302,7 +302,7 @@ class CredoraxMethod extends Cc
         $info->setAdditionalInformation(self::KEY_CC_TOKEN, $ccToken);
         $info->setAdditionalInformation(self::KEY_CC_SAVE, $ccSave);
         $info->setAdditionalInformation(self::KEY_CREDORAX_BROWSER_LANG, $browserLang);
-        $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY_DATA, $credoraxPKeyData);
+        $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY_DATA, $shift4PKeyData);
         $info->addData(
             [
                 self::KEY_CC_TYPE => $ccType,
@@ -348,19 +348,19 @@ class CredoraxMethod extends Cc
     {
         $info = $this->getInfoInstance();
 
-        $credoraxPKeyData = $this->getPKeyData();
-        if (!$credoraxPKeyData || !is_object($credoraxPKeyData)) {
+        $shift4PKeyData = $this->getPKeyData();
+        if (!$shift4PKeyData || !is_object($shift4PKeyData)) {
             throw new LocalizedException(
-                __('No response from Credorax gateway, please contact us or try again later.')
+                __('No response from Shift4 gateway, please contact us or try again later.')
             );
         }
-        if (!property_exists($credoraxPKeyData, 'PKey') || !$credoraxPKeyData->PKey || (property_exists($credoraxPKeyData, 'z2') && $credoraxPKeyData->z2)) {
-            $errMessage = (property_exists($credoraxPKeyData, 'z3') && $credoraxPKeyData->z3) ? $credoraxPKeyData->z3 : 'Credorax transaction failed, please make sure that the payment details are correct.';
+        if (!property_exists($shift4PKeyData, 'PKey') || !$shift4PKeyData->PKey || (property_exists($shift4PKeyData, 'z2') && $shift4PKeyData->z2)) {
+            $errMessage = (property_exists($shift4PKeyData, 'z3') && $shift4PKeyData->z3) ? $shift4PKeyData->z3 : 'Shift4 transaction failed, please make sure that the payment details are correct.';
             throw new LocalizedException(
                 __($errMessage)
             );
         }
-        $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY, $credoraxPKeyData->PKey);
+        $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY, $shift4PKeyData->PKey);
 
         $info->setAdditionalInformation(self::KEY_CREDORAX_3DS_METHOD, $this->checkoutSession->getData(self::KEY_CREDORAX_3DS_METHOD));
         $info->setAdditionalInformation(self::KEY_CREDORAX_3DS_TRXID, $this->checkoutSession->getData(self::KEY_CREDORAX_3DS_TRXID));
@@ -397,15 +397,15 @@ class CredoraxMethod extends Cc
             if ($token) {
                 $method = AbstractPaymentRequest::PAYMENT_AUTH_USE_TOKEN_METHOD;
             } else {
-                $method = $this->credoraxConfig->isUsingVault() && $ccSave ?
+                $method = $this->shift4Config->isUsingVault() && $ccSave ?
                     AbstractPaymentRequest::PAYMENT_AUTH_TOKENIZATION_METHOD :
                     AbstractPaymentRequest::PAYMENT_AUTH_METHOD;
             }
-            if ($this->credoraxConfig->isAuthirizeAndCaptureAction()) {
+            if ($this->shift4Config->isAuthirizeAndCaptureAction()) {
                 if ($token) {
                     $method = AbstractPaymentRequest::PAYMENT_SALE_USE_TOKEN_METHOD;
                 } else {
-                    $method = $this->credoraxConfig->isUsingVault() && $ccSave ?
+                    $method = $this->shift4Config->isUsingVault() && $ccSave ?
                         AbstractPaymentRequest::PAYMENT_SALE_TOKENIZATION_METHOD :
                         AbstractPaymentRequest::PAYMENT_SALE_METHOD;
                 }
@@ -423,8 +423,8 @@ class CredoraxMethod extends Cc
      */
     private function processPayment(InfoInterface $payment, $amount)
     {
-        if ($this->checkoutSession->getCredoraxPaymentData() !== null) {
-            $this->checkoutSession->unsCredoraxPaymentData();
+        if ($this->checkoutSession->getShift4PaymentData() !== null) {
+            $this->checkoutSession->unsShift4PaymentData();
             return $this;
         }
 
@@ -439,7 +439,7 @@ class CredoraxMethod extends Cc
         $response = $request->process();
 
         if ($response->getResponseType() === AbstractResponse::RESPONSE_TYPE_PAYMENT && $response->is3dsChallengeRequired()) {
-            $this->checkoutSession->setCredoraxPaymentData($response->getDataObject());
+            $this->checkoutSession->setShift4PaymentData($response->getDataObject());
             throw new RedirectException($response->get3dsAcsurl());
         }
 

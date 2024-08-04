@@ -1,54 +1,54 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Sales\Model\Order\Payment\State\AuthorizeCommand">
-        <plugin name="credorax_plugin_sales_model_order_payment_state_authorizecommand" type="Credorax\Credorax\Plugin\Sales\Model\Order\Payment\State\AuthorizeCommand"/>
+        <plugin name="shift4_plugin_sales_model_order_payment_state_authorizecommand" type="Shift4\Shift4\Plugin\Sales\Model\Order\Payment\State\AuthorizeCommand"/>
     </type>
     <type name="Magento\Framework\App\Request\CsrfValidator">
-        <plugin name="credorax_plugin_csrf_validator_skip" type="Credorax\Credorax\Plugin\Framework\App\Request\CsrfValidator" />
+        <plugin name="shift4_plugin_csrf_validator_skip" type="Shift4\Shift4\Plugin\Framework\App\Request\CsrfValidator" />
     </type>
 
     <!-- Vault configuration. -->
-    <virtualType name="CredoraxCreditCardVaultFacade" type="Magento\Vault\Model\Method\Vault">
+    <virtualType name="Shift4CreditCardVaultFacade" type="Magento\Vault\Model\Method\Vault">
         <arguments>
-            <argument name="config" xsi:type="object">CredoraxVaultPaymentConfig</argument>
-            <argument name="valueHandlerPool" xsi:type="object">CredoraxVaultPaymentValueHandlerPool</argument>
-            <argument name="vaultProvider" xsi:type="object">Credorax\Credorax\Model\CredoraxMethod</argument>
-            <argument name="code" xsi:type="const">Credorax\Credorax\Model\CredoraxMethod::CC_VAULT_CODE</argument>
+            <argument name="config" xsi:type="object">Shift4VaultPaymentConfig</argument>
+            <argument name="valueHandlerPool" xsi:type="object">Shift4VaultPaymentValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">Shift4\Shift4\Model\Shift4Method</argument>
+            <argument name="code" xsi:type="const">Shift4\Shift4\Model\Shift4Method::CC_VAULT_CODE</argument>
         </arguments>
     </virtualType>
-    <virtualType name="CredoraxVaultPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\Config">
+    <virtualType name="Shift4VaultPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Credorax\Credorax\Model\CredoraxMethod::CC_VAULT_CODE</argument>
+            <argument name="methodCode" xsi:type="const">Shift4\Shift4\Model\Shift4Method::CC_VAULT_CODE</argument>
         </arguments>
     </virtualType>
-    <virtualType name="CredoraxVaultPaymentValueHandlerPool" type="VaultPaymentValueHandlerPool">
+    <virtualType name="Shift4VaultPaymentValueHandlerPool" type="VaultPaymentValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">CredoraxVaultPaymentValueHandler</item>
+                <item name="default" xsi:type="string">Shift4VaultPaymentValueHandler</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="CredoraxVaultPaymentValueHandler" type="VaultPaymentDefaultValueHandler">
+    <virtualType name="Shift4VaultPaymentValueHandler" type="VaultPaymentDefaultValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">CredoraxVaultPaymentConfig</argument>
+            <argument name="configInterface" xsi:type="object">Shift4VaultPaymentConfig</argument>
         </arguments>
     </virtualType>
-    <virtualType name="CredoraxVaultPaymentConfig" type="Magento\Payment\Gateway\Config\Config">
+    <virtualType name="Shift4VaultPaymentConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Credorax\Credorax\Model\CredoraxMethod::CC_VAULT_CODE</argument>
+            <argument name="methodCode" xsi:type="const">Shift4\Shift4\Model\Shift4Method::CC_VAULT_CODE</argument>
         </arguments>
     </virtualType>
-    <type name="Credorax\Credorax\Model\CardTokenization">
+    <type name="Shift4\Shift4\Model\CardTokenization">
         <arguments>
             <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
         </arguments>

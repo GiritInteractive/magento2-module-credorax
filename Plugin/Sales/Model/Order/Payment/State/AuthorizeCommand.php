@@ -1,17 +1,17 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Plugin\Sales\Model\Order\Payment\State;
+namespace Shift4\Shift4\Plugin\Sales\Model\Order\Payment\State;
 
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\CredoraxMethod;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Shift4Method;
 use Magento\Framework\Phrase;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -25,16 +25,16 @@ class AuthorizeCommand
     /**
      * @var Config
      */
-    private $credoraxConfig;
+    private $shift4Config;
 
     /**
      * @method __construct
-     * @param  Config      $credoraxConfig
+     * @param  Config      $shift4Config
      */
     public function __construct(
-        Config $credoraxConfig
+        Config $shift4Config
     ) {
-        $this->credoraxConfig = $credoraxConfig;
+        $this->shift4Config = $shift4Config;
     }
 
     /**
@@ -53,7 +53,7 @@ class AuthorizeCommand
         $amount,
         OrderInterface $order
     ) {
-        if ($this->credoraxConfig->isActive() && $payment->getMethod() === CredoraxMethod::METHOD_CODE) {
+        if ($this->shift4Config->isActive() && $payment->getMethod() === Shift4Method::METHOD_CODE) {
             $order->setState(Order::STATE_NEW)->setStatus('pending');
         }
         return $result;

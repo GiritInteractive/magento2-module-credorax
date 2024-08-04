@@ -1,15 +1,15 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
-namespace Credorax\Credorax\Block\Info;
+namespace Shift4\Shift4\Block\Info;
 
-use Credorax\Credorax\Model\CredoraxMethod;
+use Shift4\Shift4\Model\Shift4Method;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\Config;
@@ -62,29 +62,29 @@ class Cc extends \Magento\Payment\Block\Info\Cc
         if (($expMonth = $info->getCcExpMonth()) && ($expYear = $info->getCcExpYear())) {
             $data[(string)__('Card expiration date')] = $expMonth . '/' . $expYear;
         }
-        if (($ccOwner = $info->getAdditionalInformation(CredoraxMethod::KEY_CC_OWNER))) {
+        if (($ccOwner = $info->getAdditionalInformation(Shift4Method::KEY_CC_OWNER))) {
             $data[(string)__('Card holder name')] = $ccOwner;
         }
-        if (($transactionId = $info->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID))) {
+        if (($transactionId = $info->getAdditionalInformation(Shift4Method::KEY_CREDORAX_TRANSACTION_ID))) {
             $data[(string)__('Transaction Id (RRN)')] = $transactionId;
         }
-        if (($trxid = $info->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_TRXID))) {
+        if (($trxid = $info->getAdditionalInformation(Shift4Method::KEY_CREDORAX_3DS_TRXID))) {
             $data[(string)__('3DS transaction ID')] = $trxid;
         }
         if ($this->appState->getAreaCode() === \Magento\Framework\App\Area::AREA_ADMINHTML) {
-            if (($eci = $info->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_VERSION))) {
+            if (($eci = $info->getAdditionalInformation(Shift4Method::KEY_CREDORAX_3DS_VERSION))) {
                 $data[(string)__('3DS version')] = $eci;
             }
-            if (($eci = $info->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_ECI))) {
+            if (($eci = $info->getAdditionalInformation(Shift4Method::KEY_CREDORAX_3DS_ECI))) {
                 $data[(string)__('3DS ECI')] = $eci;
             }
-            if (($authCode = $info->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_AUTH_CODE))) {
+            if (($authCode = $info->getAdditionalInformation(Shift4Method::KEY_CREDORAX_AUTH_CODE))) {
                 $data[(string)__('Auth code')] = $authCode;
             }
-            if (($responseId = $info->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_RESPONSE_ID))) {
+            if (($responseId = $info->getAdditionalInformation(Shift4Method::KEY_CREDORAX_RESPONSE_ID))) {
                 $data[(string)__('Response ID')] = $responseId;
             }
-            if (($riskScore = $info->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_RISK_SCORE))) {
+            if (($riskScore = $info->getAdditionalInformation(Shift4Method::KEY_CREDORAX_RISK_SCORE))) {
                 $data[(string)__('Risk score')] = $riskScore;
             }
         }

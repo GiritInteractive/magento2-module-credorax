@@ -1,20 +1,20 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Response\Gateway;
+namespace Shift4\Shift4\Model\Response\Gateway;
 
-use Credorax\Credorax\Model\Response\AbstractGateway;
-use Credorax\Credorax\Model\ResponseInterface;
+use Shift4\Shift4\Model\Response\AbstractGateway;
+use Shift4\Shift4\Model\ResponseInterface;
 
 /**
- * Credorax Credorax gateway capture response model.
+ * Shift4 Shift4 gateway capture response model.
  */
 class Capture extends AbstractGateway implements ResponseInterface
 {
@@ -28,7 +28,7 @@ class Capture extends AbstractGateway implements ResponseInterface
 
         if ($this->_responseId) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_RESPONSE_ID,
+                Shift4Method::KEY_CREDORAX_RESPONSE_ID,
                 $this->_responseId
             );
         }

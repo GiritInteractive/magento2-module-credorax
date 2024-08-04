@@ -1,17 +1,17 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Controller\Payment\Challenge;
+namespace Shift4\Shift4\Controller\Payment\Challenge;
 
-use Credorax\Credorax\Model\Config as CredoraxConfig;
-use Credorax\Credorax\Model\RedirectException as RedirectException;
+use Shift4\Shift4\Model\Config as Shift4Config;
+use Shift4\Shift4\Model\RedirectException as RedirectException;
 use Magento\Checkout\Model\Session\Proxy as CheckoutSession;
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\App\Action\Action;
@@ -21,7 +21,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Quote\Model\QuoteManagement;
 
 /**
- * Credorax Credorax challenge redirect controller.
+ * Shift4 Shift4 challenge redirect controller.
  */
 class Redirect extends Action
 {
@@ -41,9 +41,9 @@ class Redirect extends Action
     private $onepageCheckout;
 
     /**
-     * @var CredoraxConfig
+     * @var Shift4Config
      */
-    private $credoraxConfig;
+    private $shift4Config;
 
     /**
      * @method __construct
@@ -51,20 +51,20 @@ class Redirect extends Action
      * @param  QuoteManagement $quoteManagement
      * @param  CheckoutSession $checkoutSession
      * @param  Onepage         $onepageCheckout
-     * @param  CredoraxConfig  $credoraxConfig
+     * @param  Shift4Config  $shift4Config
      */
     public function __construct(
         Context $context,
         QuoteManagement $quoteManagement,
         CheckoutSession $checkoutSession,
         Onepage $onepageCheckout,
-        CredoraxConfig $credoraxConfig
+        Shift4Config $shift4Config
     ) {
         parent::__construct($context);
         $this->quoteManagement = $quoteManagement;
         $this->checkoutSession = $checkoutSession;
         $this->onepageCheckout = $onepageCheckout;
-        $this->credoraxConfig = $credoraxConfig;
+        $this->shift4Config = $shift4Config;
     }
     /**
      * @return ResultInterface
@@ -73,7 +73,7 @@ class Redirect extends Action
      */
     public function execute()
     {
-        $this->credoraxConfig->log('Challenge\Redirect::execute() ', 'debug', [
+        $this->shift4Config->log('Challenge\Redirect::execute() ', 'debug', [
             'params' => $this->getRequest()->getParams(),
         ]);
 
@@ -87,7 +87,7 @@ class Redirect extends Action
             if (is_a($e, RedirectException::class)) {
                 return $resultRedirect->setUrl($e->getRedirectUrl());
             }
-            $this->credoraxConfig->log('Challenge\Redirect::execute() - Exception: ' . $e->getMessage(), 'error', [
+            $this->shift4Config->log('Challenge\Redirect::execute() - Exception: ' . $e->getMessage(), 'error', [
                 'trace' => $e->getTraceAsString(),
             ]);
             $this->messageManager->addErrorMessage($e->getMessage());

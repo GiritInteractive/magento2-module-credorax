@@ -1,26 +1,26 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Request;
+namespace Shift4\Shift4\Model\Request;
 
-use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\AbstractRequest;
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\CredoraxMethod;
-use Credorax\Credorax\Model\Request\Factory as RequestFactory;
-use Credorax\Credorax\Model\Response\Factory as ResponseFactory;
-use Credorax\Credorax\Model\ResponseInterface;
+use Shift4\Shift4\Lib\Http\Client\Curl;
+use Shift4\Shift4\Model\AbstractRequest;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Shift4Method;
+use Shift4\Shift4\Model\Request\Factory as RequestFactory;
+use Shift4\Shift4\Model\Response\Factory as ResponseFactory;
+use Shift4\Shift4\Model\ResponseInterface;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
- * Credorax Credorax abstract gateway request model.
+ * Shift4 Shift4 abstract gateway request model.
  */
 abstract class AbstractGateway extends AbstractRequest
 {
@@ -57,7 +57,7 @@ abstract class AbstractGateway extends AbstractRequest
      * @param float|null            $amount
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         Curl $curl,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
@@ -65,7 +65,7 @@ abstract class AbstractGateway extends AbstractRequest
         $amount = 0.0
     ) {
         parent::__construct(
-            $credoraxConfig,
+            $shift4Config,
             $curl,
             $responseFactory
         );
@@ -99,7 +99,7 @@ abstract class AbstractGateway extends AbstractRequest
      */
     protected function getEndpoint()
     {
-        return $this->_credoraxConfig->getCredoraxGatewayUrl();
+        return $this->_shift4Config->getShift4GatewayUrl();
     }
 
     /**
@@ -120,8 +120,8 @@ abstract class AbstractGateway extends AbstractRequest
             parent::getParams(),
             $this->getOrderData($order),
             [
-                'g2' => $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_RESPONSE_ID),
-                'g3' => $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_AUTH_CODE),
+                'g2' => $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_RESPONSE_ID),
+                'g3' => $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_AUTH_CODE),
                 'a4' => $this->amountFormat($this->amount, $order->getBaseCurrencyCode()),
             ]
         );

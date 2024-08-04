@@ -1,16 +1,16 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Block\Payment;
+namespace Shift4\Shift4\Block\Payment;
 
-use Credorax\Credorax\Model\CredoraxMethod;
+use Shift4\Shift4\Model\Shift4Method;
 use Magento\Checkout\Model\Session\Proxy as CheckoutSession;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Serialize\Serializer\Base64Json;
@@ -18,10 +18,10 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
- * Credorax Credorax payment device fingerprint block.
+ * Shift4 Shift4 payment device fingerprint block.
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  */
 class Fingerprint extends Template
 {
@@ -94,8 +94,8 @@ class Fingerprint extends Template
                 ['3ds_method' => null, '3ds_trxid' => null],
                 (array)$this->jsonHelper->jsonDecode($this->getRequest()->getParam('3ds_data'))
             );
-            $this->checkoutSession->setData(CredoraxMethod::KEY_CREDORAX_3DS_METHOD, $this->parsedData['3ds_method']);
-            $this->checkoutSession->setData(CredoraxMethod::KEY_CREDORAX_3DS_TRXID, $this->parsedData['3ds_trxid']);
+            $this->checkoutSession->setData(Shift4Method::KEY_CREDORAX_3DS_METHOD, $this->parsedData['3ds_method']);
+            $this->checkoutSession->setData(Shift4Method::KEY_CREDORAX_3DS_TRXID, $this->parsedData['3ds_trxid']);
         }
         return $this->parsedData;
     }
@@ -111,7 +111,7 @@ class Fingerprint extends Template
     /**
      * @return string|null
      */
-    private function getCredoraxThreeDSServerTransID()
+    private function getShift4ThreeDSServerTransID()
     {
         return $this->getParsedData()['3ds_trxid'];
     }
@@ -121,7 +121,7 @@ class Fingerprint extends Template
      */
     public function getThreeDSMethodNotificationURL()
     {
-        return $this->_urlBuilder->getUrl('credorax/payment_fingerprint/notification');
+        return $this->_urlBuilder->getUrl('shift4/payment_fingerprint/notification');
     }
 
     /**
@@ -131,7 +131,7 @@ class Fingerprint extends Template
     {
         return $this->serializer->serialize([
             "threeDSMethodNotificationURL" => $this->getThreeDSMethodNotificationURL(),
-            "threeDSServerTransID" => $this->getCredoraxThreeDSServerTransID(),
+            "threeDSServerTransID" => $this->getShift4ThreeDSServerTransID(),
         ]);
     }
 
@@ -140,9 +140,9 @@ class Fingerprint extends Template
      */
     public function getThreeDSCompind()
     {
-        $credorax3dsCompind = (string) $this->getRequest()->getParam('threeDSMethodData');
-        $this->checkoutSession->setData(CredoraxMethod::KEY_CREDORAX_3DS_COMPIND, $credorax3dsCompind ?: null);
-        return $credorax3dsCompind;
+        $shift43dsCompind = (string) $this->getRequest()->getParam('threeDSMethodData');
+        $this->checkoutSession->setData(Shift4Method::KEY_CREDORAX_3DS_COMPIND, $shift43dsCompind ?: null);
+        return $shift43dsCompind;
     }
 
     /**
@@ -152,7 +152,7 @@ class Fingerprint extends Template
      */
     protected function _toHtml()
     {
-        if ($this->getThreeDSMethodUrl() && $this->getCredoraxThreeDSServerTransID()) {
+        if ($this->getThreeDSMethodUrl() && $this->getShift4ThreeDSServerTransID()) {
             return parent::_toHtml();
         }
 

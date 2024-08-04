@@ -1,34 +1,34 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Request\Payment;
+namespace Shift4\Shift4\Model\Request\Payment;
 
-use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\CredoraxMethod;
-use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
-use Credorax\Credorax\Model\Request\Factory as RequestFactory;
-use Credorax\Credorax\Model\RequestInterface;
-use Credorax\Credorax\Model\Response\AbstractPayment as AbstractPaymentResponse;
-use Credorax\Credorax\Model\Response\Factory as ResponseFactory;
+use Shift4\Shift4\Lib\Http\Client\Curl;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Shift4Method;
+use Shift4\Shift4\Model\Request\AbstractPayment as AbstractPaymentRequest;
+use Shift4\Shift4\Model\Request\Factory as RequestFactory;
+use Shift4\Shift4\Model\RequestInterface;
+use Shift4\Shift4\Model\Response\AbstractPayment as AbstractPaymentResponse;
+use Shift4\Shift4\Model\Response\Factory as ResponseFactory;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 
 /**
- * Credorax SaleUseToken payment request model.
+ * Shift4 SaleUseToken payment request model.
  */
 class SaleUseToken extends Sale implements RequestInterface
 {
     /**
-     * Credorax Operation Code
+     * Shift4 Operation Code
      * @var integer
      */
     const CREDORAX_O = 11;
@@ -40,7 +40,7 @@ class SaleUseToken extends Sale implements RequestInterface
 
     /**
      * @method __construct
-     * @param  Config                          $credoraxConfig
+     * @param  Config                          $shift4Config
      * @param  Curl                            $curl
      * @param  RequestFactory                  $requestFactory
      * @param  ResponseFactory                 $responseFactory
@@ -50,7 +50,7 @@ class SaleUseToken extends Sale implements RequestInterface
      * @param  PaymentTokenManagementInterface $paymentTokenFactory
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         Curl $curl,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
@@ -60,7 +60,7 @@ class SaleUseToken extends Sale implements RequestInterface
         $amount = 0.0,
     ) {
         parent::__construct(
-            $credoraxConfig,
+            $shift4Config,
             $curl,
             $requestFactory,
             $responseFactory,
@@ -100,7 +100,7 @@ class SaleUseToken extends Sale implements RequestInterface
     protected function getParams()
     {
         $token = $this->paymentTokenManagement->getByPublicHash(
-            $this->orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CC_TOKEN),
+            $this->orderPayment->getAdditionalInformation(Shift4Method::KEY_CC_TOKEN),
             $this->orderPayment->getOrder()->getCustomerId()
         );
 

@@ -1,24 +1,24 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Request;
+namespace Shift4\Shift4\Model\Request;
 
-use Credorax\Credorax\Model\Request\AbstractGateway as AbstractGatewayRequest;
-use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
-use Credorax\Credorax\Model\RequestInterface;
+use Shift4\Shift4\Model\Request\AbstractGateway as AbstractGatewayRequest;
+use Shift4\Shift4\Model\Request\AbstractPayment as AbstractPaymentRequest;
+use Shift4\Shift4\Model\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
- * Credorax Credorax request factory model.
+ * Shift4 Shift4 request factory model.
  */
 class Factory
 {
@@ -29,15 +29,15 @@ class Factory
      * @var array
      */
     private $invokableClasses = [
-        AbstractPaymentRequest::PAYMENT_AUTH_METHOD => \Credorax\Credorax\Model\Request\Payment\Auth::class,
-        AbstractPaymentRequest::PAYMENT_AUTH_TOKENIZATION_METHOD => \Credorax\Credorax\Model\Request\Payment\AuthTokenization::class,
-        AbstractPaymentRequest::PAYMENT_AUTH_USE_TOKEN_METHOD => \Credorax\Credorax\Model\Request\Payment\AuthUseToken::class,
-        AbstractPaymentRequest::PAYMENT_SALE_METHOD => \Credorax\Credorax\Model\Request\Payment\Sale::class,
-        AbstractPaymentRequest::PAYMENT_SALE_TOKENIZATION_METHOD => \Credorax\Credorax\Model\Request\Payment\SaleTokenization::class,
-        AbstractPaymentRequest::PAYMENT_SALE_USE_TOKEN_METHOD => \Credorax\Credorax\Model\Request\Payment\SaleUseToken::class,
-        AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD => \Credorax\Credorax\Model\Request\Gateway\Capture::class,
-        AbstractGatewayRequest::GATEWAY_REFUND_METHOD => \Credorax\Credorax\Model\Request\Gateway\Refund::class,
-        AbstractGatewayRequest::GATEWAY_VOID_METHOD => \Credorax\Credorax\Model\Request\Gateway\Cancel::class,
+        AbstractPaymentRequest::PAYMENT_AUTH_METHOD => \Shift4\Shift4\Model\Request\Payment\Auth::class,
+        AbstractPaymentRequest::PAYMENT_AUTH_TOKENIZATION_METHOD => \Shift4\Shift4\Model\Request\Payment\AuthTokenization::class,
+        AbstractPaymentRequest::PAYMENT_AUTH_USE_TOKEN_METHOD => \Shift4\Shift4\Model\Request\Payment\AuthUseToken::class,
+        AbstractPaymentRequest::PAYMENT_SALE_METHOD => \Shift4\Shift4\Model\Request\Payment\Sale::class,
+        AbstractPaymentRequest::PAYMENT_SALE_TOKENIZATION_METHOD => \Shift4\Shift4\Model\Request\Payment\SaleTokenization::class,
+        AbstractPaymentRequest::PAYMENT_SALE_USE_TOKEN_METHOD => \Shift4\Shift4\Model\Request\Payment\SaleUseToken::class,
+        AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD => \Shift4\Shift4\Model\Request\Gateway\Capture::class,
+        AbstractGatewayRequest::GATEWAY_REFUND_METHOD => \Shift4\Shift4\Model\Request\Gateway\Refund::class,
+        AbstractGatewayRequest::GATEWAY_VOID_METHOD => \Shift4\Shift4\Model\Request\Gateway\Cancel::class,
     ];
 
     /**
@@ -89,7 +89,7 @@ class Factory
         if (!$model instanceof RequestInterface) {
             throw new LocalizedException(
                 __(
-                    '%1 doesn\'t implement \Credorax\Credorax\Mode\RequestInterface',
+                    '%1 doesn\'t implement \Shift4\Shift4\Mode\RequestInterface',
                     $className
                 )
             );

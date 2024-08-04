@@ -1,27 +1,27 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Request;
+namespace Shift4\Shift4\Model\Request;
 
-use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\AbstractRequest;
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\CredoraxMethod;
-use Credorax\Credorax\Model\Request\Factory as RequestFactory;
-use Credorax\Credorax\Model\Response\Factory as ResponseFactory;
-use Credorax\Credorax\Model\ResponseInterface;
+use Shift4\Shift4\Lib\Http\Client\Curl;
+use Shift4\Shift4\Model\AbstractRequest;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Shift4Method;
+use Shift4\Shift4\Model\Request\Factory as RequestFactory;
+use Shift4\Shift4\Model\Response\Factory as ResponseFactory;
+use Shift4\Shift4\Model\ResponseInterface;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Credorax Credorax abstract payment request model.
+ * Shift4 Shift4 abstract payment request model.
  */
 abstract class AbstractPayment extends AbstractRequest
 {
@@ -67,7 +67,7 @@ abstract class AbstractPayment extends AbstractRequest
      * @param TimezoneInterface|null $timezoneInterface
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         Curl $curl,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
@@ -76,7 +76,7 @@ abstract class AbstractPayment extends AbstractRequest
         $amount = 0.0,
     ) {
         parent::__construct(
-            $credoraxConfig,
+            $shift4Config,
             $curl,
             $responseFactory
         );
@@ -112,7 +112,7 @@ abstract class AbstractPayment extends AbstractRequest
      */
     protected function getEndpoint()
     {
-        return $this->_credoraxConfig->getCredoraxPaymentUrl();
+        return $this->_shift4Config->getShift4PaymentUrl();
     }
 
     /**
@@ -125,8 +125,8 @@ abstract class AbstractPayment extends AbstractRequest
         $params = [
             //'3ds_initiate' => '02' // Do not send this param if 3D secure is disabled.
         ];
-        if ($this->_credoraxConfig->is3dSecureEnabled()) {
-            if ($this->_credoraxConfig->isUsingSmart3d()) {
+        if ($this->_shift4Config->is3dSecureEnabled()) {
+            if ($this->_shift4Config->isUsingSmart3d()) {
                 $params['3ds_initiate'] = '03';
             } else {
                 $params['3ds_initiate'] = '01';
@@ -141,11 +141,11 @@ abstract class AbstractPayment extends AbstractRequest
             $params['3ds_browserjavaenabled'] = 'false';
             $params['3ds_browsertz'] = '1';
             $params['3ds_challengewindowsize'] = '03';
-            $params['3ds_compind'] = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_COMPIND) ?: 'N';
+            $params['3ds_compind'] = $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_3DS_COMPIND) ?: 'N';
             $params['3ds_transtype'] = '01';
             $params['3ds_purchasedate'] = date('YmdHis', strtotime($this->timezoneInterface->date()->format('Y-m-d H:i:s')));
-            $params['3ds_redirect_url'] = $this->_credoraxConfig->getUrlBuilder()->getUrl('credorax/payment_challenge/callback', ['quote' => $orderPayment->getOrder()->getQuoteId()]);
-            $params['d6'] = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_BROWSER_LANG) ?: 'en-US';
+            $params['3ds_redirect_url'] = $this->_shift4Config->getUrlBuilder()->getUrl('shift4/payment_challenge/callback', ['quote' => $orderPayment->getOrder()->getQuoteId()]);
+            $params['d6'] = $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_BROWSER_LANG) ?: 'en-US';
         }
         return $params;
     }

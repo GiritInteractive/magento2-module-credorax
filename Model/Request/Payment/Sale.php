@@ -1,27 +1,27 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Request\Payment;
+namespace Shift4\Shift4\Model\Request\Payment;
 
-use Credorax\Credorax\Model\CredoraxMethod;
-use Credorax\Credorax\Model\Request\AbstractPayment as AbstractPaymentRequest;
-use Credorax\Credorax\Model\RequestInterface;
-use Credorax\Credorax\Model\Response\AbstractPayment as AbstractPaymentResponse;
+use Shift4\Shift4\Model\Shift4Method;
+use Shift4\Shift4\Model\Request\AbstractPayment as AbstractPaymentRequest;
+use Shift4\Shift4\Model\RequestInterface;
+use Shift4\Shift4\Model\Response\AbstractPayment as AbstractPaymentResponse;
 
 /**
- * Credorax Sale payment request model.
+ * Shift4 Sale payment request model.
  */
 class Sale extends AbstractPaymentRequest implements RequestInterface
 {
     /**
-     * Credorax Operation Code
+     * Shift4 Operation Code
      * @var integer
      */
     const CREDORAX_O = 1;
@@ -58,7 +58,7 @@ class Sale extends AbstractPaymentRequest implements RequestInterface
             parent::getParams(),
             [
                 'O' => self::CREDORAX_O,
-                'PKey' => $this->orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_PKEY),
+                'PKey' => $this->orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_PKEY),
             ]
         );
     }

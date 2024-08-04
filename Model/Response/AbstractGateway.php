@@ -1,25 +1,25 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Response;
+namespace Shift4\Shift4\Model\Response;
 
-use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\AbstractResponse;
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\CredoraxMethod;
+use Shift4\Shift4\Lib\Http\Client\Curl;
+use Shift4\Shift4\Model\AbstractResponse;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Shift4Method;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Sales\Model\Order\Payment\Transaction as OrderTransaction;
 
 /**
- * Credorax Credorax abstract gateway response model.
+ * Shift4 Shift4 abstract gateway response model.
  */
 abstract class AbstractGateway extends AbstractResponse
 {
@@ -77,17 +77,17 @@ abstract class AbstractGateway extends AbstractResponse
 
     /**
      * @method __construct
-     * @param  Config           $credoraxConfig
+     * @param  Config           $shift4Config
      * @param  Curl             $curl
      * @param  OrderPayment     $orderPayment
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         Curl $curl,
         OrderPayment $orderPayment
     ) {
         parent::__construct(
-            $credoraxConfig,
+            $shift4Config,
             $curl
         );
 
@@ -170,20 +170,20 @@ abstract class AbstractGateway extends AbstractResponse
         );
 
         $this->_orderPayment->setAdditionalInformation(
-            CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE,
+            Shift4Method::KEY_CREDORAX_LAST_OPERATION_CODE,
             $this->getOperationCode()
         );
 
         if (($transactionId = $this->getTransactionId())) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID,
+                Shift4Method::KEY_CREDORAX_TRANSACTION_ID,
                 $transactionId
             );
         }
 
-        if (!$this->_orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_RESPONSE_ID) && ($responseId = $this->getResponseId())) {
+        if (!$this->_orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_RESPONSE_ID) && ($responseId = $this->getResponseId())) {
             $this->_orderPayment->setAdditionalInformation(
-                CredoraxMethod::KEY_CREDORAX_RESPONSE_ID,
+                Shift4Method::KEY_CREDORAX_RESPONSE_ID,
                 $responseId
             );
         }

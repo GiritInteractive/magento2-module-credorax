@@ -1,19 +1,19 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Response\Payment;
+namespace Shift4\Shift4\Model\Response\Payment;
 
-use Credorax\Credorax\Model\ResponseInterface;
+use Shift4\Shift4\Model\ResponseInterface;
 
 /**
- * Credorax SaleUseToken payment response model.
+ * Shift4 SaleUseToken payment response model.
  */
 class SaleUseToken extends Sale implements ResponseInterface
 {

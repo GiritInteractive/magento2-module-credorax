@@ -1,14 +1,14 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model;
+namespace Shift4\Shift4\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
@@ -18,7 +18,7 @@ use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 
 /**
- * Credorax payment card tokenization model.
+ * Shift4 payment card tokenization model.
  */
 class CardTokenization
 {
@@ -86,47 +86,47 @@ class CardTokenization
         $customerId = $this->orderPayment->getOrder()->getCustomerId();
 
         $this->orderPayment->setAdditionalInformation(
-            CredoraxMethod::KEY_CC_TOKEN,
+            Shift4Method::KEY_CC_TOKEN,
             $token
         );
 
-        $paymentToken = $this->paymentTokenManagement->getByGatewayToken($token, CredoraxMethod::METHOD_CODE, $customerId);
+        $paymentToken = $this->paymentTokenManagement->getByGatewayToken($token, Shift4Method::METHOD_CODE, $customerId);
         if ($paymentToken && $paymentToken->getId()) {
-            $paymentToken->setData(CredoraxMethod::KEY_CC_NUMBER, $this->orderPayment->getCcNumber());
-            $paymentToken->setData(CredoraxMethod::KEY_CC_OWNER, $this->orderPayment->getCcOwner());
+            $paymentToken->setData(Shift4Method::KEY_CC_NUMBER, $this->orderPayment->getCcNumber());
+            $paymentToken->setData(Shift4Method::KEY_CC_OWNER, $this->orderPayment->getCcOwner());
             $paymentToken->setGatewayToken($token);
             $this->paymentTokenRepository->save($paymentToken);
             return $paymentToken;
         }
 
         $paymentTokenDetails = [
-            CredoraxMethod::KEY_CC_TYPE => $this->orderPayment->getCcType(),
-            CredoraxMethod::KEY_CC_LAST_4 => $this->orderPayment->getCcLast4(),
-            CredoraxMethod::KEY_CC_EXP_YEAR => $this->orderPayment->getCcExpYear(),
-            CredoraxMethod::KEY_CC_EXP_MONTH => $this->orderPayment->getCcExpMonth(),
+            Shift4Method::KEY_CC_TYPE => $this->orderPayment->getCcType(),
+            Shift4Method::KEY_CC_LAST_4 => $this->orderPayment->getCcLast4(),
+            Shift4Method::KEY_CC_EXP_YEAR => $this->orderPayment->getCcExpYear(),
+            Shift4Method::KEY_CC_EXP_MONTH => $this->orderPayment->getCcExpMonth(),
         ];
 
         $paymentTokenHash = hash(
             'sha256',
-            implode('', $paymentTokenDetails) . $this->orderPayment->getOrder()->getCustomerId() . CredoraxMethod::METHOD_CODE
+            implode('', $paymentTokenDetails) . $this->orderPayment->getOrder()->getCustomerId() . Shift4Method::METHOD_CODE
         );
 
         $paymentToken = $this->paymentTokenManagement->getByPublicHash($paymentTokenHash, $customerId);
         if ($paymentToken && $paymentToken->getId()) {
-            $paymentToken->setData(CredoraxMethod::KEY_CC_NUMBER, $this->orderPayment->getCcNumber());
-            $paymentToken->setData(CredoraxMethod::KEY_CC_OWNER, $this->orderPayment->getCcOwner());
+            $paymentToken->setData(Shift4Method::KEY_CC_NUMBER, $this->orderPayment->getCcNumber());
+            $paymentToken->setData(Shift4Method::KEY_CC_OWNER, $this->orderPayment->getCcOwner());
             $paymentToken->setGatewayToken($token);
             $this->paymentTokenRepository->save($paymentToken);
             return $paymentToken;
         }
 
-        $paymentTokenDetails[CredoraxMethod::KEY_CC_NUMBER] = $this->orderPayment->getCcNumber();
-        $paymentTokenDetails[CredoraxMethod::KEY_CC_OWNER] = $this->orderPayment->getCcOwner();
+        $paymentTokenDetails[Shift4Method::KEY_CC_NUMBER] = $this->orderPayment->getCcNumber();
+        $paymentTokenDetails[Shift4Method::KEY_CC_OWNER] = $this->orderPayment->getCcOwner();
 
         $paymentToken = $this->paymentTokenFactory->create()
             ->setCustomerId($customerId)
             ->setPublicHash($paymentTokenHash)
-            ->setPaymentMethodCode(CredoraxMethod::METHOD_CODE)
+            ->setPaymentMethodCode(Shift4Method::METHOD_CODE)
             ->setGatewayToken($token)
             ->setTokenDetails(json_encode($paymentTokenDetails))
             ->setExpiresAt($this->getExpirationDate())

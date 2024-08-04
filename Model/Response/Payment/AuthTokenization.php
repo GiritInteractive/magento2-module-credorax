@@ -1,24 +1,24 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Response\Payment;
+namespace Shift4\Shift4\Model\Response\Payment;
 
-use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\CardTokenization as CardTokenizationModel;
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\CredoraxMethod;
-use Credorax\Credorax\Model\ResponseInterface;
+use Shift4\Shift4\Lib\Http\Client\Curl;
+use Shift4\Shift4\Model\CardTokenization as CardTokenizationModel;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Shift4Method;
+use Shift4\Shift4\Model\ResponseInterface;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
- * Credorax AuthTokenization payment response model.
+ * Shift4 AuthTokenization payment response model.
  */
 class AuthTokenization extends Auth implements ResponseInterface
 {
@@ -34,19 +34,19 @@ class AuthTokenization extends Auth implements ResponseInterface
 
     /**
      * @method __construct
-     * @param  Config                $credoraxConfig
+     * @param  Config                $shift4Config
      * @param  Curl                  $curl
      * @param  OrderPayment          $orderPayment
      * @param  CardTokenizationModel $cardTokenizationModel
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         Curl $curl,
         OrderPayment $orderPayment,
         CardTokenizationModel $cardTokenizationModel
     ) {
         parent::__construct(
-            $credoraxConfig,
+            $shift4Config,
             $curl,
             $orderPayment
         );
@@ -75,7 +75,7 @@ class AuthTokenization extends Auth implements ResponseInterface
     {
         parent::updateTransaction();
 
-        if ($this->_token && $this->_credoraxConfig->isUsingVault() && $this->_orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CC_SAVE)) {
+        if ($this->_token && $this->_shift4Config->isUsingVault() && $this->_orderPayment->getAdditionalInformation(Shift4Method::KEY_CC_SAVE)) {
             $this->_cardTokenizationModel
                 ->setOrderPayment($this->_orderPayment)
                 ->processCardPaymentToken($this->_token);

@@ -1,13 +1,13 @@
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  *
  *
- * Credorax Credorax js component.
+ * Shift4 Shift4 js component.
  */
 define(
     [
@@ -48,7 +48,7 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Credorax_Credorax/payment/credorax',
+                template: 'Shift4_Shift4/payment/shift4',
                 isCcFormShown: true,
                 creditCardToken: '',
                 creditCardSave: 0,
@@ -90,7 +90,7 @@ define(
              * @returns {String}
              */
             getCode: function() {
-                return 'credorax';
+                return 'shift4';
             },
 
             /**
@@ -123,9 +123,9 @@ define(
                         'cc_type': self.creditCardType(),
                         'cc_owner': (self.creditCardOwner().length >= 5) ? self.creditCardOwner() : null,
                         'cc_token': self.useVault() ? self.creditCardToken() : null,
-                        'credorax_pkey_data': JSON.stringify(self.PKeyData()),
-                        'credorax_3ds_compind': window.credorax_3ds_compind || null,
-                        'credorax_browser_lang': navigator.language || navigator.userLanguage || 'en-US'
+                        'shift4_pkey_data': JSON.stringify(self.PKeyData()),
+                        'shift4_3ds_compind': window.shift4_3ds_compind || null,
+                        'shift4_browser_lang': navigator.language || navigator.userLanguage || 'en-US'
                     }
                 };
             },
@@ -290,8 +290,8 @@ define(
                 if (event) {
                     event.preventDefault();
                 }
-                $('#credorax-form').validation();
-                if (self.validate() && additionalValidators.validate() && $('#credorax-form').validation('isValid')) {
+                $('#shift4-form').validation();
+                if (self.validate() && additionalValidators.validate() && $('#shift4-form').validation('isValid')) {
                     $('body').trigger('processStart');
                     self.isPlaceOrderActionAllowed(false);
 
@@ -307,7 +307,7 @@ define(
                         if (!res['PKey'] || res['z2']) {
                             console.error(res);
                             self.messageContainer.addErrorMessage({
-                                message: $t(res['z3'] || 'Credorax transaction failed, please make sure that the payment details are correct.')
+                                message: $t(res['z3'] || 'Shift4 transaction failed, please make sure that the payment details are correct.')
                             });
                             self.isPlaceOrderActionAllowed(true);
                             $('body').trigger('processStop');
@@ -315,30 +315,30 @@ define(
                         }
 
                         if (self.getIs3dSecureEnabled() && res['3ds_method'] && res['3ds_trxid']) {
-                            window.credorax_fingerprint_done = false;
-                            window.credorax_fingerprint_form_submitted = false;
+                            window.shift4_fingerprint_done = false;
+                            window.shift4_fingerprint_form_submitted = false;
 
-                            var credoraxFingerprintIframe = $('<iframe>', {
+                            var shift4FingerprintIframe = $('<iframe>', {
                                 src: self.getFingetprintIframeUrl() + '?3ds_data=' + JSON.stringify({
                                     "3ds_method": res['3ds_method'],
                                     "3ds_trxid": res['3ds_trxid']
                                 }),
-                                id: 'credorax_fingerprint_iframe',
+                                id: 'shift4_fingerprint_iframe',
                                 frameborder: 0,
                                 scrolling: 'no',
                                 css: {
                                     "display": "none"
                                 },
                             });
-                            credoraxFingerprintIframe.appendTo('body');
+                            shift4FingerprintIframe.appendTo('body');
 
-                            window.credoraxFingerprintObs = setInterval(function() {
-                                if (window.credorax_fingerprint_form_submitted) {
-                                    clearInterval(window.credoraxFingerprintObs);
-                                    window.credoraxFingerprintObs = setInterval(function() {
-                                        if (window.credorax_fingerprint_done || Date.now() > window.credorax_fingerprint_form_submitted) {
-                                            credoraxFingerprintIframe.remove();
-                                            clearInterval(window.credoraxFingerprintObs);
+                            window.shift4FingerprintObs = setInterval(function() {
+                                if (window.shift4_fingerprint_form_submitted) {
+                                    clearInterval(window.shift4FingerprintObs);
+                                    window.shift4FingerprintObs = setInterval(function() {
+                                        if (window.shift4_fingerprint_done || Date.now() > window.shift4_fingerprint_form_submitted) {
+                                            shift4FingerprintIframe.remove();
+                                            clearInterval(window.shift4FingerprintObs);
                                             self.placeOrderProceed();
                                         }
                                     }, 100);

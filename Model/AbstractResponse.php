@@ -1,21 +1,21 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model;
+namespace Shift4\Shift4\Model;
 
-use Credorax\Credorax\Lib\Http\Client\Curl;
+use Shift4\Shift4\Lib\Http\Client\Curl;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
 /**
- * Credorax Credorax abstract response model.
+ * Shift4 Shift4 abstract response model.
  */
 abstract class AbstractResponse extends AbstractApi
 {
@@ -51,15 +51,15 @@ abstract class AbstractResponse extends AbstractApi
     /**
      * AbstractResponse constructor.
      *
-     * @param Config $credoraxConfig
+     * @param Config $shift4Config
      * @param Curl   $curl
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         Curl $curl
     ) {
         parent::__construct(
-            $credoraxConfig
+            $shift4Config
         );
         $this->_curl = $curl;
     }
@@ -72,7 +72,7 @@ abstract class AbstractResponse extends AbstractApi
     {
         $requestStatus = $this->getRequestStatus();
 
-        $this->_credoraxConfig->log('AbstractResponse::process() ', 'debug', [
+        $this->_shift4Config->log('AbstractResponse::process() ', 'debug', [
             'response' => $this->prepareResponseData(),
             'status' => $requestStatus === true
                 ? self::STATUS_SUCCESS
@@ -94,7 +94,7 @@ abstract class AbstractResponse extends AbstractApi
     protected function getErrorMessage()
     {
         $errorReason = $this->getErrorReason();
-        if ($errorReason !== false && $this->_credoraxConfig->isDebugEnabled()) {
+        if ($errorReason !== false && $this->_shift4Config->isDebugEnabled()) {
             return __('Request to payment gateway failed. Details: "%1".', $errorReason);
         }
 
@@ -201,7 +201,7 @@ abstract class AbstractResponse extends AbstractApi
         if (!empty($diff)) {
             throw new PaymentException(
                 __(
-                    'Credorax required response data fields are missing: %1.',
+                    'Shift4 required response data fields are missing: %1.',
                     implode(', ', $diff)
                 )
             );

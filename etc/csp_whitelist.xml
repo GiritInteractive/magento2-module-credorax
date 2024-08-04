@@ -3,32 +3,32 @@
     <policies>
         <policy id="script-src">
             <values>
-                <value id="credorax_wildcard" type="host">*.credorax.com</value>
+                <value id="shift4_wildcard" type="host">*.shift4.com</value>
             </values>
         </policy>
         <policy id="frame-src">
             <values>
-                <value id="credorax_wildcard" type="host">*.credorax.com</value>
+                <value id="shift4_wildcard" type="host">*.shift4.com</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
-                <value id="credorax_wildcard" type="host">*.credorax.com</value>
+                <value id="shift4_wildcard" type="host">*.shift4.com</value>
             </values>
         </policy>
         <policy id="form-action">
             <values>
-                <value id="credorax_wildcard" type="host">*.credorax.com</value>
+                <value id="shift4_wildcard" type="host">*.shift4.com</value>
             </values>
         </policy>
         <policy id="img-src">
             <values>
-                <value id="credorax_wildcard" type="host">*.credorax.com</value>
+                <value id="shift4_wildcard" type="host">*.shift4.com</value>
             </values>
         </policy>
         <policy id="style-src">
             <values>
-                <value id="credorax_wildcard" type="host">*.credorax.com</value>
+                <value id="shift4_wildcard" type="host">*.shift4.com</value>
             </values>
         </policy>
     </policies>

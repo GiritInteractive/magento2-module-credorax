@@ -1,12 +1,12 @@
 {
-    "name": "credorax/magento2-module-credorax",
-    "description": "Credorax Payments For Magento 2",
+    "name": "shift4/magento2-module-shift4",
+    "description": "Shift4 Payments For Magento 2",
     "require": {
         "php": ">=5.6",
         "magento/module-vault": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -22,7 +22,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Credorax\\Credorax\\": ""
+            "Shift4\\Shift4\\": ""
         }
     }
 }

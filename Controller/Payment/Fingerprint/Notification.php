@@ -1,23 +1,23 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
-namespace Credorax\Credorax\Controller\Payment\Fingerprint;
+namespace Shift4\Shift4\Controller\Payment\Fingerprint;
 
-use Credorax\Credorax\Model\Config as CredoraxConfig;
-use Credorax\Credorax\Model\CredoraxMethod;
+use Shift4\Shift4\Model\Config as Shift4Config;
+use Shift4\Shift4\Model\Shift4Method;
 use Magento\Checkout\Model\Session\Proxy as CheckoutSession;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Serialize\Serializer\Base64Json;
 
 /**
- * Credorax Credorax payment device fingerprint notification controller.
+ * Shift4 Shift4 payment device fingerprint notification controller.
  */
 class Notification extends Action
 {
@@ -32,36 +32,36 @@ class Notification extends Action
     private $serializer;
 
     /**
-     * @var CredoraxConfig
+     * @var Shift4Config
      */
-    private $credoraxConfig;
+    private $shift4Config;
 
     /**
      * @method __construct
      * @param  Context         $context
      * @param  CheckoutSession $checkoutSession
-     * @param  CredoraxConfig  $credoraxConfig
+     * @param  Shift4Config  $shift4Config
      */
     public function __construct(
         Context $context,
         CheckoutSession $checkoutSession,
         Base64Json $serializer,
-        CredoraxConfig $credoraxConfig
+        Shift4Config $shift4Config
     ) {
         parent::__construct($context);
 
         $this->checkoutSession = $checkoutSession;
         $this->serializer = $serializer;
-        $this->credoraxConfig = $credoraxConfig;
+        $this->shift4Config = $shift4Config;
     }
 
     public function execute()
     {
-        $credorax3dCompind = (array) $this->serializer->unserialize($this->getRequest()->getParam('threeDSMethodData'));
-        if ($credorax3dCompind['threeDSServerTransID'] === $this->checkoutSession->getData(CredoraxMethod::KEY_CREDORAX_3DS_TRXID)) {
-            $this->checkoutSession->setData(CredoraxMethod::KEY_CREDORAX_3DS_COMPIND, 'Y');
+        $shift43dCompind = (array) $this->serializer->unserialize($this->getRequest()->getParam('threeDSMethodData'));
+        if ($shift43dCompind['threeDSServerTransID'] === $this->checkoutSession->getData(Shift4Method::KEY_CREDORAX_3DS_TRXID)) {
+            $this->checkoutSession->setData(Shift4Method::KEY_CREDORAX_3DS_COMPIND, 'Y');
         }
 
-        $this->getResponse()->setBody("<script>parent.credorax_fingerprint_done=true;</script>");
+        $this->getResponse()->setBody("<script>parent.shift4_fingerprint_done=true;</script>");
     }
 }

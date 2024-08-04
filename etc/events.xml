@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="checkout_submit_all_after">
-        <observer name="credorax_checkout_submit_all_after" instance="Credorax\Credorax\Observer\Checkout\SubmitAllAfter"/>
+        <observer name="shift4_checkout_submit_all_after" instance="Shift4\Shift4\Observer\Checkout\SubmitAllAfter"/>
     </event>
 </config>

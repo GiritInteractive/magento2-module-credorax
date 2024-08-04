@@ -1,31 +1,31 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="CredoraxConfigProvider" type="Credorax\Credorax\Model\ConfigProvider">
+    <virtualType name="Shift4ConfigProvider" type="Shift4\Shift4\Model\ConfigProvider">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Credorax\Credorax\Model\CredoraxMethod::METHOD_CODE</argument>
+            <argument name="methodCode" xsi:type="const">Shift4\Shift4\Model\Shift4Method::METHOD_CODE</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="credorax_credorax_config_provider" xsi:type="object">CredoraxConfigProvider</item>
+                <item name="shift4_shift4_config_provider" xsi:type="object">Shift4ConfigProvider</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="credorax" xsi:type="const">Credorax\Credorax\Model\CredoraxMethod::METHOD_CODE</item>
+                <item name="shift4" xsi:type="const">Shift4\Shift4\Model\Shift4Method::METHOD_CODE</item>
             </argument>
         </arguments>
     </type>

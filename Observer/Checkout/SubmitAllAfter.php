@@ -1,17 +1,17 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Observer\Checkout;
+namespace Shift4\Shift4\Observer\Checkout;
 
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\CredoraxMethod;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Shift4Method;
 use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -28,7 +28,7 @@ class SubmitAllAfter implements ObserverInterface
     /**
      * @var Config
      */
-    private $credoraxConfig;
+    private $shift4Config;
 
     /**
      * @var AuthorizeCommand
@@ -52,20 +52,20 @@ class SubmitAllAfter implements ObserverInterface
 
     /**
      * @method __construct
-     * @param  Config             $credoraxConfig
+     * @param  Config             $shift4Config
      * @param  AuthorizeCommand   $authorizeCommand
      * @param  CaptureCommand     $captureCommand
      * @param  InvoiceService     $invoiceService
      * @param  TransactionFactory $transactionFactory
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         AuthorizeCommand $authorizeCommand,
         CaptureCommand $captureCommand,
         InvoiceService $invoiceService,
         TransactionFactory $transactionFactory
     ) {
-        $this->credoraxConfig = $credoraxConfig;
+        $this->shift4Config = $shift4Config;
         $this->authorizeCommand = $authorizeCommand;
         $this->captureCommand = $captureCommand;
         $this->invoiceService = $invoiceService;
@@ -82,12 +82,12 @@ class SubmitAllAfter implements ObserverInterface
             /** @var OrderPayment $payment */
             $orderPayment = $order->getPayment();
 
-            if ($orderPayment->getMethod() !== CredoraxMethod::METHOD_CODE) {
+            if ($orderPayment->getMethod() !== Shift4Method::METHOD_CODE) {
                 return $this;
             }
 
-            $operationCode = (int)$orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_LAST_OPERATION_CODE);
-            $transactionId = $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_TRANSACTION_ID) ?: $orderPayment->getAdditionalInformation(CredoraxMethod::KEY_CREDORAX_3DS_TRXID);
+            $operationCode = (int)$orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_LAST_OPERATION_CODE);
+            $transactionId = $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_TRANSACTION_ID) ?: $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_3DS_TRXID);
 
             if ($transactionId) {
                 if (in_array($operationCode, [2,12,28])) {
@@ -95,7 +95,7 @@ class SubmitAllAfter implements ObserverInterface
                 } elseif (in_array($operationCode, [1,11,23])) {
                     $transactionType = Transaction::TYPE_CAPTURE;
                 } else {
-                    $transactionType = $this->credoraxConfig->isAuthirizeAndCaptureAction() ? Transaction::TYPE_CAPTURE : Transaction::TYPE_AUTH;
+                    $transactionType = $this->shift4Config->isAuthirizeAndCaptureAction() ? Transaction::TYPE_CAPTURE : Transaction::TYPE_AUTH;
                 }
 
                 if ($orderPayment->getLastTransId()) {
@@ -129,7 +129,7 @@ class SubmitAllAfter implements ObserverInterface
                 $order->save();
             }
         } catch (\Exception $e) {
-            $this->credoraxConfig->log('SubmitAllAfter::execute() - Exception: ' . $e->getMessage() . "\n" . $e->getTraceAsString(), 'error');
+            $this->shift4Config->log('SubmitAllAfter::execute() - Exception: ' . $e->getMessage() . "\n" . $e->getTraceAsString(), 'error');
             throw new LocalizedException(
                 __('Your order have been placed, but there has been an error on the server, please contact us.')
             );

@@ -1,33 +1,33 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Request\Gateway;
+namespace Shift4\Shift4\Model\Request\Gateway;
 
-use Credorax\Credorax\Lib\Http\Client\Curl;
-use Credorax\Credorax\Model\Config;
-use Credorax\Credorax\Model\Request\AbstractGateway as AbstractGatewayRequest;
-use Credorax\Credorax\Model\Request\Factory as RequestFactory;
-use Credorax\Credorax\Model\RequestInterface;
-use Credorax\Credorax\Model\Response\AbstractGateway as AbstractGatewayResponse;
-use Credorax\Credorax\Model\Response\Factory as ResponseFactory;
+use Shift4\Shift4\Lib\Http\Client\Curl;
+use Shift4\Shift4\Model\Config;
+use Shift4\Shift4\Model\Request\AbstractGateway as AbstractGatewayRequest;
+use Shift4\Shift4\Model\Request\Factory as RequestFactory;
+use Shift4\Shift4\Model\RequestInterface;
+use Shift4\Shift4\Model\Response\AbstractGateway as AbstractGatewayResponse;
+use Shift4\Shift4\Model\Response\Factory as ResponseFactory;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment as OrderPayment;
 
 /**
- * Credorax Credorax refund gateway request model.
+ * Shift4 Shift4 refund gateway request model.
  */
 class Refund extends AbstractGatewayRequest implements RequestInterface
 {
     /**
-     * Credorax Operation Code
+     * Shift4 Operation Code
      * @var integer
      */
     const CREDORAX_O = 5;
@@ -49,7 +49,7 @@ class Refund extends AbstractGatewayRequest implements RequestInterface
      * @param float                          $amount
      */
     public function __construct(
-        Config $credoraxConfig,
+        Config $shift4Config,
         Curl $curl,
         RequestFactory $requestFactory,
         ResponseFactory $responseFactory,
@@ -58,7 +58,7 @@ class Refund extends AbstractGatewayRequest implements RequestInterface
         $amount = 0.0
     ) {
         parent::__construct(
-            $credoraxConfig,
+            $shift4Config,
             $curl,
             $requestFactory,
             $responseFactory,

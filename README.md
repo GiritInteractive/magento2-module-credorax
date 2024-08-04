@@ -1,4 +1,4 @@
-# Magento 2 Credorax Payments Module
+# Magento 2 Shift4 Payments Module
 
 ---
 
@@ -6,7 +6,7 @@
 Run the following command under your Magento 2 root dir:
 
 ```
-composer require credorax/magento2-module-credorax
+composer require shift4/magento2-module-shift4
 php bin/magento maintenance:enable
 php bin/magento setup:upgrade
 php bin/magento setup:di:compile
@@ -16,7 +16,7 @@ php bin/magento cache:flush
 ```
 
 ## Install manually under app/code
-Download & place the contents of this repository under {YOUR-MAGENTO2-ROOT-DIR}/app/code/Credorax/Credorax  
+Download & place the contents of this repository under {YOUR-MAGENTO2-ROOT-DIR}/app/code/Shift4/Shift4  
 Then, run the following commands under your Magento 2 root dir:
 ```
 php bin/magento maintenance:enable
@@ -29,9 +29,9 @@ php bin/magento cache:flush
 
 ---
 
-https://www.credorax.com/
+https://www.shift4.com/
 
-© 2019 Credorax.
+© 2019 Shift4.
 All rights reserved.
 
-![Credorax Logo](https://www.credorax.com/images/credorax.png)
+![Shift4 Logo](https://www.shift4.com/images/shift4.png)

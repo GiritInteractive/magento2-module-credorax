@@ -1,13 +1,13 @@
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  *
  *
- * Credorax Credorax js component.
+ * Shift4 Shift4 js component.
  */
 define(
     [
@@ -20,8 +20,8 @@ define(
     ) {
         'use strict';
         rendererList.push({
-            type: 'credorax',
-            component: 'Credorax_Credorax/js/view/payment/method-renderer/credorax'
+            type: 'shift4',
+            component: 'Shift4_Shift4/js/view/payment/method-renderer/shift4'
         });
         /** Add view logic here if needed */
         return Component.extend({});

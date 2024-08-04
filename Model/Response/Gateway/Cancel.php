@@ -1,20 +1,20 @@
 <?php
 /**
- * Credorax Payments For Magento 2
- * https://www.credorax.com/
+ * Shift4 Payments For Magento 2
+ * https://www.shift4.com/
  *
- * @category Credorax
- * @package  Credorax_Credorax
+ * @category Shift4
+ * @package  Shift4_Shift4
  * @author   Girit-Interactive (https://www.girit-tech.com/)
  */
 
-namespace Credorax\Credorax\Model\Response\Gateway;
+namespace Shift4\Shift4\Model\Response\Gateway;
 
-use Credorax\Credorax\Model\Response\AbstractGateway;
-use Credorax\Credorax\Model\ResponseInterface;
+use Shift4\Shift4\Model\Response\AbstractGateway;
+use Shift4\Shift4\Model\ResponseInterface;
 
 /**
- * Credorax Credorax gateway void response model.
+ * Shift4 Shift4 gateway void response model.
  */
 class Cancel extends AbstractGateway implements ResponseInterface
 {
