@@ -86,8 +86,8 @@ class SubmitAllAfter implements ObserverInterface
                 return $this;
             }
 
-            $operationCode = (int)$orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_LAST_OPERATION_CODE);
-            $transactionId = $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_TRANSACTION_ID) ?: $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_3DS_TRXID);
+            $operationCode = (int)$orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_LAST_OPERATION_CODE);
+            $transactionId = $orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_TRANSACTION_ID) ?: $orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_3DS_TRXID);
 
             if ($transactionId) {
                 if (in_array($operationCode, [2,12,28])) {

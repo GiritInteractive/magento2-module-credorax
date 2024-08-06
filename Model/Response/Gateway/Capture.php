@@ -28,7 +28,7 @@ class Capture extends AbstractGateway implements ResponseInterface
 
         if ($this->_responseId) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_RESPONSE_ID,
+                Shift4Method::KEY_SHIFT4_RESPONSE_ID,
                 $this->_responseId
             );
         }

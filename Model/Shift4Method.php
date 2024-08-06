@@ -66,21 +66,21 @@ class Shift4Method extends Cc
     const KEY_CC_TOKEN = 'cc_token';
     const KEY_CC_TEMP_TOKEN = 'cc_temp_token';
 
-    const KEY_CREDORAX_3DS_CAVV = 'shift4_3ds_cavv';
-    const KEY_CREDORAX_3DS_COMPIND = 'shift4_3ds_compind';
-    const KEY_CREDORAX_3DS_ECI = 'shift4_3ds_eci';
-    const KEY_CREDORAX_3DS_METHOD = 'shift4_3ds_method';
-    const KEY_CREDORAX_3DS_STATUS = 'shift4_3ds_status';
-    const KEY_CREDORAX_3DS_TRXID = 'shift4_3ds_trxid';
-    const KEY_CREDORAX_3DS_VERSION = 'shift4_3ds_version';
-    const KEY_CREDORAX_AUTH_CODE = 'shift4_auth_code';
-    const KEY_CREDORAX_BROWSER_LANG = 'shift4_browser_lang';
-    const KEY_CREDORAX_LAST_OPERATION_CODE = 'shift4_last_operation_code';
-    const KEY_CREDORAX_PKEY = 'shift4_pkey';
-    const KEY_CREDORAX_PKEY_DATA = 'shift4_pkey_data';
-    const KEY_CREDORAX_RESPONSE_ID = 'shift4_response_id';
-    const KEY_CREDORAX_RISK_SCORE = 'shift4_risk_score';
-    const KEY_CREDORAX_TRANSACTION_ID = 'shift4_transaction_id';
+    const KEY_SHIFT4_3DS_CAVV = 'shift4_3ds_cavv';
+    const KEY_SHIFT4_3DS_COMPIND = 'shift4_3ds_compind';
+    const KEY_SHIFT4_3DS_ECI = 'shift4_3ds_eci';
+    const KEY_SHIFT4_3DS_METHOD = 'shift4_3ds_method';
+    const KEY_SHIFT4_3DS_STATUS = 'shift4_3ds_status';
+    const KEY_SHIFT4_3DS_TRXID = 'shift4_3ds_trxid';
+    const KEY_SHIFT4_3DS_VERSION = 'shift4_3ds_version';
+    const KEY_SHIFT4_AUTH_CODE = 'shift4_auth_code';
+    const KEY_SHIFT4_BROWSER_LANG = 'shift4_browser_lang';
+    const KEY_SHIFT4_LAST_OPERATION_CODE = 'shift4_last_operation_code';
+    const KEY_SHIFT4_PKEY = 'shift4_pkey';
+    const KEY_SHIFT4_PKEY_DATA = 'shift4_pkey_data';
+    const KEY_SHIFT4_RESPONSE_ID = 'shift4_response_id';
+    const KEY_SHIFT4_RISK_SCORE = 'shift4_risk_score';
+    const KEY_SHIFT4_TRANSACTION_ID = 'shift4_transaction_id';
 
     /**
      * Gateway code
@@ -252,10 +252,10 @@ class Shift4Method extends Cc
 
     private function getPKeyData()
     {
-        if (!$this->hasData(self::KEY_CREDORAX_PKEY_DATA)) {
-            $this->setData(self::KEY_CREDORAX_PKEY_DATA, json_decode($this->getInfoInstance()->getAdditionalInformation(self::KEY_CREDORAX_PKEY_DATA)));
+        if (!$this->hasData(self::KEY_SHIFT4_PKEY_DATA)) {
+            $this->setData(self::KEY_SHIFT4_PKEY_DATA, json_decode($this->getInfoInstance()->getAdditionalInformation(self::KEY_SHIFT4_PKEY_DATA)));
         }
-        return $this->getData(self::KEY_CREDORAX_PKEY_DATA);
+        return $this->getData(self::KEY_SHIFT4_PKEY_DATA);
     }
 
     /**
@@ -272,8 +272,8 @@ class Shift4Method extends Cc
 
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
-        $shift4PKeyData = !empty($additionalData[self::KEY_CREDORAX_PKEY_DATA])
-            ? $additionalData[self::KEY_CREDORAX_PKEY_DATA]
+        $shift4PKeyData = !empty($additionalData[self::KEY_SHIFT4_PKEY_DATA])
+            ? $additionalData[self::KEY_SHIFT4_PKEY_DATA]
             : null;
 
         $ccType = !empty($additionalData[self::KEY_CC_TYPE])
@@ -292,8 +292,8 @@ class Shift4Method extends Cc
             ? (bool)$additionalData[self::KEY_CC_SAVE]
             : false;
 
-        $browserLang = !empty($additionalData[self::KEY_CREDORAX_BROWSER_LANG])
-            ? trim($additionalData[self::KEY_CREDORAX_BROWSER_LANG])
+        $browserLang = !empty($additionalData[self::KEY_SHIFT4_BROWSER_LANG])
+            ? trim($additionalData[self::KEY_SHIFT4_BROWSER_LANG])
             : 'en-US';
 
         $info = $this->getInfoInstance();
@@ -301,8 +301,8 @@ class Shift4Method extends Cc
         $info->setAdditionalInformation(self::KEY_CC_OWNER, $ccOwner);
         $info->setAdditionalInformation(self::KEY_CC_TOKEN, $ccToken);
         $info->setAdditionalInformation(self::KEY_CC_SAVE, $ccSave);
-        $info->setAdditionalInformation(self::KEY_CREDORAX_BROWSER_LANG, $browserLang);
-        $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY_DATA, $shift4PKeyData);
+        $info->setAdditionalInformation(self::KEY_SHIFT4_BROWSER_LANG, $browserLang);
+        $info->setAdditionalInformation(self::KEY_SHIFT4_PKEY_DATA, $shift4PKeyData);
         $info->addData(
             [
                 self::KEY_CC_TYPE => $ccType,
@@ -360,11 +360,11 @@ class Shift4Method extends Cc
                 __($errMessage)
             );
         }
-        $info->setAdditionalInformation(self::KEY_CREDORAX_PKEY, $shift4PKeyData->PKey);
+        $info->setAdditionalInformation(self::KEY_SHIFT4_PKEY, $shift4PKeyData->PKey);
 
-        $info->setAdditionalInformation(self::KEY_CREDORAX_3DS_METHOD, $this->checkoutSession->getData(self::KEY_CREDORAX_3DS_METHOD));
-        $info->setAdditionalInformation(self::KEY_CREDORAX_3DS_TRXID, $this->checkoutSession->getData(self::KEY_CREDORAX_3DS_TRXID));
-        $info->setAdditionalInformation(self::KEY_CREDORAX_3DS_COMPIND, $this->checkoutSession->getData(self::KEY_CREDORAX_3DS_COMPIND) ?: null);
+        $info->setAdditionalInformation(self::KEY_SHIFT4_3DS_METHOD, $this->checkoutSession->getData(self::KEY_SHIFT4_3DS_METHOD));
+        $info->setAdditionalInformation(self::KEY_SHIFT4_3DS_TRXID, $this->checkoutSession->getData(self::KEY_SHIFT4_3DS_TRXID));
+        $info->setAdditionalInformation(self::KEY_SHIFT4_3DS_COMPIND, $this->checkoutSession->getData(self::KEY_SHIFT4_3DS_COMPIND) ?: null);
 
         return $this;
     }
@@ -389,7 +389,7 @@ class Shift4Method extends Cc
      */
     private function getRequestMethod(InfoInterface $payment, $amount)
     {
-        if ($payment->getAdditionalInformation(self::KEY_CREDORAX_AUTH_CODE)) {
+        if ($payment->getAdditionalInformation(self::KEY_SHIFT4_AUTH_CODE)) {
             $method = AbstractGatewayRequest::GATEWAY_CAPTURE_METHOD;
         } else {
             $token = $payment->getAdditionalInformation(self::KEY_CC_TOKEN);

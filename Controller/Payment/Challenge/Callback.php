@@ -209,62 +209,62 @@ class Callback extends Action
         );
 
         $orderPayment->setAdditionalInformation(
-            Shift4Method::KEY_CREDORAX_LAST_OPERATION_CODE,
+            Shift4Method::KEY_SHIFT4_LAST_OPERATION_CODE,
             $resData->getData('O')
         );
 
         if ($transactionId = $resData->getData('z13')) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_TRANSACTION_ID,
+                Shift4Method::KEY_SHIFT4_TRANSACTION_ID,
                 $transactionId
             );
         }
 
         if ($responseId = $resData->getData('z1')) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_RESPONSE_ID,
+                Shift4Method::KEY_SHIFT4_RESPONSE_ID,
                 $responseId
             );
         }
 
         if ($riskScore = $resData->getData('z21')) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_RISK_SCORE,
+                Shift4Method::KEY_SHIFT4_RISK_SCORE,
                 $riskScore
             );
         }
 
         if ($_3dsCavv = $resData->getData('3ds_cavv')) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_CAVV,
+                Shift4Method::KEY_SHIFT4_3DS_CAVV,
                 $_3dsCavv
             );
         }
 
         if ($_3dsEci = $resData->getData('3ds_eci')) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_ECI,
+                Shift4Method::KEY_SHIFT4_3DS_ECI,
                 $_3dsEci
             );
         }
 
         if ($_3dsStatus = $resData->getData('3ds_status')) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_STATUS,
+                Shift4Method::KEY_SHIFT4_3DS_STATUS,
                 $_3dsStatus
             );
         }
 
         if ($_3dsTrxid = $resData->getData('3ds_trxid')) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_TRXID,
+                Shift4Method::KEY_SHIFT4_3DS_TRXID,
                 $_3dsTrxid
             );
         }
 
         if ($_3dsVersion = $resData->getData('3ds_version')) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_VERSION,
+                Shift4Method::KEY_SHIFT4_3DS_VERSION,
                 $_3dsVersion
             );
         }
@@ -281,7 +281,7 @@ class Callback extends Action
 
         if (($authCode = $resData->getData('z4')) && in_array($resData->getData('O'), [2,28])) {
             $orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_AUTH_CODE,
+                Shift4Method::KEY_SHIFT4_AUTH_CODE,
                 $authCode
             );
         }

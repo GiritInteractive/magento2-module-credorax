@@ -141,11 +141,11 @@ abstract class AbstractPayment extends AbstractRequest
             $params['3ds_browserjavaenabled'] = 'false';
             $params['3ds_browsertz'] = '1';
             $params['3ds_challengewindowsize'] = '03';
-            $params['3ds_compind'] = $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_3DS_COMPIND) ?: 'N';
+            $params['3ds_compind'] = $orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_3DS_COMPIND) ?: 'N';
             $params['3ds_transtype'] = '01';
             $params['3ds_purchasedate'] = date('YmdHis', strtotime($this->timezoneInterface->date()->format('Y-m-d H:i:s')));
             $params['3ds_redirect_url'] = $this->_shift4Config->getUrlBuilder()->getUrl('shift4/payment_challenge/callback', ['quote' => $orderPayment->getOrder()->getQuoteId()]);
-            $params['d6'] = $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_BROWSER_LANG) ?: 'en-US';
+            $params['d6'] = $orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_BROWSER_LANG) ?: 'en-US';
         }
         return $params;
     }

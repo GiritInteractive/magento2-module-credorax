@@ -58,8 +58,8 @@ class Notification extends Action
     public function execute()
     {
         $shift43dCompind = (array) $this->serializer->unserialize($this->getRequest()->getParam('threeDSMethodData'));
-        if ($shift43dCompind['threeDSServerTransID'] === $this->checkoutSession->getData(Shift4Method::KEY_CREDORAX_3DS_TRXID)) {
-            $this->checkoutSession->setData(Shift4Method::KEY_CREDORAX_3DS_COMPIND, 'Y');
+        if ($shift43dCompind['threeDSServerTransID'] === $this->checkoutSession->getData(Shift4Method::KEY_SHIFT4_3DS_TRXID)) {
+            $this->checkoutSession->setData(Shift4Method::KEY_SHIFT4_3DS_COMPIND, 'Y');
         }
 
         $this->getResponse()->setBody("<script>parent.shift4_fingerprint_done=true;</script>");

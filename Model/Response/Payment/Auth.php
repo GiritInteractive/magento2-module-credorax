@@ -48,7 +48,7 @@ class Auth extends AbstractPayment implements ResponseInterface
 
         if ($this->_authCode) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_AUTH_CODE,
+                Shift4Method::KEY_SHIFT4_AUTH_CODE,
                 $this->_authCode
             );
         }

@@ -170,20 +170,20 @@ abstract class AbstractGateway extends AbstractResponse
         );
 
         $this->_orderPayment->setAdditionalInformation(
-            Shift4Method::KEY_CREDORAX_LAST_OPERATION_CODE,
+            Shift4Method::KEY_SHIFT4_LAST_OPERATION_CODE,
             $this->getOperationCode()
         );
 
         if (($transactionId = $this->getTransactionId())) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_TRANSACTION_ID,
+                Shift4Method::KEY_SHIFT4_TRANSACTION_ID,
                 $transactionId
             );
         }
 
-        if (!$this->_orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_RESPONSE_ID) && ($responseId = $this->getResponseId())) {
+        if (!$this->_orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_RESPONSE_ID) && ($responseId = $this->getResponseId())) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_RESPONSE_ID,
+                Shift4Method::KEY_SHIFT4_RESPONSE_ID,
                 $responseId
             );
         }

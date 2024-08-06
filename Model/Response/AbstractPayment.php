@@ -273,62 +273,62 @@ abstract class AbstractPayment extends AbstractResponse
         );
 
         $this->_orderPayment->setAdditionalInformation(
-            Shift4Method::KEY_CREDORAX_LAST_OPERATION_CODE,
+            Shift4Method::KEY_SHIFT4_LAST_OPERATION_CODE,
             $this->_operationCode
         );
 
         if ($this->_transactionId) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_TRANSACTION_ID,
+                Shift4Method::KEY_SHIFT4_TRANSACTION_ID,
                 $this->_transactionId
             );
         }
 
         if ($this->_responseId) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_RESPONSE_ID,
+                Shift4Method::KEY_SHIFT4_RESPONSE_ID,
                 $this->_responseId
             );
         }
 
         if ($this->_riskScore) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_RISK_SCORE,
+                Shift4Method::KEY_SHIFT4_RISK_SCORE,
                 $this->_riskScore
             );
         }
 
         if ($this->_3dsCavv) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_CAVV,
+                Shift4Method::KEY_SHIFT4_3DS_CAVV,
                 $this->_3dsCavv
             );
         }
 
         if ($this->_3dsEci) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_ECI,
+                Shift4Method::KEY_SHIFT4_3DS_ECI,
                 $this->_3dsEci
             );
         }
 
         if ($this->_3dsStatus) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_STATUS,
+                Shift4Method::KEY_SHIFT4_3DS_STATUS,
                 $this->_3dsStatus
             );
         }
 
         if ($this->_3dsTrxid) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_TRXID,
+                Shift4Method::KEY_SHIFT4_3DS_TRXID,
                 $this->_3dsTrxid
             );
         }
 
         if ($this->_3dsVersion) {
             $this->_orderPayment->setAdditionalInformation(
-                Shift4Method::KEY_CREDORAX_3DS_VERSION,
+                Shift4Method::KEY_SHIFT4_3DS_VERSION,
                 $this->_3dsVersion
             );
         }

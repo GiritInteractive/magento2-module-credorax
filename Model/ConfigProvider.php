@@ -121,7 +121,7 @@ class ConfigProvider extends CcGenericConfigProvider
                 ],
             ],
         ];
-        $this->checkoutSession->unsData(Shift4Method::KEY_CREDORAX_3DS_COMPIND);
+        $this->checkoutSession->unsData(Shift4Method::KEY_SHIFT4_3DS_COMPIND);
         $this->checkoutSession->unsShift4PaymentData();
 
         return $config;

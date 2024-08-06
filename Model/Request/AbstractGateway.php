@@ -120,8 +120,8 @@ abstract class AbstractGateway extends AbstractRequest
             parent::getParams(),
             $this->getOrderData($order),
             [
-                'g2' => $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_RESPONSE_ID),
-                'g3' => $orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_AUTH_CODE),
+                'g2' => $orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_RESPONSE_ID),
+                'g3' => $orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_AUTH_CODE),
                 'a4' => $this->amountFormat($this->amount, $order->getBaseCurrencyCode()),
             ]
         );

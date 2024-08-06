@@ -94,8 +94,8 @@ class Fingerprint extends Template
                 ['3ds_method' => null, '3ds_trxid' => null],
                 (array)$this->jsonHelper->jsonDecode($this->getRequest()->getParam('3ds_data'))
             );
-            $this->checkoutSession->setData(Shift4Method::KEY_CREDORAX_3DS_METHOD, $this->parsedData['3ds_method']);
-            $this->checkoutSession->setData(Shift4Method::KEY_CREDORAX_3DS_TRXID, $this->parsedData['3ds_trxid']);
+            $this->checkoutSession->setData(Shift4Method::KEY_SHIFT4_3DS_METHOD, $this->parsedData['3ds_method']);
+            $this->checkoutSession->setData(Shift4Method::KEY_SHIFT4_3DS_TRXID, $this->parsedData['3ds_trxid']);
         }
         return $this->parsedData;
     }
@@ -141,7 +141,7 @@ class Fingerprint extends Template
     public function getThreeDSCompind()
     {
         $shift43dsCompind = (string) $this->getRequest()->getParam('threeDSMethodData');
-        $this->checkoutSession->setData(Shift4Method::KEY_CREDORAX_3DS_COMPIND, $shift43dsCompind ?: null);
+        $this->checkoutSession->setData(Shift4Method::KEY_SHIFT4_3DS_COMPIND, $shift43dsCompind ?: null);
         return $shift43dsCompind;
     }
 

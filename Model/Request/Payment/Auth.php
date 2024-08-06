@@ -58,7 +58,7 @@ class Auth extends AbstractPaymentRequest implements RequestInterface
             parent::getParams(),
             [
                 'O' => self::CREDORAX_O,
-                'PKey' => $this->orderPayment->getAdditionalInformation(Shift4Method::KEY_CREDORAX_PKEY),
+                'PKey' => $this->orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_PKEY),
             ]
         );
     }
