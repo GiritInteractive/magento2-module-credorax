@@ -88,6 +88,20 @@ abstract class AbstractResponse extends AbstractApi
         return $this;
     }
 
+    protected function is3dsChallengeFlow()
+    {
+        $body = $this->getBody();
+        if ($this->_credoraxConfig->is3dSecureEnabled()
+            && isset($body['3ds_acsurl'])
+            && isset($body['z2'])
+            && (int)$body['z2']
+            && $body['z2'] === '06'
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @return \Magento\Framework\Phrase
      */

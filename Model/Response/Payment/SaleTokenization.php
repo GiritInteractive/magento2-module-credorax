@@ -66,6 +66,9 @@ class SaleTokenization extends Sale implements ResponseInterface
         return $this;
     }
 
+
+
+
     /**
      * @return SaleTokenization
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -97,11 +100,13 @@ class SaleTokenization extends Sale implements ResponseInterface
      */
     protected function getRequiredResponseDataKeys()
     {
+
+
+        $isG1Respones = (!$this->is3dsChallengeFlow()) ? ['g1'] : [];
+
         return array_merge_recursive(
             parent::getRequiredResponseDataKeys(),
-            [
-                'g1',
-            ]
+           $isG1Respones
         );
     }
 }
