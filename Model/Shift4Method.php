@@ -253,7 +253,6 @@ class Shift4Method extends Cc
     private function getPKeyData()
     {
         if (!$this->hasData(self::KEY_SHIFT4_PKEY_DATA)) {
-            $this->setData(self::KEY_SHIFT4_PKEY_DATA, json_decode($this->getInfoInstance()->getAdditionalInformation(self::KEY_SHIFT4_PKEY_DATA)));
             $additionalData = $this->getInfoInstance()->getAdditionalInformation(self::KEY_SHIFT4_PKEY_DATA) ?? '{}';
             $this->setData(self::KEY_SHIFT4_PKEY_DATA, json_decode($additionalData));
         }
