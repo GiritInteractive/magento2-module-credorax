@@ -25,7 +25,7 @@ class Cancel extends AbstractGatewayRequest implements RequestInterface
      * Shift4 Operation Code
      * @var integer
      */
-    const CREDORAX_O = 4;
+    const SHIFT4O = 4;
 
     /**
      * {@inheritdoc}
@@ -64,7 +64,7 @@ class Cancel extends AbstractGatewayRequest implements RequestInterface
         return array_replace_recursive(
             parent::getParams(),
             [
-                'O' => self::CREDORAX_O,
+                'O' => self::SHIFT4O,
                 'a4' => $this->amountFormat($order->getBaseGrandTotal(), $order->getBaseCurrencyCode()),
             ]
         );

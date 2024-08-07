@@ -23,7 +23,7 @@ class SaleTokenization extends Sale implements RequestInterface
      * Shift4 Operation Code
      * @var integer
      */
-    const CREDORAX_O = 23;
+    const SHIFT4O = 23;
 
     /**
      * {@inheritdoc}
@@ -56,7 +56,7 @@ class SaleTokenization extends Sale implements RequestInterface
         return array_replace_recursive(
             parent::getParams(),
             [
-                'O' => self::CREDORAX_O,
+                'O' => self::SHIFT4O,
             ]
         );
     }

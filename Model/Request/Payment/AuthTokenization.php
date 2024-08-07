@@ -23,7 +23,7 @@ class AuthTokenization extends Auth implements RequestInterface
      * Shift4 Operation Code
      * @var integer
      */
-    const CREDORAX_O = 28;
+    const SHIFT4O = 28;
 
     /**
      * {@inheritdoc}
@@ -56,7 +56,7 @@ class AuthTokenization extends Auth implements RequestInterface
         return array_replace_recursive(
             parent::getParams(),
             [
-                'O' => self::CREDORAX_O,
+                'O' => self::SHIFT4O,
             ]
         );
     }

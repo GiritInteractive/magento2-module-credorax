@@ -25,7 +25,7 @@ class Capture extends AbstractGatewayRequest implements RequestInterface
      * Shift4 Operation Code
      * @var integer
      */
-    const CREDORAX_O = 3;
+    const SHIFT4O = 3;
 
     /**
      * {@inheritdoc}
@@ -65,7 +65,7 @@ class Capture extends AbstractGatewayRequest implements RequestInterface
         return array_replace_recursive(
             parent::getParams(),
             [
-                'O' => self::CREDORAX_O,
+                'O' => self::SHIFT4O,
             ]
         );
     }

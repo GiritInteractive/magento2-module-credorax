@@ -31,7 +31,7 @@ class AuthUseToken extends Auth implements RequestInterface
      * Shift4 Operation Code
      * @var integer
      */
-    const CREDORAX_O = 12;
+    const SHIFT4O = 12;
 
     /**
      * @var PaymentTokenManagementInterface
@@ -108,7 +108,7 @@ class AuthUseToken extends Auth implements RequestInterface
         return array_replace_recursive(
             parent::getParams(),
             [
-                'O' => self::CREDORAX_O,
+                'O' => self::SHIFT4O,
                 'g1' => $token->getGatewayToken(),
             ]
         );

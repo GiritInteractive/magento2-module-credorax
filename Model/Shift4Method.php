@@ -254,6 +254,8 @@ class Shift4Method extends Cc
     {
         if (!$this->hasData(self::KEY_SHIFT4_PKEY_DATA)) {
             $this->setData(self::KEY_SHIFT4_PKEY_DATA, json_decode($this->getInfoInstance()->getAdditionalInformation(self::KEY_SHIFT4_PKEY_DATA)));
+            $additionalData = $this->getInfoInstance()->getAdditionalInformation(self::KEY_SHIFT4_PKEY_DATA) ?? '{}';
+            $this->setData(self::KEY_SHIFT4_PKEY_DATA, json_decode($additionalData));
         }
         return $this->getData(self::KEY_SHIFT4_PKEY_DATA);
     }
@@ -323,7 +325,11 @@ class Shift4Method extends Cc
             $info->setAdditionalInformation(self::KEY_CC_TOKEN, null);
             return $this;
         }
-        $tokenDetails = new DataObject((array) json_decode($token->getTokenDetails()));
+        $tokenDetails = $token;
+
+        if (!is_object($token)) {
+            $tokenDetails = new DataObject((array) json_decode($token));
+        }
         $info->addData(
             [
                 self::KEY_CC_TYPE => $tokenDetails->getData(self::KEY_CC_TYPE),

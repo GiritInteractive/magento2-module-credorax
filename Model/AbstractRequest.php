@@ -192,13 +192,14 @@ abstract class AbstractRequest extends AbstractApi
      */
     protected function getOrderData(Order $order)
     {
+        $createdAt = $order->getCreatedAt();
         $orderData = [
             'a1' => $order->getIncrementId() . (int)round(microtime(true) * 10000),
             'h9' => $order->getIncrementId(),
             'a4' => $this->amountFormat($order->getBaseGrandTotal(), $order->getBaseCurrencyCode()),
             'a5' => $order->getBaseCurrencyCode(),
-            'a6' => date('ymd', strtotime($order->getCreatedAt())),
-            'a7' => date('His', strtotime($order->getCreatedAt())),
+            'a6' => $createdAt ? date('ymd', strtotime($createdAt)) : '',
+            'a7' => $createdAt ? date('His', strtotime($createdAt)) : '',
         ];
 
         return $orderData;

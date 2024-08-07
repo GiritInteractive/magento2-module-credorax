@@ -26,13 +26,13 @@ class Config
     const MODULE_NAME = 'Shift4_Shift4';
 
     //= Integration (sandbox) URLs:
-    const CREDORAX_GATEWAY_INTEGATION_URL = 'https://intconsole.shift4.com/intenv/service/gateway';
-    const CREDORAX_STORE_INTEGATION_URL = 'https://ppskey-int.shift4.com/keypayment/rest/v2/store';
-    const CREDORAX_PAYMENT_INTEGATION_URL = 'https://pps-int.shift4.com/keypayment/rest/v2/payment';
-    //= Production (live) URLs:
-    const CREDORAX_GATEWAY_PRODUCTION_URL = 'https://xts.gate.shift4.net/crax_gate/service/gateway';
-    const CREDORAX_STORE_PRODUCTION_URL = 'https://ppskey.shift4.net/keypayment/rest/v2/store';
-    const CREDORAX_PAYMENT_PRODUCTION_URL = 'https://PPS.shift4.net/keypayment/rest/v2/payment';
+    const SHIFT4_GATEWAY_INTEGATION_URL = 'https://intconsole.credorax.com/intenv/service/gateway';
+    const SHIFT4_STORE_INTEGATION_URL = 'https://ppskey-int.credorax.com/keypayment/rest/v2/store';
+    const SHIFT4_PAYMENT_INTEGATION_URL = 'https://pps-int.credorax.com/keypayment/rest/v2/payment';
+//= Production (live) URLs:
+    const SHIFT4_GATEWAY_PRODUCTION_URL = 'https://xts.gate.credorax.net/crax_gate/service/gateway';
+    const SHIFT4_STORE_PRODUCTION_URL = 'https://ppskey.credorax.net/keypayment/rest/v2/store';
+    const SHIFT4_PAYMENT_PRODUCTION_URL = 'https://PPS.credorax.net/keypayment/rest/v2/payment';
 
     /**
      * Scope config object.
@@ -148,6 +148,8 @@ class Config
     {
         return (bool)$this->getConfigValue('active');
     }
+
+
 
     /**
      * Return title.
@@ -320,7 +322,7 @@ class Config
      */
     public function getShift4GatewayUrl($path = "")
     {
-        return ($this->isSandboxMode() ? self::CREDORAX_GATEWAY_INTEGATION_URL : self::CREDORAX_GATEWAY_PRODUCTION_URL) . (($path) ? '/' . $path : '');
+        return ($this->isSandboxMode() ? self::SHIFT4_GATEWAY_INTEGATION_URL : self::SHIFT4_GATEWAY_PRODUCTION_URL) . (($path) ? '/' . $path : '');
     }
 
     /**
@@ -330,7 +332,7 @@ class Config
      */
     public function getShift4StoreUrl($path = "")
     {
-        return ($this->isSandboxMode() ? self::CREDORAX_STORE_INTEGATION_URL : self::CREDORAX_STORE_PRODUCTION_URL) . (($path) ? '/' . $path : '');
+        return ($this->isSandboxMode() ? self::SHIFT4_STORE_INTEGATION_URL : self::SHIFT4_STORE_PRODUCTION_URL) . (($path) ? '/' . $path : '');
     }
 
     /**
@@ -340,7 +342,7 @@ class Config
      */
     public function getShift4PaymentUrl($path = "")
     {
-        return ($this->isSandboxMode() ? self::CREDORAX_PAYMENT_INTEGATION_URL : self::CREDORAX_PAYMENT_PRODUCTION_URL) . (($path) ? '/' . $path : '');
+        return ($this->isSandboxMode() ? self::SHIFT4_PAYMENT_INTEGATION_URL : self::SHIFT4_PAYMENT_PRODUCTION_URL) . (($path) ? '/' . $path : '');
     }
 
     /**

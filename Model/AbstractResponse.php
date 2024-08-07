@@ -176,6 +176,20 @@ abstract class AbstractResponse extends AbstractApi
         return $this->_body;
     }
 
+    protected function is3dsChallengeFlow()
+    {
+        $body = $this->getBody();
+        if ($this->_shift4Config->is3dSecureEnabled()
+            && isset($body['3ds_acsurl'])
+            && isset($body['z2'])
+            && (int)$body['z2']
+            && $body['z2'] === '06'
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @return array
      */

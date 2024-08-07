@@ -30,7 +30,7 @@ class Refund extends AbstractGatewayRequest implements RequestInterface
      * Shift4 Operation Code
      * @var integer
      */
-    const CREDORAX_O = 5;
+    const SHIFT4O = 5;
 
     /**
      * @var TransactionRepositoryInterface
@@ -107,7 +107,7 @@ class Refund extends AbstractGatewayRequest implements RequestInterface
         return array_replace_recursive(
             parent::getParams(),
             [
-                'O' => self::CREDORAX_O,
+                'O' => self::SHIFT4O,
             ]
         );
     }

@@ -97,11 +97,10 @@ class AuthTokenization extends Auth implements ResponseInterface
      */
     protected function getRequiredResponseDataKeys()
     {
+        $isG1Response = (!$this->is3dsChallengeFlow()) ? ['g1'] : [];
         return array_merge_recursive(
             parent::getRequiredResponseDataKeys(),
-            [
-                'g1',
-            ]
+            $isG1Response
         );
     }
 }

@@ -24,7 +24,7 @@ class Sale extends AbstractPaymentRequest implements RequestInterface
      * Shift4 Operation Code
      * @var integer
      */
-    const CREDORAX_O = 1;
+    const SHIFT4O = 1;
 
     /**
      * {@inheritdoc}
@@ -57,7 +57,7 @@ class Sale extends AbstractPaymentRequest implements RequestInterface
         return array_replace_recursive(
             parent::getParams(),
             [
-                'O' => self::CREDORAX_O,
+                'O' => self::SHIFT4O,
                 'PKey' => $this->orderPayment->getAdditionalInformation(Shift4Method::KEY_SHIFT4_PKEY),
             ]
         );
